@@ -1,4 +1,9 @@
-## Hi there 👋
+## TimeSeriesMadeSimple.com
+
+100% Time Series.
+100% Simple.
+100% Python.
+100% Awesome.
 
 <!--
 **time-series-made-simple/time-series-made-simple** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
