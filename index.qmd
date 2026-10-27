@@ -1,0 +1,19 @@
+
+---
+title: "Time Series Made Simple"
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  fields: [title, date, description, categories]
+---
+
+Welcome to **Time Series Made Simple** — practical
+tutorials on time-series analysis, statistics, and
+forecasting with Python.
+
+My goal is to explain the theory behind forecasting
+methods and demonstrate how to implement and evaluate
+them using Python.
+
+## Latest articles

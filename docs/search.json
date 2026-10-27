@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "posts/index.html",
+    "href": "posts/index.html",
+    "title": "Understanding Time Series",
+    "section": "",
+    "text": "A time series is a sequence of observations collected over time, usually at regular intervals.\nExamples include:\n\nDaily call-center volume\nMonthly sales\nHourly electricity demand\nAnnual unemployment rates"
+  },
+  {
+    "objectID": "posts/index.html#what-is-a-time-series",
+    "href": "posts/index.html#what-is-a-time-series",
+    "title": "Understanding Time Series",
+    "section": "",
+    "text": "A time series is a sequence of observations collected over time, usually at regular intervals.\nExamples include:\n\nDaily call-center volume\nMonthly sales\nHourly electricity demand\nAnnual unemployment rates"
+  },
+  {
+    "objectID": "posts/index.html#creating-a-time-series-in-python",
+    "href": "posts/index.html#creating-a-time-series-in-python",
+    "title": "Understanding Time Series",
+    "section": "Creating a time series in Python",
+    "text": "Creating a time series in Python\nLet’s create a simple example using pandas.\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\ndates = pd.date_range(\n    start=\"2026-01-01\",\n    periods=30,\n    freq=\"D\"\n)\n\nvolume = pd.Series(\n    range(100, 130),\n    index=dates,\n    name=\"volume\"\n)\n\nvolume.plot(title=\"Example Daily Volume\")\nplt.xlabel(\"Date\")\nplt.ylabel(\"Volume\")\nplt.show()\n\n\n\n\n\n\n\n\nThis example creates 30 daily observations and plots them over time."
+  },
+  {
+    "objectID": "posts/index.html#why-does-time-order-matter",
+    "href": "posts/index.html#why-does-time-order-matter",
+    "title": "Understanding Time Series",
+    "section": "Why does time order matter?",
+    "text": "Why does time order matter?\nUnlike ordinary independent observations, time-series data can contain trends, seasonality, and serial dependence.\nUnderstanding these patterns helps us select appropriate forecasting methods."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Time Series Made Simple",
+    "section": "",
+    "text": "Welcome to Time Series Made Simple — practical tutorials on time-series analysis, statistics, and forecasting with Python.\nMy goal is to explain the theory behind forecasting methods and demonstrate how to implement and evaluate them using Python."
+  },
+  {
+    "objectID": "index.html#latest-articles",
+    "href": "index.html#latest-articles",
+    "title": "Time Series Made Simple",
+    "section": "Latest articles",
+    "text": "Latest articles"
+  }
+]
