@@ -1,0 +1,22 @@
+---
+Title: "About"
+format:
+  html:
+    toc: false
+---
+
+Hello, I'm Joel, the founder of TimeSeriesMadeSimple.com.
+
+I began working extensively with time series data in 2018. At the time, my forecasting toolkit consisted largely of the basic methods available in Microsoft Excel. Those tools served a purpose, but as I tackled more complex forecasting problems, I realized I needed something more powerful. What I didn't yet appreciate was just how much statistical theory and how many analytical techniques were available to help me understand my data and build better forecasts.
+
+That realization set me on a path of continuous learning. I taught myself Python, earned a Master of Data Science degree, and developed a deep interest in time series analysis, statistical modeling, and forecasting. I now oversee the preparation of long and medium range forecasts across multiple sales and service operational groups within my company.
+
+I created **Time Series Made Simple** to share what I've learned and help others develop these skills. My goal is to make time series concepts easier to understand by connecting the underlying theory with practical, hands-on applications. While the examples and projects on this site use Python, the statistical concepts are broadly applicable across programming languages and analytical tools.
+
+You'll find a mix of focused tutorials on individual time series concepts and end-to-end projects that demonstrate the full analytical process—from exploring data and selecting models to evaluating forecasts and interpreting results. I aim to publish new articles weekly, giving readers a steady path toward building their knowledge and practical skills.
+
+Whether you're just getting started with time series analysis or looking to expand your existing data science toolkit, I hope this site helps you understand not just *how* forecasting methods work, but *why* they work and when to use them.
+
+**Understand the theory. Master the code. Build better forecasts.**
+
+New to time series analysis? Start with my [Introduction to Time Series](posts/intro-to-time-series/) tutorial.
