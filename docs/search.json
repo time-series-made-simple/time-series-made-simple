@@ -1,31 +1,17 @@
 [
   {
-    "objectID": "posts/index.html",
-    "href": "posts/index.html",
-    "title": "Understanding Time Series",
+    "objectID": "posts/intro-to-time-series/index.html",
+    "href": "posts/intro-to-time-series/index.html",
+    "title": "Intro to Time Series",
     "section": "",
-    "text": "A time series is a sequence of observations collected over time, usually at regular intervals.\nExamples include:\n\nDaily call-center volume\nMonthly sales\nHourly electricity demand\nAnnual unemployment rates"
+    "text": "In this article, we will cover the basics of time series data - what it is, why it matters, and how it is unique. Along the way we will look at a few examples of time series data to help solidify these concepts."
   },
   {
-    "objectID": "posts/index.html#what-is-a-time-series",
-    "href": "posts/index.html#what-is-a-time-series",
-    "title": "Understanding Time Series",
-    "section": "",
-    "text": "A time series is a sequence of observations collected over time, usually at regular intervals.\nExamples include:\n\nDaily call-center volume\nMonthly sales\nHourly electricity demand\nAnnual unemployment rates"
-  },
-  {
-    "objectID": "posts/index.html#creating-a-time-series-in-python",
-    "href": "posts/index.html#creating-a-time-series-in-python",
-    "title": "Understanding Time Series",
-    "section": "Creating a time series in Python",
-    "text": "Creating a time series in Python\nLet’s create a simple example using pandas.\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\ndates = pd.date_range(\n    start=\"2026-01-01\",\n    periods=30,\n    freq=\"D\"\n)\n\nvolume = pd.Series(\n    range(100, 130),\n    index=dates,\n    name=\"volume\"\n)\n\nvolume.plot(title=\"Example Daily Volume\")\nplt.xlabel(\"Date\")\nplt.ylabel(\"Volume\")\nplt.show()\n\n\n\n\n\n\n\n\nThis example creates 30 daily observations and plots them over time."
-  },
-  {
-    "objectID": "posts/index.html#why-does-time-order-matter",
-    "href": "posts/index.html#why-does-time-order-matter",
-    "title": "Understanding Time Series",
-    "section": "Why does time order matter?",
-    "text": "Why does time order matter?\nUnlike ordinary independent observations, time-series data can contain trends, seasonality, and serial dependence.\nUnderstanding these patterns helps us select appropriate forecasting methods."
+    "objectID": "posts/intro-to-time-series/index.html#what-is-a-time-series",
+    "href": "posts/intro-to-time-series/index.html#what-is-a-time-series",
+    "title": "Intro to Time Series",
+    "section": "What is a Time Series?",
+    "text": "What is a Time Series?\nA time series is a data set in which the observations, the instances, or the rows, are in some type of sequential order. Consider the following example:"
   },
   {
     "objectID": "index.html",
@@ -56,10 +42,10 @@
     "text": "A practical approach to learning\nThe tutorials follow a consistent progression:\n\nBuild intuition. Understand the problem and the patterns in the data.\nExplore the theory. Learn the statistical concepts behind the method.\nImplement the model. Work through a Python example.\nEvaluate the results. Examine forecast accuracy, limitations, and practical trade-offs.\n\nThe emphasis is on developing the judgment to choose and evaluate forecasting methods, rather than simply learning how to call a modeling function."
   },
   {
-    "objectID": "index.html#latest-posts",
-    "href": "index.html#latest-posts",
+    "objectID": "index.html#latest-tutorials",
+    "href": "index.html#latest-tutorials",
     "title": "Time Series Made Simple",
     "section": "Latest tutorials",
-    "text": "Latest tutorials\nBrowse the latest articles below. New articles are posted regularly, so be sure to check back soon."
+    "text": "Latest tutorials\nBrowse the latest articles below.\n\n\n\n\n\nIntro to Time Series\n\n\n\nTime Series\n\nPython\n\nBasics\n\n\n\nThe absolute basics of time series data for beginners.\n\n\n\n\n\nOct 28, 2026\n\n\n\n\n\nNo matching items"
   }
 ]

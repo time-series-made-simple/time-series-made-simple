@@ -1,0 +1,25 @@
+
+---
+title: "Intro to Time Series"
+description: "The absolute basics of time series data for beginners."
+date: "2026-10-28"
+categories:
+  - Time Series
+  - Python
+  - Basics
+
+format:
+  html:
+    toc: true
+    code-fold: false
+    code-copy: true
+---
+
+In this article, we will cover the basics of time series data - what it is, why it matters, and how it is unique. Along the way we will look at a few examples of time series data to help solidify these concepts.
+
+## What is a Time Series?
+
+A time series is a data set in which the observations, the instances, or the rows, are in some type of
+sequential order. Consider the following example:
+
+
