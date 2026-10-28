@@ -1,0 +1,19 @@
+
+---
+title: "All Posts"
+description: "Browse all time series tutorials, Python examples, and forecasting projects."
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  fields:
+    - title
+    - date
+    - description
+    - categories
+  categories: true
+  sort-ui: true
+  filter-ui: true
+---
+
+Explore all articles on Time Series Made Simple, from foundational concepts to hands-on forecasting projects.

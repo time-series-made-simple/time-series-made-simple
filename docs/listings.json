@@ -1,5 +1,11 @@
 [
   {
+    "listing": "/archive.html",
+    "items": [
+      "/posts/intro-to-time-series/index.html"
+    ]
+  },
+  {
     "listing": "/index.html",
     "items": [
       "/posts/intro-to-time-series/index.html"
