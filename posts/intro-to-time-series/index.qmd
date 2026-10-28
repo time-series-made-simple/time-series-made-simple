@@ -20,6 +20,58 @@ In this article, we will cover the basics of time series data - what it is, why 
 ## What is a Time Series?
 
 A time series is a data set in which the observations, the instances, or the rows, are in some type of
-sequential order. Consider the following example:
+sequential order. Consider the following example from a data set that includes average march temperatures for the state of Pennsylvania from 1895-2026:
 
+
+```{python}
+import pandas as pd
+import seaborn as sns
+
+pa_march_temps = pd.read_csv('pa_avg_temp_march_1895_2026.csv')
+pa_march_temps['Year'] = pa_march_temps['Date'].astype(str).str[0:4].astype(int)
+pa_march_temps = pa_march_temps.drop(['Date'], axis=1).copy()
+pa_march_temps = pa_march_temps.set_index('Year')
+pa_march_temps = pa_march_temps.rename(columns={'Value': 'March Avg Temp - Degrees F'})
+pa_march_temps.head(10)
+
+```
+
+Notice that the index for our data set is in years, and these years are in sequential (generally, chronological) order. This is what makes it a time series. 
+
+Time series are arranged along a timeline. There is a
+chronological order to the data, and typically the index is temporal in nature. Interestingly, other types of data
+follow similar patterns to time series without being temporal in nature. DNA sequencing, noise, and
+sound frequencies, for example, can follow many of the same patterns that time series do, and many of
+the same rules apply. We will not delve into those applications here, but it is good to know that they exist.
+
+The main point is that, when it comes to time series data, **order matters**. There is a sequence to the rows, to the
+instances, and to the observations.
+
+## Regular and Irregular Time Series
+
+Time series data can fit into two categories: **regular time series** and **irregular time series**. This refers to
+the frequency of the data. Most of the data you will work with are regular time series, meaning the
+observations occur at a consistent frequency. Daily, weekly, monthly, quarterly, and yearly data are all
+examples of regular time series.
+
+Irregular time series, unlike regular time series, do not have consistent spacing. Consider a machine that
+records a timestamp, along with information about what happened, every time it malfunctions or
+produces an error. The spacing between those records is random, which produces an irregular time
+series. This is just one example. Regular time series are much easier to work with, so an irregular time series is often converted into a regular time series through a process called resampling, which we will
+cover in a future article.
+
+## The Importance of Time Series Data
+
+Time series are important regardless of the industry or field in which you work. If you are a data professional, sooner or later you will work with time series. Time affects everything around us, and everything that happens in our world takes place in time. There are countless, almost infinite, examples. 
+
+- Weather conditions, such as the daily average temperature or monthly rainfall, are time series. 
+- Stock market data, such as the daily closing prices of stocks, is a major example. 
+- Medical data is another; if a hospital monitors your heart rate, for instance, that is time series data. 
+- Transportation data is a further example, like the monthly number of flight passengers in the US.
+- Economic data, such as the annual GDP of the United States, is functionally a time series as well. 
+- Wildlife data, such as the number of wolf sightings each month in Yellowstone National Park. 
+- Sales and marketing data often comes in the form of time series. 
+- Law enforcement data like crime statistics also are often time series. 
+
+These are just a few examples, and the list could go on. Time series are literally everywhere. Data professionals need to know how to work with this type of data.
 

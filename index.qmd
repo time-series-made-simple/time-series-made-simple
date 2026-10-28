@@ -1,6 +1,6 @@
 
 ---
-title: "Time Series Made Simple"
+title: "Home"
 page-layout: full
 listing:
   id: latest-posts
@@ -9,9 +9,13 @@ listing:
   type: default
   fields: [title, date, description, categories]
   categories: true
+
+format:
+  html:
+    toc: false
 ---
 
-## Understand the theory. Master the code. Build better forecasts.
+![Time Series Made Simple - Site Logo](logo_main.png){width=75%}
 
 Time-series analysis doesn't have to be a black box. **Time Series Made Simple** equips you to work with time series data effectively. Learn the theory behind forecasting methods and put those methods into practice with Python.
 
@@ -21,7 +25,7 @@ Whether you're learning the fundamentals or comparing models for a real forecast
 
 ---
 
-## Learn the concepts, not just the code
+## Understand the theory. Master the code. Build better forecasts.
 
 Good forecasting starts with understanding the data. Each tutorial aims to build intuition first, introduce the relevant statistical ideas, and then demonstrate how to apply them in Python.
 

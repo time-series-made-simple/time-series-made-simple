@@ -11,40 +11,47 @@
     "href": "posts/intro-to-time-series/index.html#what-is-a-time-series",
     "title": "Intro to Time Series",
     "section": "What is a Time Series?",
-    "text": "What is a Time Series?\nA time series is a data set in which the observations, the instances, or the rows, are in some type of sequential order. Consider the following example:"
+    "text": "What is a Time Series?\nA time series is a data set in which the observations, the instances, or the rows, are in some type of sequential order. Consider the following example from a data set that includes average march temperatures for the state of Pennsylvania from 1895-2026:\n\nimport pandas as pd\nimport seaborn as sns\n\npa_march_temps = pd.read_csv('pa_avg_temp_march_1895_2026.csv')\npa_march_temps['Year'] = pa_march_temps['Date'].astype(str).str[0:4].astype(int)\npa_march_temps = pa_march_temps.drop(['Date'], axis=1).copy()\npa_march_temps = pa_march_temps.set_index('Year')\npa_march_temps = pa_march_temps.rename(columns={'Value': 'March Avg Temp - Degrees F'})\npa_march_temps.head(10)\n\n\n\n\n\n\n\n\nMarch Avg Temp - Degrees F\n\n\nYear\n\n\n\n\n\n1895\n31.3\n\n\n1896\n27.8\n\n\n1897\n36.9\n\n\n1898\n42.0\n\n\n1899\n34.0\n\n\n1900\n29.3\n\n\n1901\n35.1\n\n\n1902\n38.8\n\n\n1903\n44.5\n\n\n1904\n34.0\n\n\n\n\n\n\n\nNotice that the index for our data set is in years, and these years are in sequential (generally, chronological) order. This is what makes it a time series.\nTime series are arranged along a timeline. There is a chronological order to the data, and typically the index is temporal in nature. Interestingly, other types of data follow similar patterns to time series without being temporal in nature. DNA sequencing, noise, and sound frequencies, for example, can follow many of the same patterns that time series do, and many of the same rules apply. We will not delve into those applications here, but it is good to know that they exist.\nThe main point is that, when it comes to time series data, order matters. There is a sequence to the rows, to the instances, and to the observations."
+  },
+  {
+    "objectID": "posts/intro-to-time-series/index.html#regular-and-irregular-time-series",
+    "href": "posts/intro-to-time-series/index.html#regular-and-irregular-time-series",
+    "title": "Intro to Time Series",
+    "section": "Regular and Irregular Time Series",
+    "text": "Regular and Irregular Time Series\nTime series data can fit into two categories: regular time series and irregular time series. This refers to the frequency of the data. Most of the data you will work with are regular time series, meaning the observations occur at a consistent frequency. Daily, weekly, monthly, quarterly, and yearly data are all examples of regular time series.\nIrregular time series, unlike regular time series, do not have consistent spacing. Consider a machine that records a timestamp, along with information about what happened, every time it malfunctions or produces an error. The spacing between those records is random, which produces an irregular time series. This is just one example. Regular time series are much easier to work with, so an irregular time series is often converted into a regular time series through a process called resampling, which we will cover in a future article."
+  },
+  {
+    "objectID": "posts/intro-to-time-series/index.html#the-importance-of-time-series-data",
+    "href": "posts/intro-to-time-series/index.html#the-importance-of-time-series-data",
+    "title": "Intro to Time Series",
+    "section": "The Importance of Time Series Data",
+    "text": "The Importance of Time Series Data\nTime series are important regardless of the industry or field in which you work. If you are a data professional, sooner or later you will work with time series. Time affects everything around us, and everything that happens in our world takes place in time. There are countless, almost infinite, examples.\n\nWeather conditions, such as the daily average temperature or monthly rainfall, are time series.\nStock market data, such as the daily closing prices of stocks, is a major example.\nMedical data is another; if a hospital monitors your heart rate, for instance, that is time series data.\nTransportation data is a further example, like the monthly number of flight passengers in the US.\nEconomic data, such as the annual GDP of the United States, is functionally a time series as well.\nWildlife data, such as the number of wolf sightings each month in Yellowstone National Park.\nSales and marketing data often comes in the form of time series.\nLaw enforcement data like crime statistics also are often time series.\n\nThese are just a few examples, and the list could go on. Time series are literally everywhere. Data professionals need to know how to work with this type of data."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Time Series Made Simple",
+    "title": "Home",
     "section": "",
-    "text": "Time-series analysis doesn’t have to be a black box. Time Series Made Simple equips you to work with time series data effectively. Learn the theory behind forecasting methods and put those methods into practice with Python.\nWhether you’re learning the fundamentals or comparing models for a real forecasting problem, the goal is the same: understand why a method works, when to use it, and how to evaluate its results.\nExplore the tutorials · About this site"
+    "text": "Time Series Made Simple - Site Logo\nTime-series analysis doesn’t have to be a black box. Time Series Made Simple equips you to work with time series data effectively. Learn the theory behind forecasting methods and put those methods into practice with Python.\nWhether you’re learning the fundamentals or comparing models for a real forecasting problem, the goal is the same: understand why a method works, when to use it, and how to evaluate its results.\nExplore the tutorials · About this site"
   },
   {
     "objectID": "index.html#understand-the-theory.-master-the-code.-build-better-forecasts.",
     "href": "index.html#understand-the-theory.-master-the-code.-build-better-forecasts.",
-    "title": "Time Series Made Simple",
-    "section": "",
-    "text": "Time-series analysis doesn’t have to be a black box. Time Series Made Simple equips you to work with time series data effectively. Learn the theory behind forecasting methods and put those methods into practice with Python.\nWhether you’re learning the fundamentals or comparing models for a real forecasting problem, the goal is the same: understand why a method works, when to use it, and how to evaluate its results.\nExplore the tutorials · About this site"
-  },
-  {
-    "objectID": "index.html#learn-the-concepts-not-just-the-code",
-    "href": "index.html#learn-the-concepts-not-just-the-code",
-    "title": "Time Series Made Simple",
-    "section": "Learn the concepts, not just the code",
-    "text": "Learn the concepts, not just the code\nGood forecasting starts with understanding the data. Each tutorial aims to build intuition first, introduce the relevant statistical ideas, and then demonstrate how to apply them in Python.\n\n\n\nFoundations\nUnderstand trends, seasonality, stationarity, autocorrelation, and the structure of time-series data.\n\n\n\nStatistical forecasting\nExplore moving averages, exponential smoothing, ARIMA, SARIMA, and other statistical forecasting methods.\n\n\n\n\n\n\nPython in practice\nWork through examples using pandas, matplotlib, statsmodels, and scikit-learn, with code that illustrates the ideas being discussed.\n\n\n\nModel evaluation\nLearn how to compare forecasts, diagnose errors, establish meaningful baselines, and decide which models are useful for a particular problem."
+    "title": "Home",
+    "section": "Understand the theory. Master the code. Build better forecasts.",
+    "text": "Understand the theory. Master the code. Build better forecasts.\nGood forecasting starts with understanding the data. Each tutorial aims to build intuition first, introduce the relevant statistical ideas, and then demonstrate how to apply them in Python.\n\n\n\nFoundations\nUnderstand trends, seasonality, stationarity, autocorrelation, and the structure of time-series data.\n\n\n\nStatistical forecasting\nExplore moving averages, exponential smoothing, ARIMA, SARIMA, and other statistical forecasting methods.\n\n\n\n\n\n\nPython in practice\nWork through examples using pandas, matplotlib, statsmodels, and scikit-learn, with code that illustrates the ideas being discussed.\n\n\n\nModel evaluation\nLearn how to compare forecasts, diagnose errors, establish meaningful baselines, and decide which models are useful for a particular problem."
   },
   {
     "objectID": "index.html#a-practical-approach-to-learning",
     "href": "index.html#a-practical-approach-to-learning",
-    "title": "Time Series Made Simple",
+    "title": "Home",
     "section": "A practical approach to learning",
     "text": "A practical approach to learning\nThe tutorials follow a consistent progression:\n\nBuild intuition. Understand the problem and the patterns in the data.\nExplore the theory. Learn the statistical concepts behind the method.\nImplement the model. Work through a Python example.\nEvaluate the results. Examine forecast accuracy, limitations, and practical trade-offs.\n\nThe emphasis is on developing the judgment to choose and evaluate forecasting methods, rather than simply learning how to call a modeling function."
   },
   {
     "objectID": "index.html#latest-tutorials",
     "href": "index.html#latest-tutorials",
-    "title": "Time Series Made Simple",
+    "title": "Home",
     "section": "Latest tutorials",
     "text": "Latest tutorials\nBrowse the latest articles below.\n\n\n\n\n\nIntro to Time Series\n\n\n\nTime Series\n\nPython\n\nBasics\n\n\n\nThe absolute basics of time series data for beginners.\n\n\n\n\n\nOct 28, 2026\n\n\n\n\n\nNo matching items"
   }

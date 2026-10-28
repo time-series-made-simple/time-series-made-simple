@@ -28,10 +28,45 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -75,6 +110,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 </head>
@@ -128,6 +166,8 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#what-is-a-time-series" id="toc-what-is-a-time-series" class="nav-link active" data-scroll-target="#what-is-a-time-series">What is a Time Series?</a></li>
+  <li><a href="#regular-and-irregular-time-series" id="toc-regular-and-irregular-time-series" class="nav-link" data-scroll-target="#regular-and-irregular-time-series">Regular and Irregular Time Series</a></li>
+  <li><a href="#the-importance-of-time-series-data" id="toc-the-importance-of-time-series-data" class="nav-link" data-scroll-target="#the-importance-of-time-series-data">The Importance of Time Series Data</a></li>
   </ul>
 </nav>
     </div>
@@ -172,7 +212,102 @@ ul.task-list li input[type="checkbox"] {
 <p>In this article, we will cover the basics of time series data - what it is, why it matters, and how it is unique. Along the way we will look at a few examples of time series data to help solidify these concepts.</p>
 <section id="what-is-a-time-series" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-a-time-series">What is a Time Series?</h2>
-<p>A time series is a data set in which the observations, the instances, or the rows, are in some type of sequential order. Consider the following example:</p>
+<p>A time series is a data set in which the observations, the instances, or the rows, are in some type of sequential order. Consider the following example from a data set that includes average march temperatures for the state of Pennsylvania from 1895-2026:</p>
+<div id="492913a2" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>pa_march_temps <span class="op">=</span> pd.read_csv(<span class="st">'pa_avg_temp_march_1895_2026.csv'</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>pa_march_temps[<span class="st">'Year'</span>] <span class="op">=</span> pa_march_temps[<span class="st">'Date'</span>].astype(<span class="bu">str</span>).<span class="bu">str</span>[<span class="dv">0</span>:<span class="dv">4</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>pa_march_temps <span class="op">=</span> pa_march_temps.drop([<span class="st">'Date'</span>], axis<span class="op">=</span><span class="dv">1</span>).copy()</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>pa_march_temps <span class="op">=</span> pa_march_temps.set_index(<span class="st">'Year'</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>pa_march_temps <span class="op">=</span> pa_march_temps.rename(columns<span class="op">=</span>{<span class="st">'Value'</span>: <span class="st">'March Avg Temp - Degrees F'</span>})</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>pa_march_temps.head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">March Avg Temp - Degrees F</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Year</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">1895</th>
+<td>31.3</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1896</th>
+<td>27.8</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">1897</th>
+<td>36.9</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1898</th>
+<td>42.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">1899</th>
+<td>34.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1900</th>
+<td>29.3</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">1901</th>
+<td>35.1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1902</th>
+<td>38.8</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">1903</th>
+<td>44.5</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1904</th>
+<td>34.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Notice that the index for our data set is in years, and these years are in sequential (generally, chronological) order. This is what makes it a time series.</p>
+<p>Time series are arranged along a timeline. There is a chronological order to the data, and typically the index is temporal in nature. Interestingly, other types of data follow similar patterns to time series without being temporal in nature. DNA sequencing, noise, and sound frequencies, for example, can follow many of the same patterns that time series do, and many of the same rules apply. We will not delve into those applications here, but it is good to know that they exist.</p>
+<p>The main point is that, when it comes to time series data, <strong>order matters</strong>. There is a sequence to the rows, to the instances, and to the observations.</p>
+</section>
+<section id="regular-and-irregular-time-series" class="level2">
+<h2 class="anchored" data-anchor-id="regular-and-irregular-time-series">Regular and Irregular Time Series</h2>
+<p>Time series data can fit into two categories: <strong>regular time series</strong> and <strong>irregular time series</strong>. This refers to the frequency of the data. Most of the data you will work with are regular time series, meaning the observations occur at a consistent frequency. Daily, weekly, monthly, quarterly, and yearly data are all examples of regular time series.</p>
+<p>Irregular time series, unlike regular time series, do not have consistent spacing. Consider a machine that records a timestamp, along with information about what happened, every time it malfunctions or produces an error. The spacing between those records is random, which produces an irregular time series. This is just one example. Regular time series are much easier to work with, so an irregular time series is often converted into a regular time series through a process called resampling, which we will cover in a future article.</p>
+</section>
+<section id="the-importance-of-time-series-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-importance-of-time-series-data">The Importance of Time Series Data</h2>
+<p>Time series are important regardless of the industry or field in which you work. If you are a data professional, sooner or later you will work with time series. Time affects everything around us, and everything that happens in our world takes place in time. There are countless, almost infinite, examples.</p>
+<ul>
+<li>Weather conditions, such as the daily average temperature or monthly rainfall, are time series.</li>
+<li>Stock market data, such as the daily closing prices of stocks, is a major example.</li>
+<li>Medical data is another; if a hospital monitors your heart rate, for instance, that is time series data.</li>
+<li>Transportation data is a further example, like the monthly number of flight passengers in the US.</li>
+<li>Economic data, such as the annual GDP of the United States, is functionally a time series as well.</li>
+<li>Wildlife data, such as the number of wolf sightings each month in Yellowstone National Park.</li>
+<li>Sales and marketing data often comes in the form of time series.</li>
+<li>Law enforcement data like crime statistics also are often time series.</li>
+</ul>
+<p>These are just a few examples, and the list could go on. Time series are literally everywhere. Data professionals need to know how to work with this type of data.</p>
 
 
 </section>
