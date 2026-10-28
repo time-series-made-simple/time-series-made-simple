@@ -77,11 +77,9 @@ The list could go on. Time series are literally everywhere. Can you think of an 
 
 If you are a data professional, sooner or later you will work with time series. This is why it is so crucial to learn how to understand and handle time series data.
 
-## What Makes Time Series Unique?
+## How are Time Series Unique?
 
-You may be asking why we need separate training and instruction for working with time series
-data. "Could I not apply the same methods, concepts, and models that I learned on other types of data to time series?" The answer is: "not exactly". Many of the same ideas and steps carry over, but
-there are also many differences. The following are the key differences that make working with time
+You may be asking why we need separate training and instruction for working with time series data. "Could I not apply the same methods, concepts, and models that I learned on other types of data to time series?" The answer is: "not exactly". Many of the same ideas and steps carry over, but there are also many differences. The following are the key differences that make working with time
 series unique. We will expand upon these in much greater detail in future articles.
 
 ### Key Difference #1: Order Matters
