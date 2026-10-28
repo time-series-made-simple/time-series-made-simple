@@ -21,7 +21,7 @@ Time-series analysis doesn't have to be a black box. **Time Series Made Simple**
 
 Whether you're learning the fundamentals or comparing models for a real forecasting problem, the goal is the same: understand why a method works, when to use it, and how to evaluate its results.
 
-[Explore the tutorials](#latest-posts) · [About this site](about.qmd)
+[Explore the tutorials](#latest-posts) · [About this site](about.html)
 
 ---
 
