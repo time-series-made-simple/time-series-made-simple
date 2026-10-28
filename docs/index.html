@@ -78,7 +78,7 @@ ul.task-list li input[type="checkbox"] {
 <script>
 
   window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    const listingTargetEl = window.document.querySelector('#listing-latest-posts .list');
     if (!listingTargetEl) {
       // No listing discovered, do not attach.
       return; 
@@ -87,11 +87,11 @@ ul.task-list li input[type="checkbox"] {
     const options = {
       valueNames: ['listing-title','listing-date','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+    window['quarto-listings']['listing-latest-posts'] = new List('listing-latest-posts', options);
 
     if (window['quarto-listing-loaded']) {
       window['quarto-listing-loaded']();
@@ -177,7 +177,7 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -185,12 +185,15 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#latest-articles" id="toc-latest-articles" class="nav-link active" data-scroll-target="#latest-articles">Latest articles</a></li>
+  <li><a href="#understand-the-theory.-master-the-code.-build-better-forecasts." id="toc-understand-the-theory.-master-the-code.-build-better-forecasts." class="nav-link active" data-scroll-target="#understand-the-theory.-master-the-code.-build-better-forecasts.">Understand the theory. Master the code. Build better forecasts.</a></li>
+  <li><a href="#learn-the-concepts-not-just-the-code" id="toc-learn-the-concepts-not-just-the-code" class="nav-link" data-scroll-target="#learn-the-concepts-not-just-the-code">Learn the concepts, not just the code</a></li>
+  <li><a href="#a-practical-approach-to-learning" id="toc-a-practical-approach-to-learning" class="nav-link" data-scroll-target="#a-practical-approach-to-learning">A practical approach to learning</a></li>
+  <li><a href="#latest-posts" id="toc-latest-posts" class="nav-link" data-scroll-target="#latest-posts">Latest tutorials</a></li>
   </ul>
 </nav>
-    </div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RnVuZGFtZW50YWxz">Fundamentals <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHl0aG9u">Python <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page-left" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -199,7 +202,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page-left">
 
     
   
@@ -211,16 +214,65 @@ window.Quarto = {
 </header>
 
 
-<p>Welcome to <strong>Time Series Made Simple</strong> — practical tutorials on time-series analysis, statistics, and forecasting with Python.</p>
-<p>My goal is to explain the theory behind forecasting methods and demonstrate how to implement and evaluate them using Python.</p>
-<section id="latest-articles" class="level2">
-<h2 class="anchored" data-anchor-id="latest-articles">Latest articles</h2>
+<section id="understand-the-theory.-master-the-code.-build-better-forecasts." class="level2">
+<h2 class="anchored" data-anchor-id="understand-the-theory.-master-the-code.-build-better-forecasts.">Understand the theory. Master the code. Build better forecasts.</h2>
+<p>Time-series analysis doesn’t have to be a black box. <strong>Time Series Made Simple</strong> equips you to work with time series data effectively. Learn the theory behind forecasting methods and put those methods into practice with Python.</p>
+<p>Whether you’re learning the fundamentals or comparing models for a real forecasting problem, the goal is the same: understand why a method works, when to use it, and how to evaluate its results.</p>
+<p><a href="#latest-posts">Explore the tutorials</a> · <a href="about.qmd">About this site</a></p>
+<hr>
+</section>
+<section id="learn-the-concepts-not-just-the-code" class="level2">
+<h2 class="anchored" data-anchor-id="learn-the-concepts-not-just-the-code">Learn the concepts, not just the code</h2>
+<p>Good forecasting starts with understanding the data. Each tutorial aims to build intuition first, introduce the relevant statistical ideas, and then demonstrate how to apply them in Python.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<section id="foundations" class="level3">
+<h3 class="anchored" data-anchor-id="foundations">Foundations</h3>
+<p>Understand trends, seasonality, stationarity, autocorrelation, and the structure of time-series data.</p>
+</section>
+</div><div class="column" style="width:50%;">
+<section id="statistical-forecasting" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-forecasting">Statistical forecasting</h3>
+<p>Explore moving averages, exponential smoothing, ARIMA, SARIMA, and other statistical forecasting methods.</p>
+</section>
+</div>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<section id="python-in-practice" class="level3">
+<h3 class="anchored" data-anchor-id="python-in-practice">Python in practice</h3>
+<p>Work through examples using pandas, matplotlib, statsmodels, and scikit-learn, with code that illustrates the ideas being discussed.</p>
+</section>
+</div><div class="column" style="width:50%;">
+<section id="model-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="model-evaluation">Model evaluation</h3>
+<p>Learn how to compare forecasts, diagnose errors, establish meaningful baselines, and decide which models are useful for a particular problem.</p>
+</section>
+</div>
+</div>
+<hr>
+</section>
+<section id="a-practical-approach-to-learning" class="level2">
+<h2 class="anchored" data-anchor-id="a-practical-approach-to-learning">A practical approach to learning</h2>
+<p>The tutorials follow a consistent progression:</p>
+<ol type="1">
+<li><strong>Build intuition.</strong> Understand the problem and the patterns in the data.</li>
+<li><strong>Explore the theory.</strong> Learn the statistical concepts behind the method.</li>
+<li><strong>Implement the model.</strong> Work through a Python example.</li>
+<li><strong>Evaluate the results.</strong> Examine forecast accuracy, limitations, and practical trade-offs.</li>
+</ol>
+<p>The emphasis is on developing the judgment to choose and evaluate forecasting methods, rather than simply learning how to call a modeling function.</p>
+<hr>
+</section>
+<section id="latest-posts" class="level2">
+<h2 class="anchored" data-anchor-id="latest-posts">Latest tutorials</h2>
+<p>Browse the latest articles below. New articles are posted regularly, so be sure to check back soon.</p>
 
 
 
 </section>
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="quarto-listing quarto-listing-container-default" id="listing-latest-posts">
 <div class="list quarto-listing-default">
 <div class="quarto-post image-right" data-index="0" data-categories="RnVuZGFtZW50YWxzJTJDUHl0aG9u" data-listing-date-sort="1793073600000" data-listing-file-modified-sort="1793134160016" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="106">
 <div class="body">

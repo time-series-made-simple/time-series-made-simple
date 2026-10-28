@@ -32,13 +32,34 @@
     "href": "index.html",
     "title": "Time Series Made Simple",
     "section": "",
-    "text": "Welcome to Time Series Made Simple — practical tutorials on time-series analysis, statistics, and forecasting with Python.\nMy goal is to explain the theory behind forecasting methods and demonstrate how to implement and evaluate them using Python."
+    "text": "Time-series analysis doesn’t have to be a black box. Time Series Made Simple equips you to work with time series data effectively. Learn the theory behind forecasting methods and put those methods into practice with Python.\nWhether you’re learning the fundamentals or comparing models for a real forecasting problem, the goal is the same: understand why a method works, when to use it, and how to evaluate its results.\nExplore the tutorials · About this site"
   },
   {
-    "objectID": "index.html#latest-articles",
-    "href": "index.html#latest-articles",
+    "objectID": "index.html#understand-the-theory.-master-the-code.-build-better-forecasts.",
+    "href": "index.html#understand-the-theory.-master-the-code.-build-better-forecasts.",
     "title": "Time Series Made Simple",
-    "section": "Latest articles",
-    "text": "Latest articles"
+    "section": "",
+    "text": "Time-series analysis doesn’t have to be a black box. Time Series Made Simple equips you to work with time series data effectively. Learn the theory behind forecasting methods and put those methods into practice with Python.\nWhether you’re learning the fundamentals or comparing models for a real forecasting problem, the goal is the same: understand why a method works, when to use it, and how to evaluate its results.\nExplore the tutorials · About this site"
+  },
+  {
+    "objectID": "index.html#learn-the-concepts-not-just-the-code",
+    "href": "index.html#learn-the-concepts-not-just-the-code",
+    "title": "Time Series Made Simple",
+    "section": "Learn the concepts, not just the code",
+    "text": "Learn the concepts, not just the code\nGood forecasting starts with understanding the data. Each tutorial aims to build intuition first, introduce the relevant statistical ideas, and then demonstrate how to apply them in Python.\n\n\n\nFoundations\nUnderstand trends, seasonality, stationarity, autocorrelation, and the structure of time-series data.\n\n\n\nStatistical forecasting\nExplore moving averages, exponential smoothing, ARIMA, SARIMA, and other statistical forecasting methods.\n\n\n\n\n\n\nPython in practice\nWork through examples using pandas, matplotlib, statsmodels, and scikit-learn, with code that illustrates the ideas being discussed.\n\n\n\nModel evaluation\nLearn how to compare forecasts, diagnose errors, establish meaningful baselines, and decide which models are useful for a particular problem."
+  },
+  {
+    "objectID": "index.html#a-practical-approach-to-learning",
+    "href": "index.html#a-practical-approach-to-learning",
+    "title": "Time Series Made Simple",
+    "section": "A practical approach to learning",
+    "text": "A practical approach to learning\nThe tutorials follow a consistent progression:\n\nBuild intuition. Understand the problem and the patterns in the data.\nExplore the theory. Learn the statistical concepts behind the method.\nImplement the model. Work through a Python example.\nEvaluate the results. Examine forecast accuracy, limitations, and practical trade-offs.\n\nThe emphasis is on developing the judgment to choose and evaluate forecasting methods, rather than simply learning how to call a modeling function."
+  },
+  {
+    "objectID": "index.html#latest-posts",
+    "href": "index.html#latest-posts",
+    "title": "Time Series Made Simple",
+    "section": "Latest tutorials",
+    "text": "Latest tutorials\nBrowse the latest articles below. New articles are posted regularly, so be sure to check back soon."
   }
 ]
