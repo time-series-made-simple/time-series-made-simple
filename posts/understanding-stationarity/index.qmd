@@ -1,5 +1,5 @@
 ---
-title: "Understanding Stationarity - Part 1"
+title: "Understanding Stationarity"
 description: "A simple explanation of the concept of stationarity."
 date: "2026-10-29"
 categories:

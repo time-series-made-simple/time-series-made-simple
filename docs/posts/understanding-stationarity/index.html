@@ -9,7 +9,7 @@
 <meta name="dcterms.date" content="2026-10-29">
 <meta name="description" content="A simple explanation of the concept of stationarity.">
 
-<title>Understanding Stationarity - Part 1 – Time Series Made Simple</title>
+<title>Understanding Stationarity – Time Series Made Simple</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -180,7 +180,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Understanding Stationarity - Part 1</h1>
+<h1 class="title">Understanding Stationarity</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Time Series</div>
     <div class="quarto-category">Python</div>
@@ -249,7 +249,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Null Hypothesis: Has Unit Root: Time Series is Non-Stationary Alternate Hypothesis: Does not Have Unit Root: Time Series is Stationary</p>
 <p>A p-value of below .05 is typically interpreted as strong evidence to reject the null hypothesis (i.e., your time series is stationary), while a p-value of above .05 is interpreted as insufficient evidence to reject the null hypothesis (i.e., your time series is nonstationary). Note, this test, though helpful, is not a 100% guarantee. It should always be paired with visual exploration prior to model creation and additional testing of the model’s performance.</p>
 <p>The statsmodels <code>adfuller</code> function performs this test for us. Let’s run our electricity production data from earlier in the article through the adfuller test as an example.</p>
-<div id="8e35e736" class="cell" data-execution_count="1">
+<div id="e4c0ea08" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.stattools <span class="im">import</span> adfuller</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
