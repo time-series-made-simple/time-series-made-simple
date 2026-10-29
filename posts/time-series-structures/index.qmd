@@ -86,7 +86,7 @@ flights_decomp = seasonal_decompose(
                     model='multiplicative'
                 )
 fig = flights_decomp.plot()
-fig.set_size_inches(10, 7);
+fig.set_size_inches(8, 6);
 ```
 
 The resulting plots give us the decomposed version of the time series. This can be extremely helpful in understanding the structure of our data.
