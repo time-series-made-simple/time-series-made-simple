@@ -5,8 +5,10 @@ project:
   resources:
     - CNAME
 
+jupyter: python3
 website:
   title: "Time Series Made Simple"
+  draft-mode: unlinked
   description: "Practical tutorials on time-series analysis and forecasting with Python."
   navbar:
     left:

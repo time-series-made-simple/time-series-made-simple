@@ -1,5 +1,75 @@
 [
   {
+    "objectID": "posts/time-series-structures/index.html",
+    "href": "posts/time-series-structures/index.html",
+    "title": "Time Series Structures",
+    "section": "",
+    "text": "This articles explores the main structural elements to look for when exploring a time series data set and gives a basic example of time series decomposition."
+  },
+  {
+    "objectID": "posts/time-series-structures/index.html#time-series-structures",
+    "href": "posts/time-series-structures/index.html#time-series-structures",
+    "title": "Time Series Structures",
+    "section": "Time Series Structures",
+    "text": "Time Series Structures\nThere are four main structures to look for when you are exploring a time series data set. Understanding these structural elements is an important part of learning about your time series, determining which preprocessing steps are needed, and deciding which models would be most appropriate for forecasting.\n\nTrend\nA trend is a long-term increase or decrease in the data. It describes an overall direction of the data set, whether upward or downward.\nThe following line plot of the daily Google opening stock price from 2004 to 2022 illustrates a clear example of an upward trend. If, on the other hand, the overall direction of the data appeared to be “flat”, this would likely indicate the absence of a trend.\n\n\n\nGoogle stock price line chart\n\n\n\n\nSeasonality\nSeasonality describes repeating fluctuations that occur at consistent intervals. These could show up as “peaks” or “valleys” in your time series data. For example, if you are a marketing analyst for a large online toy retailer, you might see regular, recurring spikes in sales in Q4 of each year around the holidays. This is a form of seasonality. Depending on the granularity of your data set, it could occur at other frequencies such as on certain days of the week or during certain hours of the day. The key is that it is of a consistent and repeating pattern.\nThe following plot of monthly electricity production from 2009-2018 shows clear seasonal structure. This seasonality aligns with what we intuitively would expect about electricity use. The highest electricity production is in the winter and, to a lesser extent, in the summer. Spring and fall show relatively lower levels of production. This pattern is repeating and at consistent intervals. If, on the other hand, the fluctuations in the data appeared to be random, with no clear pattern, we would not consider them to be seasonal in nature.\n\n\n\nElectricity production line chart\n\n\n\n\nCycles\nCycles describe longer term rises and falls in a data set that do repeat but not at a consistent interval. These are very commonly discussed in the field of economics and finance. Unlike seasonality, cycles are often difficult to predict.\nThe following plot of solar activity from 1909-2009 shows a clear cyclical pattern in the data. The increases and decreases in solar activity are longer in nature than seasonal fluctuations and are more difficult to anticipate.\n\n\n\nSolar activity line chart\n\n\n\n\nNoise\nWhatever is left over after accounting for the time series structures described so far is the noise in the data set. Noise consists of random fluctuations in the data that cannot be attributed to any perceivable structure. A time series data set that has no perceivable structure is called “white noise”. In the real world, virtually all time series data will have some amount of noise in it."
+  },
+  {
+    "objectID": "posts/time-series-structures/index.html#time-series-decomposition",
+    "href": "posts/time-series-structures/index.html#time-series-decomposition",
+    "title": "Time Series Structures",
+    "section": "Time Series Decomposition",
+    "text": "Time Series Decomposition\nTime series decomposition is the process of taking a time series data set and splitting it apart into its different structures. Using the flights data set from the seaborn package in Python, let’s walk through a simple example of time series decomposition. To accomplish this, we’ll rely on statsmodels’ seasonal_decompose function.\nNote, the model parameter is very important. If seasonality remains at a consistent level, you can use “additive”. If the seasonal fluctuations become more extreme as the time series increases, you will want to use “multiplicative”. We will explore this further in another article. For more information check out the statsmodels documentation here: https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.seasonal_decompose.html\nFor more complex time series or time series with extreme outliers, you should consider using STL decomposition. More information is available here: https://www.statsmodels.org/devel/generated/statsmodels.tsa.seasonal.STL.html\n\n#Necessary imports\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom statsmodels.tsa.seasonal import seasonal_decompose\n\n#Load flights data into 'flights' dataframe\nflights = sns.load_dataset(\"flights\")\n\n#You will often need to convert your data into a more usable form, usually with some type of time index.\n#This code converts the 'year' and 'month' columns into a single datatime column then sets that column as our index.\n\nflights['date'] = pd.to_datetime(\n    flights['year'].astype(str) + '-' + flights['month'].astype(str), format='%Y-%b'\n)\n\nflights = flights.set_index('date')\n\n#Separate the target feature into a series. We no longer need the month/year columns since our index  already has that information.\ny = flights['passengers']\n\n#Use the seasonal_decompose function to decompose your time series, be sure to choose the correct model parameter\nflights_decomp = seasonal_decompose(\n                    y,\n                    #model='additive',\n                    model='multiplicative'\n                )\nfig = flights_decomp.plot()\nfig.set_size_inches(10, 7);\n\n\n\n\n\n\n\n\nThe resulting plots give us the decomposed version of the time series. This can be extremely helpful in understanding the structure of our data.\nThe first line graph is the original data set without any decomposition.\nThe second reveals the trend in the data.\nThe third reveals the seasonality in the data.\nThe final plot reveals the residuals (or noise) in the data set. For additive, this should cluster around 0. For multiplicative, this should cluster around 1. You hope to not see remaining structure or changing variance in the residuals.\nIn the case of the flights data set, we can clearly see a consistent upward trend. We also see strong seasonal fluctuations, with spikes and valleys occurring at consistent points each year. Finally, we see that the residuals appear to have little to no remaining structure and are tightly clustered around 1.\nOften times, your data sets may not decompose this cleanly. However, this is an important exercise that is very helpful in learning about the underlying time series structures."
+  },
+  {
+    "objectID": "posts/time-series-structures/index.html#conclusion",
+    "href": "posts/time-series-structures/index.html#conclusion",
+    "title": "Time Series Structures",
+    "section": "Conclusion",
+    "text": "Conclusion\nTo sum up, the four main structures you are looking for within your time series are trend, seasonal fluctuations, cycles, and noise. Time series decomposition can be a useful tool in exploring these aspects of your time series."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Home",
+    "section": "",
+    "text": "Time Series Made Simple - Site Logo\nTime-series analysis doesn’t have to be a black box. Time Series Made Simple equips you to work with time series data effectively. Learn the theory behind forecasting methods and put those methods into practice with Python.\nWhether you’re learning the fundamentals or comparing models for a real forecasting problem, the goal is the same: understand why a method works, when to use it, and how to evaluate its results.\nExplore the tutorials · About this site"
+  },
+  {
+    "objectID": "index.html#understand-the-theory.-master-the-code.-build-better-forecasts.",
+    "href": "index.html#understand-the-theory.-master-the-code.-build-better-forecasts.",
+    "title": "Home",
+    "section": "Understand the theory. Master the code. Build better forecasts.",
+    "text": "Understand the theory. Master the code. Build better forecasts.\nGood forecasting starts with understanding the data. Each tutorial aims to build intuition first, introduce the relevant statistical ideas, and then demonstrate how to apply them in Python.\n\n\n\nFoundations\nUnderstand trends, seasonality, stationarity, autocorrelation, and the structure of time-series data.\n\n\n\nStatistical forecasting\nExplore moving averages, exponential smoothing, ARIMA, SARIMA, and other statistical forecasting methods.\n\n\n\n\n\n\nPython in practice\nWork through examples using pandas, matplotlib, statsmodels, and scikit-learn, with code that illustrates the ideas being discussed.\n\n\n\nModel evaluation\nLearn how to compare forecasts, diagnose errors, establish meaningful baselines, and decide which models are useful for a particular problem."
+  },
+  {
+    "objectID": "index.html#a-practical-approach-to-learning",
+    "href": "index.html#a-practical-approach-to-learning",
+    "title": "Home",
+    "section": "A practical approach to learning",
+    "text": "A practical approach to learning\nThe tutorials follow a consistent progression:\n\nBuild intuition. Understand the problem and the patterns in the data.\nExplore the theory. Learn the statistical concepts behind the method.\nImplement the model. Work through a Python example.\nEvaluate the results. Examine forecast accuracy, limitations, and practical trade-offs.\n\nThe emphasis is on developing the judgment to choose and evaluate forecasting methods, rather than simply learning how to call a modeling function."
+  },
+  {
+    "objectID": "index.html#latest-tutorials",
+    "href": "index.html#latest-tutorials",
+    "title": "Home",
+    "section": "Latest tutorials",
+    "text": "Latest tutorials\nBrowse the latest articles below.\n\n\n\n\n\nTime Series Structures\n\n\n\nTime Series\n\nPython\n\nBasics\n\nStatsmodels\n\nVisualization\n\n\n\nTo understand a time series you must understand its structure.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nIntro to Time Series\n\n\n\nTime Series\n\nPython\n\nBasics\n\n\n\nThe absolute basics of time series data for beginners.\n\n\n\n\n\nOct 28, 2026\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Time Series Made Simple",
+    "section": "",
+    "text": "Hello, I’m Joel, the founder of TimeSeriesMadeSimple.com.\nI began working extensively with time series data in 2018. At the time, my forecasting toolkit consisted largely of the basic methods available in Microsoft Excel. Those tools served a purpose, but as I tackled more complex forecasting problems, I realized I needed something more powerful. What I didn’t yet appreciate was just how much statistical theory and how many analytical techniques were available to help me understand my data and build better forecasts.\nThat realization set me on a path of continuous learning. I taught myself Python, earned a Master of Data Science degree, and developed a deep interest in time series analysis, statistical modeling, and forecasting. I now oversee the preparation of long and medium range forecasts across multiple sales and service operational groups within my company.\nI created Time Series Made Simple to share what I’ve learned and help others develop these skills. My goal is to make time series concepts easier to understand by connecting the underlying theory with practical, hands-on applications. While the examples and projects on this site use Python, the statistical concepts are broadly applicable across programming languages and analytical tools.\nYou’ll find a mix of focused tutorials on individual time series concepts and end-to-end projects that demonstrate the full analytical process—from exploring data and selecting models to evaluating forecasts and interpreting results. I aim to publish new articles weekly, giving readers a steady path toward building their knowledge and practical skills.\nWhether you’re just getting started with time series analysis or looking to expand your existing data science toolkit, I hope this site helps you understand not just how forecasting methods work, but why they work and when to use them.\nUnderstand the theory. Master the code. Build better forecasts.\nNew to time series analysis? Start with my Introduction to Time Series tutorial."
+  },
+  {
+    "objectID": "archive.html",
+    "href": "archive.html",
+    "title": "All Posts",
+    "section": "",
+    "text": "Explore all articles on Time Series Made Simple, from foundational concepts to hands-on forecasting projects.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\nTime Series Structures\n\n\n\nTime Series\n\nPython\n\nBasics\n\nStatsmodels\n\nVisualization\n\n\n\nTo understand a time series you must understand its structure.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nIntro to Time Series\n\n\n\nTime Series\n\nPython\n\nBasics\n\n\n\nThe absolute basics of time series data for beginners.\n\n\n\n\n\nOct 28, 2026\n\n\n\n\n\nNo matching items"
+  },
+  {
     "objectID": "posts/intro-to-time-series/index.html",
     "href": "posts/intro-to-time-series/index.html",
     "title": "Intro to Time Series",
@@ -40,47 +110,5 @@
     "title": "Intro to Time Series",
     "section": "Conclusion",
     "text": "Conclusion\nTo sum it up: because time series are all around us and unique, we as data professionals must equip ourselves to work with them effectively."
-  },
-  {
-    "objectID": "archive.html",
-    "href": "archive.html",
-    "title": "All Posts",
-    "section": "",
-    "text": "Explore all articles on Time Series Made Simple, from foundational concepts to hands-on forecasting projects.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\nIntro to Time Series\n\n\n\nTime Series\n\nPython\n\nBasics\n\n\n\nThe absolute basics of time series data for beginners.\n\n\n\n\n\nOct 28, 2026\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "Time Series Made Simple",
-    "section": "",
-    "text": "Hello, I’m Joel, the founder of TimeSeriesMadeSimple.com.\nI began working extensively with time series data in 2018. At the time, my forecasting toolkit consisted largely of the basic methods available in Microsoft Excel. Those tools served a purpose, but as I tackled more complex forecasting problems, I realized I needed something more powerful. What I didn’t yet appreciate was just how much statistical theory and how many analytical techniques were available to help me understand my data and build better forecasts.\nThat realization set me on a path of continuous learning. I taught myself Python, earned a Master of Data Science degree, and developed a deep interest in time series analysis, statistical modeling, and forecasting. I now oversee the preparation of long and medium range forecasts across multiple sales and service operational groups within my company.\nI created Time Series Made Simple to share what I’ve learned and help others develop these skills. My goal is to make time series concepts easier to understand by connecting the underlying theory with practical, hands-on applications. While the examples and projects on this site use Python, the statistical concepts are broadly applicable across programming languages and analytical tools.\nYou’ll find a mix of focused tutorials on individual time series concepts and end-to-end projects that demonstrate the full analytical process—from exploring data and selecting models to evaluating forecasts and interpreting results. I aim to publish new articles weekly, giving readers a steady path toward building their knowledge and practical skills.\nWhether you’re just getting started with time series analysis or looking to expand your existing data science toolkit, I hope this site helps you understand not just how forecasting methods work, but why they work and when to use them.\nUnderstand the theory. Master the code. Build better forecasts.\nNew to time series analysis? Start with my Introduction to Time Series tutorial."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Home",
-    "section": "",
-    "text": "Time Series Made Simple - Site Logo\nTime-series analysis doesn’t have to be a black box. Time Series Made Simple equips you to work with time series data effectively. Learn the theory behind forecasting methods and put those methods into practice with Python.\nWhether you’re learning the fundamentals or comparing models for a real forecasting problem, the goal is the same: understand why a method works, when to use it, and how to evaluate its results.\nExplore the tutorials · About this site"
-  },
-  {
-    "objectID": "index.html#understand-the-theory.-master-the-code.-build-better-forecasts.",
-    "href": "index.html#understand-the-theory.-master-the-code.-build-better-forecasts.",
-    "title": "Home",
-    "section": "Understand the theory. Master the code. Build better forecasts.",
-    "text": "Understand the theory. Master the code. Build better forecasts.\nGood forecasting starts with understanding the data. Each tutorial aims to build intuition first, introduce the relevant statistical ideas, and then demonstrate how to apply them in Python.\n\n\n\nFoundations\nUnderstand trends, seasonality, stationarity, autocorrelation, and the structure of time-series data.\n\n\n\nStatistical forecasting\nExplore moving averages, exponential smoothing, ARIMA, SARIMA, and other statistical forecasting methods.\n\n\n\n\n\n\nPython in practice\nWork through examples using pandas, matplotlib, statsmodels, and scikit-learn, with code that illustrates the ideas being discussed.\n\n\n\nModel evaluation\nLearn how to compare forecasts, diagnose errors, establish meaningful baselines, and decide which models are useful for a particular problem."
-  },
-  {
-    "objectID": "index.html#a-practical-approach-to-learning",
-    "href": "index.html#a-practical-approach-to-learning",
-    "title": "Home",
-    "section": "A practical approach to learning",
-    "text": "A practical approach to learning\nThe tutorials follow a consistent progression:\n\nBuild intuition. Understand the problem and the patterns in the data.\nExplore the theory. Learn the statistical concepts behind the method.\nImplement the model. Work through a Python example.\nEvaluate the results. Examine forecast accuracy, limitations, and practical trade-offs.\n\nThe emphasis is on developing the judgment to choose and evaluate forecasting methods, rather than simply learning how to call a modeling function."
-  },
-  {
-    "objectID": "index.html#latest-tutorials",
-    "href": "index.html#latest-tutorials",
-    "title": "Home",
-    "section": "Latest tutorials",
-    "text": "Latest tutorials\nBrowse the latest articles below.\n\n\n\n\n\nIntro to Time Series\n\n\n\nTime Series\n\nPython\n\nBasics\n\n\n\nThe absolute basics of time series data for beginners.\n\n\n\n\n\nOct 28, 2026\n\n\n\n\n\nNo matching items"
   }
 ]

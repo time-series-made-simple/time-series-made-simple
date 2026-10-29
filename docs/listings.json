@@ -1,13 +1,15 @@
 [
   {
-    "listing": "/archive.html",
+    "listing": "/index.html",
     "items": [
+      "/posts/time-series-structures/index.html",
       "/posts/intro-to-time-series/index.html"
     ]
   },
   {
-    "listing": "/index.html",
+    "listing": "/archive.html",
     "items": [
+      "/posts/time-series-structures/index.html",
       "/posts/intro-to-time-series/index.html"
     ]
   }
