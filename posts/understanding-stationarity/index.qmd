@@ -33,13 +33,13 @@ If a time series has a trend or seasonality, it is non-stationary. Understanding
 
 Let's first take a look at an example of a non-stationary time series.
 
-[electricity production line plot](elec_production_1985_2018.png)
+![electricity production line plot](elec_production_1985_2018.png)
 
 This line graph displays the monthly electricity production from 1985-2018. Just a cursory glance indicates that neither the mean nor the variance are consistent over time. There is a clear upward trend to the data as well as increasing seasonal variance as well. This gives us strong evidence that we are dealing with a non-stationary data set.
 
 Now, let's see an example of a stationary time series.
 
-[google stock price change 2010](google_stock_price_change_2010.png)
+![google stock price change 2010](google_stock_price_change_2010.png)
 
 This line graph displays the daily change in the opening stock price for Google's stock in 2010. What we see here is that, while there are certainly day-to-day fluctuations, the overall mean and variance appear to be relatively stable. There does not appear to be a trend to the data or consistent seasonal fluctuations. 
 

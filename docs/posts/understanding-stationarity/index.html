@@ -226,10 +226,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="visualization">Visualization</h3>
 <p>If a time series has a trend or seasonality, it is non-stationary. Understanding the structure of your time series, then, can be a quick way to determine whether or not your time series is stationary. The easiest way to do this is by visualizing your time series. Often a simple line plot can reveal trend or seasonality, or you can decompose your time series. See <a href="posts/time-series-structures">this article</a> for more information about time series structures and decomposition.</p>
 <p>Let’s first take a look at an example of a non-stationary time series.</p>
-<p><a href="elec_production_1985_2018.png">electricity production line plot</a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="elec_production_1985_2018.png" class="img-fluid figure-img"></p>
+<figcaption>electricity production line plot</figcaption>
+</figure>
+</div>
 <p>This line graph displays the monthly electricity production from 1985-2018. Just a cursory glance indicates that neither the mean nor the variance are consistent over time. There is a clear upward trend to the data as well as increasing seasonal variance as well. This gives us strong evidence that we are dealing with a non-stationary data set.</p>
 <p>Now, let’s see an example of a stationary time series.</p>
-<p><a href="google_stock_price_change_2010.png">google stock price change 2010</a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="google_stock_price_change_2010.png" class="img-fluid figure-img"></p>
+<figcaption>google stock price change 2010</figcaption>
+</figure>
+</div>
 <p>This line graph displays the daily change in the opening stock price for Google’s stock in 2010. What we see here is that, while there are certainly day-to-day fluctuations, the overall mean and variance appear to be relatively stable. There does not appear to be a trend to the data or consistent seasonal fluctuations.</p>
 </section>
 <section id="statistical-tests" class="level3">
@@ -239,7 +249,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Null Hypothesis: Has Unit Root: Time Series is Non-Stationary Alternate Hypothesis: Does not Have Unit Root: Time Series is Stationary</p>
 <p>A p-value of below .05 is typically interpreted as strong evidence to reject the null hypothesis (i.e., your time series is stationary), while a p-value of above .05 is interpreted as insufficient evidence to reject the null hypothesis (i.e., your time series is nonstationary). Note, this test, though helpful, is not a 100% guarantee. It should always be paired with visual exploration prior to model creation and additional testing of the model’s performance.</p>
 <p>The statsmodels <code>adfuller</code> function performs this test for us. Let’s run our electricity production data from earlier in the article through the adfuller test as an example.</p>
-<div id="42736882" class="cell" data-execution_count="1">
+<div id="8e35e736" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.stattools <span class="im">import</span> adfuller</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
