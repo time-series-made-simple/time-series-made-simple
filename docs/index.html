@@ -85,9 +85,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-title','listing-date','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-title','listing-date','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -184,10 +184,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(3)</span></div><div class="category" data-category="QmFzaWNz">Basics <span class="quarto-category-count">(3)</span></div><div class="category" data-category="UHl0aG9u">Python <span class="quarto-category-count">(3)</span></div><div class="category" data-category="U3RhdHNtb2RlbHM=">Statsmodels <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VGltZSUyMFNlcmllcw==">Time Series <span class="quarto-category-count">(3)</span></div><div class="category" data-category="VmlzdWFsaXphdGlvbg==">Visualization <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content column-page" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -196,7 +195,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta column-page-left">
+<div class="quarto-title-meta column-page">
 
     
   
@@ -210,7 +209,7 @@ window.Quarto = {
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="logo_main.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<p><img src="logo_main.png" class="img-fluid figure-img" style="width:50.0%"></p>
 <figcaption>Time Series Made Simple - Site Logo</figcaption>
 </figure>
 </div>
@@ -271,19 +270,6 @@ window.Quarto = {
 <h3 class="no-anchor listing-title">
 <a href="./posts/time-series-structures/index.html" class="no-external">Time Series Structures</a>
 </h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('VGltZSUyMFNlcmllcw=='); return false;">Time Series</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">Python</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QmFzaWNz'); return false;">Basics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('U3RhdHNtb2RlbHM='); return false;">Statsmodels</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('VmlzdWFsaXphdGlvbg=='); return false;">Visualization</div>
-
-</div>
 <div class="delink listing-description"><a href="./posts/time-series-structures/index.html" class="no-external">
 <p>To understand a time series you must understand its structure.</p>
 </a></div>
@@ -301,15 +287,6 @@ Oct 29, 2026
 <h3 class="no-anchor listing-title">
 <a href="./posts/understanding-stationarity/index.html" class="no-external">Understanding Stationarity</a>
 </h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('VGltZSUyMFNlcmllcw=='); return false;">Time Series</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">Python</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QmFzaWNz'); return false;">Basics</div>
-
-</div>
 <div class="delink listing-description"><a href="./posts/understanding-stationarity/index.html" class="no-external">
 <p>A simple explanation of the concept of stationarity.</p>
 </a></div>
@@ -327,15 +304,6 @@ Oct 29, 2026
 <h3 class="no-anchor listing-title">
 <a href="./posts/intro-to-time-series/index.html" class="no-external">Intro to Time Series</a>
 </h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('VGltZSUyMFNlcmllcw=='); return false;">Time Series</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">Python</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('QmFzaWNz'); return false;">Basics</div>
-
-</div>
 <div class="delink listing-description"><a href="./posts/intro-to-time-series/index.html" class="no-external">
 <p>The absolute basics of time series data for beginners.</p>
 </a></div>

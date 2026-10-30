@@ -7,15 +7,15 @@ listing:
   contents: posts
   sort: "date desc"
   type: default
-  fields: [title, date, description, categories]
-  categories: true
+  fields: [title, date, description]
+  categories: false
 
 format:
   html:
     toc: false
 ---
 
-![Time Series Made Simple - Site Logo](logo_main.png){width=75%}
+![Time Series Made Simple - Site Logo](logo_main.png){width=50%}
 
 Time-series analysis doesn't have to be a black box. **Time Series Made Simple** equips you to work with time series data effectively. Learn the theory behind forecasting methods and put those methods into practice with Python.
 
