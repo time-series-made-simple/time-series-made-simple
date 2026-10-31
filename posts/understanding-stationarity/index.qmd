@@ -32,7 +32,7 @@ There are two main ways to identify whether a time series is stationary or non-s
 
 ### Visualization
 
-If a time series has a trend or seasonality, it is non-stationary. Understanding the structure of your time series, then, can be a quick way to determine whether or not your time series is stationary. The easiest way to do this is by visualizing your time series. Often a simple line plot can reveal trend or seasonality, or you can decompose your time series. See [this article](posts/time-series-structures) for more information about time series structures and decomposition.
+If a time series has a trend or seasonality, it is non-stationary. Understanding the structure of your time series, then, can be a quick way to determine whether or not your time series is stationary. The easiest way to do this is by visualizing your time series. Often a simple line plot can reveal trend or seasonality, or you can decompose your time series. See [this article](../time-series-structures/index.html) for more information about time series structures and decomposition.
 
 Let's first take a look at an example of a non-stationary time series.
 

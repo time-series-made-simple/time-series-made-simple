@@ -17,7 +17,7 @@ format:
     code-copy: true
 ---
 
-ARMA models require a stationary time series in order to work properly. If you are unfamiliar with the concept of stationarity, I encourage you to check out this [article](posts/understanding-stationarity) before moving forward.
+ARMA models require a stationary time series in order to work properly. If you are unfamiliar with the concept of stationarity, I encourage you to check out this [article](../understanding-stationarity/index.html) before moving forward.
 
 If you determine that your time series is non-stationary - whether through visualization, statistical tests, or both - and you intend to build an auto-regression and/or moving average model (ARMA), you will need to make your data stationary. How can this be done? Through a simple process called **differencing**.
 

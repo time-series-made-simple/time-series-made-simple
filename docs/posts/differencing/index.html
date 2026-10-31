@@ -215,7 +215,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>ARMA models require a stationary time series in order to work properly. If you are unfamiliar with the concept of stationarity, I encourage you to check out this <a href="posts/understanding-stationarity">article</a> before moving forward.</p>
+<p>ARMA models require a stationary time series in order to work properly. If you are unfamiliar with the concept of stationarity, I encourage you to check out this <a href="../understanding-stationarity/index.html">article</a> before moving forward.</p>
 <p>If you determine that your time series is non-stationary - whether through visualization, statistical tests, or both - and you intend to build an auto-regression and/or moving average model (ARMA), you will need to make your data stationary. How can this be done? Through a simple process called <strong>differencing</strong>.</p>
 <p>In this article we will explore what differencing is, how it can usually make a nonstationary time series stationary, and then walk through an easy way to perform differencing in Python.</p>
 <section id="what-is-differencing" class="level2">
@@ -234,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Differencing in Python</h1>
 <p>Consider the following example of the Google daily opening stock price from 2010-2013.</p>
 <p>If we just plot the daily stock price in its original form, we will see strong evidence of non-stationarity. The data set has a clear upward trend, which would indicate a mean that is not constant across the time series.</p>
-<div id="9d60e34a" class="cell" data-execution_count="1">
+<div id="70777d76" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Necessary imports</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -269,7 +269,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Now, let’s use Pandas <code>.diff()</code> method to difference our data set. For more information about the <code>.diff()</code> method, check out the Pandas documentation on the subject <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.diff.html">here</a>.</p>
 <p>In the case of this daily data, without any clear seasonality, we will just difference by 1. This means we are taking the change in the Google stock price from day to day. We will then plot this differenced data to see if we were able to successfully make our time series stationary.</p>
 <p>Note, when you use the <code>.diff()</code> method, you will introduce at least 1 null value into your time series. This is due to the first instance not having a preceding instance to compare against. Therefore, you will typically want to use <code>.dropna()</code> along with this method to remove the null value.</p>
-<div id="079492db" class="cell" data-execution_count="2">
+<div id="8e846ab6" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>y_diff <span class="op">=</span> y.diff(<span class="dv">1</span>).dropna() <span class="co">#Differencing by 1, dropping the resulting null value</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>y_diff.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>), legend<span class="op">=</span><span class="va">None</span>)</span>
@@ -286,7 +286,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>In this plot of the differenced Google stock price data, we should immediately note that the trend that was so apparent in the previous plot (the undifferenced data) has disappeared. In addition, we see what appears to be fairly consistent mean and variance across this differenced data set. All of this gives us reason to believe we now have a stationary time series.</p>
 <p>To give us some additional confidence, let’s run our data through the Augmented Dickey-Fuller test. We will compare the p-values before and after differencing to see how we did.</p>
-<div id="38010dc3" class="cell" data-execution_count="3">
+<div id="01804fb2" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.stattools <span class="im">import</span> adfuller</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>adfuller_results_nondiff <span class="op">=</span> adfuller(y)</span>
