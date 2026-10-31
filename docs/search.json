@@ -63,20 +63,6 @@
     "text": "Conclusion\nTo sum it up: because time series are all around us and unique, we as data professionals must equip ourselves to work with them effectively."
   },
   {
-    "objectID": "archive.html",
-    "href": "archive.html",
-    "title": "All Posts",
-    "section": "",
-    "text": "Explore all articles on Time Series Made Simple, from foundational concepts to hands-on forecasting projects.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\nTime Series Structures\n\n\n\nTime Series\n\nPython\n\nBasics\n\nStatsmodels\n\nVisualization\n\n\n\nTo understand a time series you must understand its structure.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nUnderstanding Stationarity\n\n\n\nTime Series\n\nPython\n\nBasics\n\n\n\nA simple explanation of the concept of stationarity.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nIntro to Time Series\n\n\n\nTime Series\n\nPython\n\nBasics\n\n\n\nThe absolute basics of time series data for beginners.\n\n\n\n\n\nOct 28, 2026\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "Time Series Made Simple",
-    "section": "",
-    "text": "Hello, I’m Joel, the founder of TimeSeriesMadeSimple.com.\nI began working extensively with time series data in 2018. At the time, my forecasting toolkit consisted largely of the basic methods available in Microsoft Excel. Those tools served a purpose, but as I tackled more complex forecasting problems, I realized I needed something more powerful. What I didn’t yet appreciate was just how much statistical theory and how many analytical techniques were available to help me understand my data and build better forecasts.\nThat realization set me on a path of continuous learning. I taught myself Python, earned a Master of Data Science degree, and developed a deep interest in time series analysis, statistical modeling, and forecasting. I now oversee the preparation of long and medium range forecasts across multiple sales and service operational groups within my company.\nI created Time Series Made Simple to share what I’ve learned and help others develop these skills. My goal is to make time series concepts easier to understand by connecting the underlying theory with practical, hands-on applications. While the examples and projects on this site use Python, the statistical concepts are broadly applicable across programming languages and analytical tools.\nYou’ll find a mix of focused tutorials on individual time series concepts and end-to-end projects that demonstrate the full analytical process—from exploring data and selecting models to evaluating forecasts and interpreting results. I aim to publish new articles weekly, giving readers a steady path toward building their knowledge and practical skills.\nWhether you’re just getting started with time series analysis or looking to expand your existing data science toolkit, I hope this site helps you understand not just how forecasting methods work, but why they work and when to use them.\nUnderstand the theory. Master the code. Build better forecasts.\nNew to time series analysis? Start with my Introduction to Time Series tutorial."
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Home",
@@ -102,7 +88,49 @@
     "href": "index.html#latest-tutorials",
     "title": "Home",
     "section": "Latest tutorials",
-    "text": "Latest tutorials\nBrowse the latest articles below.\n\n\n\n\n\nTime Series Structures\n\n\nTo understand a time series you must understand its structure.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nUnderstanding Stationarity\n\n\nA simple explanation of the concept of stationarity.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nIntro to Time Series\n\n\nThe absolute basics of time series data for beginners.\n\n\n\n\n\nOct 28, 2026\n\n\n\n\n\nNo matching items"
+    "text": "Latest tutorials\nBrowse the latest articles below.\n\n\n\n\n\nDifferencing\n\n\nHow to make a non-stationary time series stationary\n\n\n\n\n\nOct 30, 2026\n\n\n\n\n\n\n\nTime Series Structures\n\n\nTo understand a time series you must understand its structure.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nUnderstanding Stationarity\n\n\nA simple explanation of the concept of stationarity.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nIntro to Time Series\n\n\nThe absolute basics of time series data for beginners.\n\n\n\n\n\nOct 28, 2026\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Time Series Made Simple",
+    "section": "",
+    "text": "Hello, I’m Joel, the founder of TimeSeriesMadeSimple.com.\nI began working extensively with time series data in 2018. At the time, my forecasting toolkit consisted largely of the basic methods available in Microsoft Excel. Those tools served a purpose, but as I tackled more complex forecasting problems, I realized I needed something more powerful. What I didn’t yet appreciate was just how much statistical theory and how many analytical techniques were available to help me understand my data and build better forecasts.\nThat realization set me on a path of continuous learning. I taught myself Python, earned a Master of Data Science degree, and developed a deep interest in time series analysis, statistical modeling, and forecasting. I now oversee the preparation of long and medium range forecasts across multiple sales and service operational groups within my company.\nI created Time Series Made Simple to share what I’ve learned and help others develop these skills. My goal is to make time series concepts easier to understand by connecting the underlying theory with practical, hands-on applications. While the examples and projects on this site use Python, the statistical concepts are broadly applicable across programming languages and analytical tools.\nYou’ll find a mix of focused tutorials on individual time series concepts and end-to-end projects that demonstrate the full analytical process—from exploring data and selecting models to evaluating forecasts and interpreting results. I aim to publish new articles weekly, giving readers a steady path toward building their knowledge and practical skills.\nWhether you’re just getting started with time series analysis or looking to expand your existing data science toolkit, I hope this site helps you understand not just how forecasting methods work, but why they work and when to use them.\nUnderstand the theory. Master the code. Build better forecasts.\nNew to time series analysis? Start with my Introduction to Time Series tutorial."
+  },
+  {
+    "objectID": "archive.html",
+    "href": "archive.html",
+    "title": "All Posts",
+    "section": "",
+    "text": "Explore all articles on Time Series Made Simple, from foundational concepts to hands-on forecasting projects.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\nDifferencing\n\n\n\nTime Series\n\nPython\n\nBasics\n\nARIMA\n\nPandas\n\n\n\nHow to make a non-stationary time series stationary\n\n\n\n\n\nOct 30, 2026\n\n\n\n\n\n\n\nTime Series Structures\n\n\n\nTime Series\n\nPython\n\nBasics\n\nStatsmodels\n\nVisualization\n\n\n\nTo understand a time series you must understand its structure.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nUnderstanding Stationarity\n\n\n\nTime Series\n\nPython\n\nBasics\n\nARIMA\n\nVisualization\n\nStatsmodels\n\n\n\nA simple explanation of the concept of stationarity.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nIntro to Time Series\n\n\n\nTime Series\n\nPython\n\nBasics\n\n\n\nThe absolute basics of time series data for beginners.\n\n\n\n\n\nOct 28, 2026\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/differencing/index.html",
+    "href": "posts/differencing/index.html",
+    "title": "Differencing",
+    "section": "",
+    "text": "ARMA models require a stationary time series in order to work properly. If you are unfamiliar with the concept of stationarity, I encourage you to check out this article before moving forward.\nIf you determine that your time series is non-stationary - whether through visualization, statistical tests, or both - and you intend to build an auto-regression and/or moving average model (ARMA), you will need to make your data stationary. How can this be done? Through a simple process called differencing.\nIn this article we will explore what differencing is, how it can usually make a nonstationary time series stationary, and then walk through an easy way to perform differencing in Python."
+  },
+  {
+    "objectID": "posts/differencing/index.html#what-is-differencing",
+    "href": "posts/differencing/index.html#what-is-differencing",
+    "title": "Differencing",
+    "section": "What is Differencing?",
+    "text": "What is Differencing?\nDifferencing, very simply, means calculating the change (i.e. the difference) between instances within your time series.\nFor example, if your time series was (0, 3, 2, 5, 5, 1, 7), then the differenced time series would be (3, -1, 3, 0, -4, 6), the difference between each “hop”. Think, “up 3”, “down 1”, “up 3”, “stay the same”, “down 4”, and “up 6”.\nDifferencing can be done at other intervals than just from each successive instance. Seasonal differencing is an example of this, where you calculate the difference between each successive seasonal instance. For example, you might calculate the difference between January 2025 and January 2026, February 2025 and February 2026, March 2025 and March 2026, etc. for monthly seasonal data.\nIn its simplest form though, differencing just implies taking the change between each successive instance. In essence, you are just converting your original time series of values into a time series of the change between values."
+  },
+  {
+    "objectID": "posts/differencing/index.html#how-does-differencing-work",
+    "href": "posts/differencing/index.html#how-does-differencing-work",
+    "title": "Differencing",
+    "section": "How does Differencing Work?",
+    "text": "How does Differencing Work?\nInterestingly, the change from instance to instance is often (though not always) relatively stable in mean and variance, even if the underlying time series is quite unstable.\nOccasionally, you may need to difference your time series data more than once to achieve stationarity. If you find yourself differencing more than 2-3 times, however, you may need to consider other methods of working with your time series."
+  },
+  {
+    "objectID": "posts/differencing/index.html#conclusion",
+    "href": "posts/differencing/index.html#conclusion",
+    "title": "Differencing",
+    "section": "Conclusion",
+    "text": "Conclusion\nDifferencing is a simple process that can generally be used to make a non-stationary time series stationary. We can difference our time series data using Pandas .diff() function. This is an important step in preparing your data for use in a statistical model like ARIMA.\nThe Google Stock Price data set used in this article was sourced from https://www.kaggle.com/datasets/varpit94/google-stock-data"
   },
   {
     "objectID": "posts/time-series-structures/index.html",

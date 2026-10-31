@@ -1,15 +1,17 @@
 [
   {
-    "listing": "/archive.html",
+    "listing": "/index.html",
     "items": [
+      "/posts/differencing/index.html",
       "/posts/time-series-structures/index.html",
       "/posts/understanding-stationarity/index.html",
       "/posts/intro-to-time-series/index.html"
     ]
   },
   {
-    "listing": "/index.html",
+    "listing": "/archive.html",
     "items": [
+      "/posts/differencing/index.html",
       "/posts/time-series-structures/index.html",
       "/posts/understanding-stationarity/index.html",
       "/posts/intro-to-time-series/index.html"

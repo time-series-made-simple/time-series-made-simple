@@ -6,6 +6,9 @@ categories:
   - Time Series
   - Python
   - Basics
+  - ARIMA
+  - Visualization
+  - Statsmodels
 
 jupyter: python3
 format:
