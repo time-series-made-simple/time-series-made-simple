@@ -224,15 +224,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="multiplicative-seasonality" class="level2">
 <h2 class="anchored" data-anchor-id="multiplicative-seasonality">Multiplicative Seasonality</h2>
-<p>A time series has multiplicative seasonality if the seasonal fluctuations change in size if the underlying data increases or decreases.</p>
-<p>Going back to our coffee shop scenario once more, if we saw that the additional customer traffic during the 7:30am-8:00am interval instead of staying consistent (+5 customers) a year into business actually increased in its variation from the underlying level, say now the coffee shop receives 10 customers over the average level, that would be an example of multiplicative seasonality.</p>
-<p>In other words, the seasonal variation increases or decreases, based on the underlying trend.</p>
+<p>A time series has multiplicative seasonality if the seasonal fluctuations change in size as the underlying data increases or decreases.</p>
+<p>Let’s return to our coffee shop illustration once more. Imagine that a month in, the increased customer traffic was 5 over the average from 7:30am-8:00am. So far, exactly the same as our prior scenario. This time though, imagine that a year later, as the average customer traffic increased, the variation during that 7:30am interval also increased to 2 times as many customers than the average (+12 customers). This would be an example of multiplicative seasonality. As overall customer counts increased, the seasonal variation in our peak interval also increased.</p>
+<p>In other words, the seasonal variation increases or decreases based on the underlying trend.</p>
 </section>
 <section id="using-visualization-to-determine-seasonality-type" class="level2">
 <h2 class="anchored" data-anchor-id="using-visualization-to-determine-seasonality-type">Using Visualization to Determine Seasonality Type</h2>
 <p>Many times, a simple line plot will be enough to determine whether our time series has additive or multiplicative seasonality.</p>
 <p>We will use the flights data set from the <code>seaborn</code> package in Python as an example.</p>
-<div id="59539676" class="cell" data-execution_count="1">
+<div id="741e2b43" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Necessary imports</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -273,7 +273,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>If, on the other hand, the fluctuations stayed fairly consistent - even as the underlying trend increased - we would have evidence of additive seasonality.</p>
 <p>What would happen if we assumed incorrectly that our data had additive seasonality?</p>
 <p>Well, let’s use statsmodels <code>seasonal_decompose</code> function, with the <code>model</code> parameter set to “additive” instead of “multiplicative” and see what happens.</p>
-<div id="c8f3c861" class="cell" data-execution_count="2">
+<div id="5830e831" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.seasonal <span class="im">import</span> seasonal_decompose</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>flights_decomp <span class="op">=</span> seasonal_decompose(</span>
@@ -294,7 +294,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Look carefully at the “Resid” plot (the 4th plot). This plot shows the remaining noise in the data once the trend and seasonal components have been accounted for. Notice how the residuals flare out at the ends, rather than staying consistent and tightly clustered around 0.</p>
 <p>This should be a red flag. There is something in our decomposition that is not properly recognizing the underlying structure of the time series.</p>
 <p>Let’s switch the <code>model</code> parameter to “multiplicative” and see whether our residual plot looks any better.</p>
-<div id="feab3d96" class="cell" data-execution_count="3">
+<div id="88d5e5be" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.seasonal <span class="im">import</span> seasonal_decompose</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>flights_decomp <span class="op">=</span> seasonal_decompose(</span>

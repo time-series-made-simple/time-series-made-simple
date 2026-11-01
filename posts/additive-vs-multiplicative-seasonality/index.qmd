@@ -35,11 +35,11 @@ In other words, the seasonal variation stays consistent - even though the underl
 
 ## Multiplicative Seasonality
 
-A time series has multiplicative seasonality if the seasonal fluctuations change in size if the underlying data increases or decreases.
+A time series has multiplicative seasonality if the seasonal fluctuations change in size as the underlying data increases or decreases.
 
-Going back to our coffee shop scenario once more, if we saw that the additional customer traffic during the 7:30am-8:00am interval instead of staying consistent (+5 customers) a year into business actually increased in its variation from the underlying level, say now the coffee shop receives 10 customers over the average level, that would be an example of multiplicative seasonality.
+Let's return to our coffee shop illustration once more. Imagine that a month in, the increased customer traffic was 5 over the average from 7:30am-8:00am. So far, exactly the same as our prior scenario. This time though, imagine that a year later, as the average customer traffic increased, the variation during that 7:30am interval also increased to 2 times as many customers than the average (+12 customers). This would be an example of multiplicative seasonality. As overall customer counts increased, the seasonal variation in our peak interval also increased.
 
-In other words, the seasonal variation increases or decreases, based on the underlying trend.
+In other words, the seasonal variation increases or decreases based on the underlying trend.
 
 ## Using Visualization to Determine Seasonality Type
 
