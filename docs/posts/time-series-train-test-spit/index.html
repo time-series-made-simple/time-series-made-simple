@@ -238,17 +238,17 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 </section>
 <section id="train-test-split-in-python" class="level2">
 <h2 class="anchored" data-anchor-id="train-test-split-in-python">Train-Test Split in Python</h2>
-<p>In the following code cell, we will walk through a simple example of a train-test split in Python.</p>
+<p>In the following code cells, we will walk through a simple example of a train-test split in Python.</p>
 <p>We will use sklearn’s <code>train_test_split</code> function to achieve this. For more information about this function, visit sklearn’s official documentation <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html">here</a>.</p>
 <p>First, we will import the necessary libraries and then we will load the flights data set from seaborn.</p>
-<div id="b882d1a7" class="cell" data-execution_count="1">
+<div id="89e86ca6" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Necessary imports</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split <span class="co">#This is the train-test split function we will use</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, we will load the flights data set from seaborn. For more info about this data set, visit <a href="https://seaborn.pydata.org/tutorial/data_structure.html#data-structures-accepted-by-seaborn">this seaborn documentation</a>. We will also set up the time index.</p>
-<div id="665b0c09" class="cell" data-execution_count="2">
+<div id="3ec675b9" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load flights data into 'flights' dataframe</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>flights <span class="op">=</span> sns.load_dataset(<span class="st">"flights"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -268,7 +268,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <p>Now, we have our “y”, which is the full time series data we will work with. We are ready to split it into train and test sets.</p>
 <p>By default, sklearn’s <code>train_test_split</code> function shuffles your data. This is what we want to avoid, so we will <strong>set the <code>shuffle</code> parameter to False</strong> to override the default behavior.</p>
 <p>We will set our training set size to use 80% of our data. The remaining 20% will be reserved as a test set.</p>
-<div id="16a11a1b" class="cell" data-execution_count="3">
+<div id="50719ebf" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>y_train, y_test <span class="op">=</span> train_test_split(y, shuffle<span class="op">=</span><span class="va">False</span>, train_size<span class="op">=</span><span class="fl">.8</span>) <span class="co">#Notice, the "shuffle" parameter is set to False here. It defaults to true.</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Let's check the size of our train and test sets as a gut check. </span></span>
@@ -280,7 +280,7 @@ Test Set Size: 29 rows</code></pre>
 </div>
 </div>
 <p>We can confirm that the start and end dates of our train and test set are still in chronological order.</p>
-<div id="942727a9" class="cell" data-execution_count="4">
+<div id="e7fcc434" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Train Start:'</span>, y_train.index[<span class="dv">0</span>])</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Train End:'</span>, y_train.index[<span class="op">-</span><span class="dv">1</span>])</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test Start:'</span>, y_test.index[<span class="dv">0</span>])</span>

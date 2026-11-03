@@ -41,7 +41,7 @@ Remember, with time series, **order matters**.
 
 ## Train-Test Split in Python
 
-In the following code cell, we will walk through a simple example of a train-test split in Python.
+In the following code cells, we will walk through a simple example of a train-test split in Python.
 
 We will use sklearn's `train_test_split` function to achieve this. For more information about this function, visit sklearn's official documentation [here](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html).
 
