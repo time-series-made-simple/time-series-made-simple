@@ -1,0 +1,103 @@
+---
+title: "Train-Test Split for Time Series"
+description: "A basic explanation of how to splilt a time series into train and test sets"
+date: "2026-11-03"
+categories:
+  - Time Series
+  - Python
+  - Basics
+  - Data Preparation
+  - sklearn
+
+jupyter: python3
+format:
+  html:
+    toc: true
+    code-fold: false
+    code-copy: true
+---
+
+## Introduction
+
+One of the most important steps when building machine learning models is splitting your data into training and testing sets. 
+
+The training data is what you use to build, fit, and choose your models; the testing data is used at the end of the process to see how your chosen model would perform on unseen data. This helps you to approximate how the model would do "in the real world".
+
+Time series modeling also requires train-test splits. There are more advanced ways of checking your time series models such as rolling horizon cross-validation which we will cover in future articles. Even if you use cross-validation, however, most of the time, you will still want to do a train-test split so you have a part of your data that is reserved for testing at the end of your project.
+
+In this article, we will look at an important difference when splitting time series data. We will also walk through a basic example in Python.
+
+## Problems with Shuffling Time Series Data
+
+With non-time series data sets (cross-sectional data), you often will shuffle your data as part of the train-test split process. This helps to ensure that the training and testing set both have a good, randomized mix of instances.
+
+However, **shuffling time series data is almost always a big mistake**.
+
+Time series data, unlike cross-sectional data, often possesses autocorrelation and structures like trend, seasonality, or cycles. These aspects of the data are often critical in understanding and modeling your time series. Shuffling the data will destroy this underlying autocorrelation and structure. This will severely hinder your modeling of the data or forecasts later on. 
+
+If you shuffle time series data, it can cause a type of data leakage specific to time series. In this case, it can move instances that are later in time ahead of instances that occurred earlier in time. This could lead to you training on future data and testing on past data. In other words, future data could be used to predict past data. This is not realistic for real-world modeling.
+
+Remember, with time series, **order matters**.
+
+## Train-Test Split in Python
+
+In the following code cell, we will walk through a simple example of a train-test split in Python.
+
+We will use sklearn's `train_test_split` function to achieve this. For more information about this function, visit sklearn's official documentation [here](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html).
+
+First, we will import the necessary libraries and then we will load the flights data set from seaborn.
+
+```{python}
+#Necessary imports
+import pandas as pd
+import seaborn as sns
+from sklearn.model_selection import train_test_split #This is the train-test split function we will use
+```
+
+Next, we will load the flights data set from seaborn. For more info about this data set, visit [this seaborn documentation](https://seaborn.pydata.org/tutorial/data_structure.html#data-structures-accepted-by-seaborn). We will also set up the time index.
+
+
+```{python}
+#Load flights data into 'flights' dataframe
+flights = sns.load_dataset("flights")
+
+#You will often need to convert your data into a more usable form, usually with some type of time index.
+
+#This code converts the 'year' and 'month' columns into a single datetime column then sets that column as our index.
+
+flights['date'] = pd.to_datetime(
+    flights['year'].astype(str) + '-' + flights['month'].astype(str), format='%Y-%b'
+)
+
+flights = flights.set_index('date')
+
+#Separate the target feature into a series. We no longer need the month/year columns since our index already has that information.
+y = flights['passengers']
+```
+
+Now, we have our "y", which is the full time series data we will work with. We are ready to split it into train and test sets.
+
+By default, sklearn's  `train_test_split` function shuffles your data. This is what we want to avoid, so we will **set the `shuffle` parameter to False** to override the default behavior.
+
+We will set our training set size to use 80% of our data. The remaining 20% will be reserved as a test set.
+
+```{python}
+
+y_train, y_test = train_test_split(y, shuffle=False, train_size=.8) #Notice, the "shuffle" parameter is set to False here. It defaults to true.
+
+#Let's check the size of our train and test sets as a gut check. 
+print('Train Set Size:', len(y_train), 'rows')
+print('Test Set Size:', len(y_test), 'rows')
+```
+
+We can confirm that the start and end dates of our train and test set are still in chronological order.
+
+```{python}
+print('Train Start:', y_train.index[0])
+print('Train End:', y_train.index[-1])
+print('Test Start:', y_test.index[0])
+print('Test End:', y_test.index[-1])
+```
+
+
+Success! We now have divided our time series data into training and testing sets while respecting the sequential order of our data. In a real project, we would use `y_train` to build our time series models, and reserve the `y_test` to check our final model selection on unseen data. 

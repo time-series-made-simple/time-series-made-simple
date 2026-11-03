@@ -1,7 +1,8 @@
 [
   {
-    "listing": "/archive.html",
+    "listing": "/index.html",
     "items": [
+      "/posts/time-series-train-test-spit/index.html",
       "/posts/additive-vs-multiplicative-seasonality/index.html",
       "/posts/differencing/index.html",
       "/posts/time-series-structures/index.html",
@@ -10,8 +11,9 @@
     ]
   },
   {
-    "listing": "/index.html",
+    "listing": "/archive.html",
     "items": [
+      "/posts/time-series-train-test-spit/index.html",
       "/posts/additive-vs-multiplicative-seasonality/index.html",
       "/posts/differencing/index.html",
       "/posts/time-series-structures/index.html",
