@@ -107,7 +107,7 @@ combined_fitted_and_forecasts = pd.concat([fitted_values, forecasts], axis=0)
 #Combining with y for visualization purposes
 combined_forecasts_actuals = pd.concat([y, combined_fitted_and_forecasts], axis=1).dropna()
 
-combined_forecasts_actuals.plot(figsize=(10, 7))
+combined_forecasts_actuals.plot(figsize=(8, 6))
 plt.axvline(x=y_test.index[0], c='red', linestyle='--', label='Start of Test Set')
 plt.title('Naive Forecast vs. Actuals - Flight Passengers')
 plt.ylabel('Passengers (Thousands)')

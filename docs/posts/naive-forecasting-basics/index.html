@@ -244,7 +244,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <p>Building a simple naive model in Python is easy. You can use Pandas <code>.shift()</code> method to “slide” your data forward by one instance. This shifted series becomes your fitted values. Future forecasts will simply take on whatever the last value is in your training set.</p>
 <p>More information about Pandas <code>.shift()</code> method is available <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.shift.html">here</a></p>
 <p>Before we get started, let’s prepare our data. The following code uses the <code>flights</code> data set from Seaborn. For more info about this data set, visit the seaborn documentation located <a href="https://seaborn.pydata.org/tutorial/data_structure.html#data-structures-accepted-by-seaborn">here</a></p>
-<div id="32dfd28e" class="cell" data-execution_count="1">
+<div id="f803d34b" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Necessary imports</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -272,12 +272,12 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 </div>
 <p>Now that our data is loaded, we are ready to move forward with getting our fitted values.</p>
 <p>It is important to note, you will introduce missing values into your series for however many rows you shift with the <code>.shift()</code> method. You can drop these rows using Pandas <code>dropna()</code> method.</p>
-<div id="d3a15f51" class="cell" data-execution_count="2">
+<div id="e9ac4eca" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fitted_values <span class="op">=</span> y_train.shift(<span class="dv">1</span>) <span class="co">#Shifting by 1 to get our simple naive fitted values</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>fitted_values <span class="op">=</span> fitted_values.dropna() <span class="co">#Dropping the null value introduced by the shift</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We have successfully generated our fitted values. Let’s now generate our forecast for the test set period. In this case, the final value of our training set will become the forecast for the entirety of the test set.</p>
-<div id="2d0477c6" class="cell" data-execution_count="3">
+<div id="d5622c5c" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>future_forecast_value <span class="op">=</span> y_train.iloc[<span class="op">-</span><span class="dv">1</span>] <span class="co">#Grab the last value of our train set</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>forecasts <span class="op">=</span> pd.Series(future_forecast_value, index<span class="op">=</span>y_test.index) <span class="co">#Create a series with the same index as our test set that uses that one future value</span></span>
@@ -294,14 +294,14 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>As you can see, our naive forecast model produces a constant value of 491. Let’s use a visualization to get an idea for how well our naive forecast captures this time series.</p>
-<div id="7e0cd475" class="cell" data-execution_count="4">
+<div id="52e9e23b" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Combining fitted values and forecasts for simpler viewing</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>combined_fitted_and_forecasts <span class="op">=</span> pd.concat([fitted_values, forecasts], axis<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Combining with y for visualization purposes</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>combined_forecasts_actuals <span class="op">=</span> pd.concat([y, combined_fitted_and_forecasts], axis<span class="op">=</span><span class="dv">1</span>).dropna()</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>combined_forecasts_actuals.plot(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">7</span>))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>combined_forecasts_actuals.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>plt.axvline(x<span class="op">=</span>y_test.index[<span class="dv">0</span>], c<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Start of Test Set'</span>)</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Naive Forecast vs. Actuals - Flight Passengers'</span>)</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Passengers (Thousands)'</span>)</span>
@@ -311,7 +311,7 @@ dtype: int64</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-5-output-1.png" width="816" height="597" class="figure-img"></p>
+<p><img src="index_files/figure-html/cell-5-output-1.png" width="667" height="523" class="figure-img"></p>
 </figure>
 </div>
 </div>
