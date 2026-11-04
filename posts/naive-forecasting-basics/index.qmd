@@ -1,0 +1,125 @@
+---
+title: "Naive Forecasting Basics"
+description: "Understanding simple naive forecasts and how to build them in Python"
+date: "2026-11-04"
+categories:
+  - Forecasting
+  - Python
+  - Baseline Models
+  - Time Series Modeling
+
+jupyter: python3
+format:
+  html:
+    toc: true
+    code-fold: false
+    code-copy: true
+---
+
+In this article, we will explore the topic of naive forecasting models. We will explain the idea behind these simple models and what they are used for. Finally, we will walk through an example of building one in Python.
+
+## What is a Naive Forecast?
+
+The idea behind a naive forecast is very simple: the most recent value becomes the next forecasted value.
+
+In terms of weather, a naive forecast would be like saying, "Today's temperature was 42 degrees, so I expect tomorrow's forecast will be 42 degrees."
+
+Sounds pretty simple, right? It is simple. That's actually the beauty of naive forecasts. Surprisingly, for many time series, this forecasting method can work quite well. Where they often fall short is when your time series has seasonality or trend. However, naive forecasts can be expanded upon to account for those time series structures as well.
+
+For now, though, we will stick with just our simple naive forecast with no seasonality or trend.
+
+## How can we use Naive Forecasts?
+
+Sometimes a naive forecast is used as a production model. These are cases when the best way to predict the future is with the most recent value in the past. They are easy to set up, not resource intensive, and very simple to explain.
+
+However, where naive forecasts are most often used is as a benchmark or baseline forecasting model. They set the bar for every other model you build. When you are exploring types of forecasting models for your time series, make sure a naive model is one that you build and validate against. If a more advanced model cannot outperform the naive model, this should call into question whether the complexity of the advanced model adds any true value.
+
+## What are the limitations of Naive Forecasts?
+
+Naive forecasts can be too simple for a time series that possesses structure. Another important limitation is that a naive forecast, in its simplest form, can only forecast a flat line as it extends into the future. This means a basic naive forecasting model's predictive power can degrade very quickly.
+
+## How to Build a Naive Model in Python
+
+Building a simple naive model in Python is easy. You can use Pandas `.shift()` method to "slide" your data forward by one instance. This shifted series becomes your fitted values. Future forecasts will simply take on whatever the last value is in your training set.
+
+More information about Pandas `.shift()` method is available [here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.shift.html)
+
+Before we get started, let's prepare our data. The following code uses the `flights` data set from Seaborn. For more info about this data set, visit the seaborn documentation located [here](https://seaborn.pydata.org/tutorial/data_structure.html#data-structures-accepted-by-seaborn)
+
+```{python}
+#Necessary imports
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+
+#Load flights data into 'flights' dataframe
+flights = sns.load_dataset("flights")
+
+#You will often need to convert your data into a more usable form, usually with some type of time index.
+#This code converts the 'year' and 'month' columns into a single datetime column then sets that column as our index.
+
+flights['date'] = pd.to_datetime(
+    flights['year'].astype(str) + '-' + flights['month'].astype(str), format='%Y-%b'
+)
+
+flights = flights.set_index('date')
+
+#Separate the target feature into a series. We no longer need the month/year columns since our index already has that information.
+y = flights['passengers']
+
+
+#We will split our data into train and test sets
+y_train, y_test = train_test_split(y, shuffle=False, train_size=.8) #Notice, the "shuffle" parameter is set to false here. It defaults to true.
+
+```
+
+Now that our data is loaded, we are ready to move forward with getting our fitted values.
+
+It is important to note, you will introduce missing values into your series for however many rows you shift with the `.shift()` method. You can drop these rows using Pandas `dropna()` method.
+
+```{python}
+
+fitted_values = y_train.shift(1) #Shifting by 1 to get our simple naive fitted values
+fitted_values = fitted_values.dropna() #Dropping the null value introduced by the shift
+
+```
+
+We have successfully generated our fitted values. Let's now generate our forecast for the test set period. In this case, the final value of our training set will become the forecast for the entirety of the test set.
+
+
+```{python}
+future_forecast_value = y_train.iloc[-1] #Grab the last value of our train set
+
+forecasts = pd.Series(future_forecast_value, index=y_test.index) #Create a series with the same index as our test set that uses that one future value
+
+forecasts.head(5)
+
+```
+
+As you can see, our naive forecast model produces a constant value of 491. Let's use a visualization to get an idea for how well our naive forecast captures this time series.
+
+```{python}
+
+#Combining fitted values and forecasts for simpler viewing
+combined_fitted_and_forecasts = pd.concat([fitted_values, forecasts], axis=0)
+
+#Combining with y for visualization purposes
+combined_forecasts_actuals = pd.concat([y, combined_fitted_and_forecasts], axis=1).dropna()
+
+combined_forecasts_actuals.plot(figsize=(10, 7))
+plt.axvline(x=y_test.index[0], c='red', linestyle='--', label='Start of Test Set')
+plt.title('Naive Forecast vs. Actuals - Flight Passengers')
+plt.ylabel('Passengers (Thousands)')
+plt.xlabel('Date')
+plt.legend()
+plt.show();
+```
+
+The visualization drives the limitation of this model home. It does not do well at capturing the seasonality or trend in the `flights` time series once it enters the test period. For a data set without these structural components, however, a naive forecast may do quite well. Nevertheless, we have created what will serve as our most basic baseline forecast - one which future more advanced forecasting models will be compared to.
+
+## Conclusion
+
+In conclusion, naive forecasts are among the simplest time series models available. They are sometimes used for production forecasts, but more often they serve as baseline models to compare with more advanced model options. Creating a naive forecast is simple in Python. It could also be easily done in Microsoft Excel.
+
+In future articles, we will explore how to add seasonality and trend to our naive model to make it more competitive.

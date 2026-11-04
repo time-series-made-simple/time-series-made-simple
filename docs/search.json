@@ -49,111 +49,6 @@
     "text": "Conclusion\nTo sum up, the four main structures you are looking for within your time series are trend, seasonal fluctuations, cycles, and noise. Time series decomposition can be a useful tool in exploring these aspects of your time series."
   },
   {
-    "objectID": "posts/differencing/index.html",
-    "href": "posts/differencing/index.html",
-    "title": "Differencing",
-    "section": "",
-    "text": "ARMA models require a stationary time series in order to work properly. If you are unfamiliar with the concept of stationarity, I encourage you to check out this article before moving forward.\nIf you determine that your time series is non-stationary - whether through visualization, statistical tests, or both - and you intend to build an auto-regression and/or moving average model (ARMA), you will need to make your data stationary. How can this be done? Through a simple process called differencing.\nIn this article we will explore what differencing is, how it can usually make a nonstationary time series stationary, and then walk through an easy way to perform differencing in Python."
-  },
-  {
-    "objectID": "posts/differencing/index.html#what-is-differencing",
-    "href": "posts/differencing/index.html#what-is-differencing",
-    "title": "Differencing",
-    "section": "What is Differencing?",
-    "text": "What is Differencing?\nDifferencing, very simply, means calculating the change (i.e. the difference) between instances within your time series.\nFor example, if your time series was (0, 3, 2, 5, 5, 1, 7), then the differenced time series would be (3, -1, 3, 0, -4, 6), the difference between each “hop”. Think, “up 3”, “down 1”, “up 3”, “stay the same”, “down 4”, and “up 6”.\nDifferencing can be done at other intervals than just from each successive instance. Seasonal differencing is an example of this, where you calculate the difference between each successive seasonal instance. For example, you might calculate the difference between January 2025 and January 2026, February 2025 and February 2026, March 2025 and March 2026, etc. for monthly seasonal data.\nIn its simplest form though, differencing just implies taking the change between each successive instance. In essence, you are just converting your original time series of values into a time series of the change between values."
-  },
-  {
-    "objectID": "posts/differencing/index.html#how-does-differencing-work",
-    "href": "posts/differencing/index.html#how-does-differencing-work",
-    "title": "Differencing",
-    "section": "How does Differencing Work?",
-    "text": "How does Differencing Work?\nInterestingly, the change from instance to instance is often (though not always) relatively stable in mean and variance, even if the underlying time series is quite unstable.\nOccasionally, you may need to difference your time series data more than once to achieve stationarity. If you find yourself differencing more than 2-3 times, however, you may need to consider other methods of working with your time series."
-  },
-  {
-    "objectID": "posts/differencing/index.html#conclusion",
-    "href": "posts/differencing/index.html#conclusion",
-    "title": "Differencing",
-    "section": "Conclusion",
-    "text": "Conclusion\nDifferencing is a simple process that can generally be used to make a non-stationary time series stationary. We can difference our time series data using Pandas .diff() function. This is an important step in preparing your data for use in a statistical model like ARIMA.\nThe Google Stock Price data set used in this article was sourced from https://www.kaggle.com/datasets/varpit94/google-stock-data"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Home",
-    "section": "",
-    "text": "Time Series Made Simple - Site Logo\nTime-series analysis doesn’t have to be a black box. Time Series Made Simple equips you to work with time series data effectively. Learn the theory behind forecasting methods and put those methods into practice with Python.\nWhether you’re learning the fundamentals or comparing models for a real forecasting problem, the goal is the same: understand why a method works, when to use it, and how to evaluate its results.\nExplore the tutorials · About this site"
-  },
-  {
-    "objectID": "index.html#understand-the-theory.-master-the-code.-build-better-forecasts.",
-    "href": "index.html#understand-the-theory.-master-the-code.-build-better-forecasts.",
-    "title": "Home",
-    "section": "Understand the theory. Master the code. Build better forecasts.",
-    "text": "Understand the theory. Master the code. Build better forecasts.\nGood forecasting starts with understanding the data. Each tutorial aims to build intuition first, introduce the relevant statistical ideas, and then demonstrate how to apply them in Python.\n\n\n\nFoundations\nUnderstand trends, seasonality, stationarity, autocorrelation, and the structure of time-series data.\n\n\n\nStatistical forecasting\nExplore moving averages, exponential smoothing, ARIMA, SARIMA, and other statistical forecasting methods.\n\n\n\n\n\n\nPython in practice\nWork through examples using pandas, matplotlib, statsmodels, and scikit-learn, with code that illustrates the ideas being discussed.\n\n\n\nModel evaluation\nLearn how to compare forecasts, diagnose errors, establish meaningful baselines, and decide which models are useful for a particular problem."
-  },
-  {
-    "objectID": "index.html#a-practical-approach-to-learning",
-    "href": "index.html#a-practical-approach-to-learning",
-    "title": "Home",
-    "section": "A practical approach to learning",
-    "text": "A practical approach to learning\nThe tutorials follow a consistent progression:\n\nBuild intuition. Understand the problem and the patterns in the data.\nExplore the theory. Learn the statistical concepts behind the method.\nImplement the model. Work through a Python example.\nEvaluate the results. Examine forecast accuracy, limitations, and practical trade-offs.\n\nThe emphasis is on developing the judgment to choose and evaluate forecasting methods, rather than simply learning how to call a modeling function."
-  },
-  {
-    "objectID": "index.html#latest-tutorials",
-    "href": "index.html#latest-tutorials",
-    "title": "Home",
-    "section": "Latest tutorials",
-    "text": "Latest tutorials\nBrowse the latest articles below.\n\n\n\n\n\nTrain-Test Split for Time Series\n\n\nA basic explanation of how to splilt a time series into train and test sets\n\n\n\n\n\nNov 3, 2026\n\n\n\n\n\n\n\nAdditive vs. Multiplicative Seasonality\n\n\nDetermining what type of seasonality your time series has\n\n\n\n\n\nOct 31, 2026\n\n\n\n\n\n\n\nDifferencing\n\n\nHow to make a non-stationary time series stationary\n\n\n\n\n\nOct 30, 2026\n\n\n\n\n\n\n\nTime Series Structures\n\n\nTo understand a time series you must understand its structure.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "Time Series Made Simple",
-    "section": "",
-    "text": "Hello, I’m Joel, the founder of TimeSeriesMadeSimple.com.\nI began working extensively with time series data in 2018. At the time, my forecasting toolkit consisted largely of the basic methods available in Microsoft Excel. Those tools served a purpose, but as I tackled more complex forecasting problems, I realized I needed something more powerful. What I didn’t yet appreciate was just how much statistical theory and how many analytical techniques were available to help me understand my data and build better forecasts.\nThat realization set me on a path of continuous learning. I taught myself Python, earned a Master of Data Science degree, and developed a deep interest in time series analysis, statistical modeling, and forecasting. I now oversee the preparation of long and medium range forecasts across multiple sales and service operational groups within my company.\nI created Time Series Made Simple to share what I’ve learned and help others develop these skills. My goal is to make time series concepts easier to understand by connecting the underlying theory with practical, hands-on applications. While the examples and projects on this site use Python, the statistical concepts are broadly applicable across programming languages and analytical tools.\nYou’ll find a mix of focused tutorials on individual time series concepts and end-to-end projects that demonstrate the full analytical process—from exploring data and selecting models to evaluating forecasts and interpreting results. I aim to publish new articles weekly, giving readers a steady path toward building their knowledge and practical skills.\nWhether you’re just getting started with time series analysis or looking to expand your existing data science toolkit, I hope this site helps you understand not just how forecasting methods work, but why they work and when to use them.\nUnderstand the theory. Master the code. Build better forecasts.\nNew to time series analysis? Start with my Introduction to Time Series tutorial."
-  },
-  {
-    "objectID": "archive.html",
-    "href": "archive.html",
-    "title": "All Posts",
-    "section": "",
-    "text": "Explore all articles on Time Series Made Simple, from foundational concepts to hands-on forecasting projects.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\nTrain-Test Split for Time Series\n\n\n\nTime Series\n\nPython\n\nBasics\n\nData Preparation\n\nsklearn\n\n\n\nA basic explanation of how to splilt a time series into train and test sets\n\n\n\n\n\nNov 3, 2026\n\n\n\n\n\n\n\nAdditive vs. Multiplicative Seasonality\n\n\n\nTime Series\n\nPython\n\nBasics\n\n\n\nDetermining what type of seasonality your time series has\n\n\n\n\n\nOct 31, 2026\n\n\n\n\n\n\n\nDifferencing\n\n\n\nTime Series\n\nPython\n\nBasics\n\nARIMA\n\nPandas\n\n\n\nHow to make a non-stationary time series stationary\n\n\n\n\n\nOct 30, 2026\n\n\n\n\n\n\n\nTime Series Structures\n\n\n\nTime Series\n\nPython\n\nBasics\n\nStatsmodels\n\nVisualization\n\n\n\nTo understand a time series you must understand its structure.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nUnderstanding Stationarity\n\n\n\nTime Series\n\nPython\n\nBasics\n\nARIMA\n\nVisualization\n\nStatsmodels\n\n\n\nA simple explanation of the concept of stationarity.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nIntro to Time Series\n\n\n\nTime Series\n\nPython\n\nBasics\n\n\n\nThe absolute basics of time series data for beginners.\n\n\n\n\n\nOct 28, 2026\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "posts/additive-vs-multiplicative-seasonality/index.html",
-    "href": "posts/additive-vs-multiplicative-seasonality/index.html",
-    "title": "Additive vs. Multiplicative Seasonality",
-    "section": "",
-    "text": "Seasonal patterns are one of the key structures we look for when analyzing time series data sets.\nSeasonality refers to repeating patterns in a time series that occur at consistent intervals. For example, a drive-through coffee shop consistently sees their peak customer traffic around 7:30am Monday-Friday. This would be a form of seasonality.\nHowever, not all seasonality is the same. There are two main types of seasonal fluctuations that a time series may possess. These are additive or multiplicative seasonality. Being able to identify which type of seasonality you are working with is important if you plan to use time series decomposition or model your time series data.\nIn the rest of this article, we will explain what each of these types of seasonality are, then we will walk through how to use visualizations in Python to identify each."
-  },
-  {
-    "objectID": "posts/additive-vs-multiplicative-seasonality/index.html#additive-seasonality",
-    "href": "posts/additive-vs-multiplicative-seasonality/index.html#additive-seasonality",
-    "title": "Additive vs. Multiplicative Seasonality",
-    "section": "Additive Seasonality",
-    "text": "Additive Seasonality\nA time series has additive seasonality if the seasonal fluctuations are consistent in size, regardless of whether the underlying data increases or decreases.\nLet’s return to our coffee shop scenario from earlier in this article. Let’s say the coffee shop just opened for business a month ago and gets around 7 customers each half hour interval on average. The peak customer traffic occurs from 7:30am-8:00am on weekdays and the shop typically has 5 additional customers over the 7 customer average during that morning interval.\nNow, let’s imagine that the coffee shop gets very popular over its first year of business. A year later, the coffee shop now gets around 12 customers each half hour interval on average. Additive seasonality in this case would mean that the 7:30am-8:00am interval would still get 5 additional customers over that average level.\nIn other words, the seasonal variation stays consistent - even though the underlying trend has caused the overall customer traffic at the coffee shop to increase."
-  },
-  {
-    "objectID": "posts/additive-vs-multiplicative-seasonality/index.html#multiplicative-seasonality",
-    "href": "posts/additive-vs-multiplicative-seasonality/index.html#multiplicative-seasonality",
-    "title": "Additive vs. Multiplicative Seasonality",
-    "section": "Multiplicative Seasonality",
-    "text": "Multiplicative Seasonality\nA time series has multiplicative seasonality if the seasonal fluctuations change in size as the underlying data increases or decreases.\nLet’s return to our coffee shop illustration once more. Imagine that a month in, the increased customer traffic was 5 over the average from 7:30am-8:00am. So far, exactly the same as our prior scenario. This time though, imagine that a year later, as the average customer traffic increased, the variation during that 7:30am interval also increased to 2 times as many customers than the average (+12 customers). This would be an example of multiplicative seasonality. As overall customer counts increased, the seasonal variation in our peak interval also increased.\nIn other words, the seasonal variation increases or decreases based on the underlying trend."
-  },
-  {
-    "objectID": "posts/additive-vs-multiplicative-seasonality/index.html#using-visualization-to-determine-seasonality-type",
-    "href": "posts/additive-vs-multiplicative-seasonality/index.html#using-visualization-to-determine-seasonality-type",
-    "title": "Additive vs. Multiplicative Seasonality",
-    "section": "Using Visualization to Determine Seasonality Type",
-    "text": "Using Visualization to Determine Seasonality Type\nMany times, a simple line plot will be enough to determine whether our time series has additive or multiplicative seasonality.\nWe will use the flights data set from the seaborn package in Python as an example.\n\n#Necessary imports\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\n#Load flights data into 'flights' dataframe\nflights = sns.load_dataset(\"flights\")\n\n#You will often need to convert your data into a more usable form, usually with some type of time index.\n#This code converts the 'year' and 'month' columns into a single datatime column then sets that column as our index.\n\nflights['date'] = pd.to_datetime(\n    flights['year'].astype(str) + '-' + flights['month'].astype(str), format='%Y-%b'\n)\n\nflights = flights.set_index('date')\n\n#Separate the target feature into a series. We no longer need the month/year columns since our index  already has that information.\ny = flights['passengers']\n\n#The easiest and quickest way to visualize the data is with the .plot method. This gives you a quick line graph.\ny.plot(figsize=(8,6))\nplt.title('Flight Passengers: 1949-1960')\nplt.ylabel('Passengers (Thousands)')\nplt.xlabel('Date')\nplt.show();\n\n\n\n\n\n\n\n\nNow, look carefully at the seasonal fluctuations (the peaks and valleys) in this line graph.\nNotice how the fluctuations get bigger as the trend increases over time.\nThis is a strong indicator of multiplicative seasonality.\nIf, on the other hand, the fluctuations stayed fairly consistent - even as the underlying trend increased - we would have evidence of additive seasonality.\nWhat would happen if we assumed incorrectly that our data had additive seasonality?\nWell, let’s use statsmodels seasonal_decompose function, with the model parameter set to “additive” instead of “multiplicative” and see what happens.\n\nfrom statsmodels.tsa.seasonal import seasonal_decompose\n\nflights_decomp = seasonal_decompose(\n                    y,\n                    model='additive',\n                    #model='multiplicative'\n                )\nfig = flights_decomp.plot()\nfig.set_size_inches(8, 6);\n\n\n\n\n\n\n\n\nLook carefully at the “Resid” plot (the 4th plot). This plot shows the remaining noise in the data once the trend and seasonal components have been accounted for. Notice how the residuals flare out at the ends, rather than staying consistent and tightly clustered around 0.\nThis should be a red flag. There is something in our decomposition that is not properly recognizing the underlying structure of the time series.\nLet’s switch the model parameter to “multiplicative” and see whether our residual plot looks any better.\n\nfrom statsmodels.tsa.seasonal import seasonal_decompose\n\nflights_decomp = seasonal_decompose(\n                    y,\n                    #model='additive',\n                    model='multiplicative'\n                )\nfig = flights_decomp.plot()\nfig.set_size_inches(8, 6);\n\n\n\n\n\n\n\n\nIndeed, these residuals look much better. They are clustered closely to 1.0, which is what you would normally hope to see with multiplicative seasonality. There is no “flaring out” at the ends like we saw before either. This confirms what we expected from our line graph; our flights data set has multiplicative seasonality."
-  },
-  {
-    "objectID": "posts/additive-vs-multiplicative-seasonality/index.html#conclusion",
-    "href": "posts/additive-vs-multiplicative-seasonality/index.html#conclusion",
-    "title": "Additive vs. Multiplicative Seasonality",
-    "section": "Conclusion",
-    "text": "Conclusion\nIn conclusion, once you recognize seasonal structure in your time series, you should try to identify whether your seasonality is additive or multiplicative.\nThis will impact future steps in your data analysis, processing, and model creation."
-  },
-  {
     "objectID": "posts/intro-to-time-series/index.html",
     "href": "posts/intro-to-time-series/index.html",
     "title": "Intro to Time Series",
@@ -194,6 +89,153 @@
     "title": "Intro to Time Series",
     "section": "Conclusion",
     "text": "Conclusion\nTo sum it up: because time series are all around us and unique, we as data professionals must equip ourselves to work with them effectively."
+  },
+  {
+    "objectID": "posts/additive-vs-multiplicative-seasonality/index.html",
+    "href": "posts/additive-vs-multiplicative-seasonality/index.html",
+    "title": "Additive vs. Multiplicative Seasonality",
+    "section": "",
+    "text": "Seasonal patterns are one of the key structures we look for when analyzing time series data sets.\nSeasonality refers to repeating patterns in a time series that occur at consistent intervals. For example, a drive-through coffee shop consistently sees their peak customer traffic around 7:30am Monday-Friday. This would be a form of seasonality.\nHowever, not all seasonality is the same. There are two main types of seasonal fluctuations that a time series may possess. These are additive or multiplicative seasonality. Being able to identify which type of seasonality you are working with is important if you plan to use time series decomposition or model your time series data.\nIn the rest of this article, we will explain what each of these types of seasonality are, then we will walk through how to use visualizations in Python to identify each."
+  },
+  {
+    "objectID": "posts/additive-vs-multiplicative-seasonality/index.html#additive-seasonality",
+    "href": "posts/additive-vs-multiplicative-seasonality/index.html#additive-seasonality",
+    "title": "Additive vs. Multiplicative Seasonality",
+    "section": "Additive Seasonality",
+    "text": "Additive Seasonality\nA time series has additive seasonality if the seasonal fluctuations are consistent in size, regardless of whether the underlying data increases or decreases.\nLet’s return to our coffee shop scenario from earlier in this article. Let’s say the coffee shop just opened for business a month ago and gets around 7 customers each half hour interval on average. The peak customer traffic occurs from 7:30am-8:00am on weekdays and the shop typically has 5 additional customers over the 7 customer average during that morning interval.\nNow, let’s imagine that the coffee shop gets very popular over its first year of business. A year later, the coffee shop now gets around 12 customers each half hour interval on average. Additive seasonality in this case would mean that the 7:30am-8:00am interval would still get 5 additional customers over that average level.\nIn other words, the seasonal variation stays consistent - even though the underlying trend has caused the overall customer traffic at the coffee shop to increase."
+  },
+  {
+    "objectID": "posts/additive-vs-multiplicative-seasonality/index.html#multiplicative-seasonality",
+    "href": "posts/additive-vs-multiplicative-seasonality/index.html#multiplicative-seasonality",
+    "title": "Additive vs. Multiplicative Seasonality",
+    "section": "Multiplicative Seasonality",
+    "text": "Multiplicative Seasonality\nA time series has multiplicative seasonality if the seasonal fluctuations change in size as the underlying data increases or decreases.\nLet’s return to our coffee shop illustration once more. Imagine that a month in, the increased customer traffic was 5 over the average from 7:30am-8:00am. So far, exactly the same as our prior scenario. This time though, imagine that a year later, as the average customer traffic increased, the variation during that 7:30am interval also increased to 2 times as many customers than the average (+12 customers). This would be an example of multiplicative seasonality. As overall customer counts increased, the seasonal variation in our peak interval also increased.\nIn other words, the seasonal variation increases or decreases based on the underlying trend."
+  },
+  {
+    "objectID": "posts/additive-vs-multiplicative-seasonality/index.html#using-visualization-to-determine-seasonality-type",
+    "href": "posts/additive-vs-multiplicative-seasonality/index.html#using-visualization-to-determine-seasonality-type",
+    "title": "Additive vs. Multiplicative Seasonality",
+    "section": "Using Visualization to Determine Seasonality Type",
+    "text": "Using Visualization to Determine Seasonality Type\nMany times, a simple line plot will be enough to determine whether our time series has additive or multiplicative seasonality.\nWe will use the flights data set from the seaborn package in Python as an example.\n\n#Necessary imports\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\n#Load flights data into 'flights' dataframe\nflights = sns.load_dataset(\"flights\")\n\n#You will often need to convert your data into a more usable form, usually with some type of time index.\n#This code converts the 'year' and 'month' columns into a single datatime column then sets that column as our index.\n\nflights['date'] = pd.to_datetime(\n    flights['year'].astype(str) + '-' + flights['month'].astype(str), format='%Y-%b'\n)\n\nflights = flights.set_index('date')\n\n#Separate the target feature into a series. We no longer need the month/year columns since our index  already has that information.\ny = flights['passengers']\n\n#The easiest and quickest way to visualize the data is with the .plot method. This gives you a quick line graph.\ny.plot(figsize=(8,6))\nplt.title('Flight Passengers: 1949-1960')\nplt.ylabel('Passengers (Thousands)')\nplt.xlabel('Date')\nplt.show();\n\n\n\n\n\n\n\n\nNow, look carefully at the seasonal fluctuations (the peaks and valleys) in this line graph.\nNotice how the fluctuations get bigger as the trend increases over time.\nThis is a strong indicator of multiplicative seasonality.\nIf, on the other hand, the fluctuations stayed fairly consistent - even as the underlying trend increased - we would have evidence of additive seasonality.\nWhat would happen if we assumed incorrectly that our data had additive seasonality?\nWell, let’s use statsmodels seasonal_decompose function, with the model parameter set to “additive” instead of “multiplicative” and see what happens.\n\nfrom statsmodels.tsa.seasonal import seasonal_decompose\n\nflights_decomp = seasonal_decompose(\n                    y,\n                    model='additive',\n                    #model='multiplicative'\n                )\nfig = flights_decomp.plot()\nfig.set_size_inches(8, 6);\n\n\n\n\n\n\n\n\nLook carefully at the “Resid” plot (the 4th plot). This plot shows the remaining noise in the data once the trend and seasonal components have been accounted for. Notice how the residuals flare out at the ends, rather than staying consistent and tightly clustered around 0.\nThis should be a red flag. There is something in our decomposition that is not properly recognizing the underlying structure of the time series.\nLet’s switch the model parameter to “multiplicative” and see whether our residual plot looks any better.\n\nfrom statsmodels.tsa.seasonal import seasonal_decompose\n\nflights_decomp = seasonal_decompose(\n                    y,\n                    #model='additive',\n                    model='multiplicative'\n                )\nfig = flights_decomp.plot()\nfig.set_size_inches(8, 6);\n\n\n\n\n\n\n\n\nIndeed, these residuals look much better. They are clustered closely to 1.0, which is what you would normally hope to see with multiplicative seasonality. There is no “flaring out” at the ends like we saw before either. This confirms what we expected from our line graph; our flights data set has multiplicative seasonality."
+  },
+  {
+    "objectID": "posts/additive-vs-multiplicative-seasonality/index.html#conclusion",
+    "href": "posts/additive-vs-multiplicative-seasonality/index.html#conclusion",
+    "title": "Additive vs. Multiplicative Seasonality",
+    "section": "Conclusion",
+    "text": "Conclusion\nIn conclusion, once you recognize seasonal structure in your time series, you should try to identify whether your seasonality is additive or multiplicative.\nThis will impact future steps in your data analysis, processing, and model creation."
+  },
+  {
+    "objectID": "archive.html",
+    "href": "archive.html",
+    "title": "All Posts",
+    "section": "",
+    "text": "Explore all articles on Time Series Made Simple, from foundational concepts to hands-on forecasting projects.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Title\n      \n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\nNaive Forecasting Basics\n\n\n\nForecasting\n\nPython\n\nBaseline Models\n\nTime Series Modeling\n\n\n\nUnderstanding simple naive forecasts and how to build them in Python\n\n\n\n\n\nNov 4, 2026\n\n\n\n\n\n\n\nTrain-Test Split for Time Series\n\n\n\nTime Series\n\nPython\n\nBasics\n\nData Preparation\n\nsklearn\n\n\n\nA basic explanation of how to splilt a time series into train and test sets\n\n\n\n\n\nNov 3, 2026\n\n\n\n\n\n\n\nAdditive vs. Multiplicative Seasonality\n\n\n\nTime Series\n\nPython\n\nBasics\n\n\n\nDetermining what type of seasonality your time series has\n\n\n\n\n\nOct 31, 2026\n\n\n\n\n\n\n\nDifferencing\n\n\n\nTime Series\n\nPython\n\nBasics\n\nARIMA\n\nPandas\n\n\n\nHow to make a non-stationary time series stationary\n\n\n\n\n\nOct 30, 2026\n\n\n\n\n\n\n\nTime Series Structures\n\n\n\nTime Series\n\nPython\n\nBasics\n\nStatsmodels\n\nVisualization\n\n\n\nTo understand a time series you must understand its structure.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nUnderstanding Stationarity\n\n\n\nTime Series\n\nPython\n\nBasics\n\nARIMA\n\nVisualization\n\nStatsmodels\n\n\n\nA simple explanation of the concept of stationarity.\n\n\n\n\n\nOct 29, 2026\n\n\n\n\n\n\n\nIntro to Time Series\n\n\n\nTime Series\n\nPython\n\nBasics\n\n\n\nThe absolute basics of time series data for beginners.\n\n\n\n\n\nOct 28, 2026\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Time Series Made Simple",
+    "section": "",
+    "text": "Hello, I’m Joel, the founder of TimeSeriesMadeSimple.com.\nI began working extensively with time series data in 2018. At the time, my forecasting toolkit consisted largely of the basic methods available in Microsoft Excel. Those tools served a purpose, but as I tackled more complex forecasting problems, I realized I needed something more powerful. What I didn’t yet appreciate was just how much statistical theory and how many analytical techniques were available to help me understand my data and build better forecasts.\nThat realization set me on a path of continuous learning. I taught myself Python, earned a Master of Data Science degree, and developed a deep interest in time series analysis, statistical modeling, and forecasting. I now oversee the preparation of long and medium range forecasts across multiple sales and service operational groups within my company.\nI created Time Series Made Simple to share what I’ve learned and help others develop these skills. My goal is to make time series concepts easier to understand by connecting the underlying theory with practical, hands-on applications. While the examples and projects on this site use Python, the statistical concepts are broadly applicable across programming languages and analytical tools.\nYou’ll find a mix of focused tutorials on individual time series concepts and end-to-end projects that demonstrate the full analytical process—from exploring data and selecting models to evaluating forecasts and interpreting results. I aim to publish new articles weekly, giving readers a steady path toward building their knowledge and practical skills.\nWhether you’re just getting started with time series analysis or looking to expand your existing data science toolkit, I hope this site helps you understand not just how forecasting methods work, but why they work and when to use them.\nUnderstand the theory. Master the code. Build better forecasts.\nNew to time series analysis? Start with my Introduction to Time Series tutorial."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Home",
+    "section": "",
+    "text": "Time Series Made Simple - Site Logo\nTime-series analysis doesn’t have to be a black box. Time Series Made Simple equips you to work with time series data effectively. Learn the theory behind forecasting methods and put those methods into practice with Python.\nWhether you’re learning the fundamentals or comparing models for a real forecasting problem, the goal is the same: understand why a method works, when to use it, and how to evaluate its results.\nExplore the tutorials · About this site"
+  },
+  {
+    "objectID": "index.html#understand-the-theory.-master-the-code.-build-better-forecasts.",
+    "href": "index.html#understand-the-theory.-master-the-code.-build-better-forecasts.",
+    "title": "Home",
+    "section": "Understand the theory. Master the code. Build better forecasts.",
+    "text": "Understand the theory. Master the code. Build better forecasts.\nGood forecasting starts with understanding the data. Each tutorial aims to build intuition first, introduce the relevant statistical ideas, and then demonstrate how to apply them in Python.\n\n\n\nFoundations\nUnderstand trends, seasonality, stationarity, autocorrelation, and the structure of time-series data.\n\n\n\nStatistical forecasting\nExplore moving averages, exponential smoothing, ARIMA, SARIMA, and other statistical forecasting methods.\n\n\n\n\n\n\nPython in practice\nWork through examples using pandas, matplotlib, statsmodels, and scikit-learn, with code that illustrates the ideas being discussed.\n\n\n\nModel evaluation\nLearn how to compare forecasts, diagnose errors, establish meaningful baselines, and decide which models are useful for a particular problem."
+  },
+  {
+    "objectID": "index.html#a-practical-approach-to-learning",
+    "href": "index.html#a-practical-approach-to-learning",
+    "title": "Home",
+    "section": "A practical approach to learning",
+    "text": "A practical approach to learning\nThe tutorials follow a consistent progression:\n\nBuild intuition. Understand the problem and the patterns in the data.\nExplore the theory. Learn the statistical concepts behind the method.\nImplement the model. Work through a Python example.\nEvaluate the results. Examine forecast accuracy, limitations, and practical trade-offs.\n\nThe emphasis is on developing the judgment to choose and evaluate forecasting methods, rather than simply learning how to call a modeling function."
+  },
+  {
+    "objectID": "index.html#latest-tutorials",
+    "href": "index.html#latest-tutorials",
+    "title": "Home",
+    "section": "Latest tutorials",
+    "text": "Latest tutorials\nBrowse the latest articles below.\n\n\n\n\n\nNaive Forecasting Basics\n\n\nUnderstanding simple naive forecasts and how to build them in Python\n\n\n\n\n\nNov 4, 2026\n\n\n\n\n\n\n\nTrain-Test Split for Time Series\n\n\nA basic explanation of how to splilt a time series into train and test sets\n\n\n\n\n\nNov 3, 2026\n\n\n\n\n\n\n\nAdditive vs. Multiplicative Seasonality\n\n\nDetermining what type of seasonality your time series has\n\n\n\n\n\nOct 31, 2026\n\n\n\n\n\n\n\nDifferencing\n\n\nHow to make a non-stationary time series stationary\n\n\n\n\n\nOct 30, 2026\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/differencing/index.html",
+    "href": "posts/differencing/index.html",
+    "title": "Differencing",
+    "section": "",
+    "text": "ARMA models require a stationary time series in order to work properly. If you are unfamiliar with the concept of stationarity, I encourage you to check out this article before moving forward.\nIf you determine that your time series is non-stationary - whether through visualization, statistical tests, or both - and you intend to build an auto-regression and/or moving average model (ARMA), you will need to make your data stationary. How can this be done? Through a simple process called differencing.\nIn this article we will explore what differencing is, how it can usually make a nonstationary time series stationary, and then walk through an easy way to perform differencing in Python."
+  },
+  {
+    "objectID": "posts/differencing/index.html#what-is-differencing",
+    "href": "posts/differencing/index.html#what-is-differencing",
+    "title": "Differencing",
+    "section": "What is Differencing?",
+    "text": "What is Differencing?\nDifferencing, very simply, means calculating the change (i.e. the difference) between instances within your time series.\nFor example, if your time series was (0, 3, 2, 5, 5, 1, 7), then the differenced time series would be (3, -1, 3, 0, -4, 6), the difference between each “hop”. Think, “up 3”, “down 1”, “up 3”, “stay the same”, “down 4”, and “up 6”.\nDifferencing can be done at other intervals than just from each successive instance. Seasonal differencing is an example of this, where you calculate the difference between each successive seasonal instance. For example, you might calculate the difference between January 2025 and January 2026, February 2025 and February 2026, March 2025 and March 2026, etc. for monthly seasonal data.\nIn its simplest form though, differencing just implies taking the change between each successive instance. In essence, you are just converting your original time series of values into a time series of the change between values."
+  },
+  {
+    "objectID": "posts/differencing/index.html#how-does-differencing-work",
+    "href": "posts/differencing/index.html#how-does-differencing-work",
+    "title": "Differencing",
+    "section": "How does Differencing Work?",
+    "text": "How does Differencing Work?\nInterestingly, the change from instance to instance is often (though not always) relatively stable in mean and variance, even if the underlying time series is quite unstable.\nOccasionally, you may need to difference your time series data more than once to achieve stationarity. If you find yourself differencing more than 2-3 times, however, you may need to consider other methods of working with your time series."
+  },
+  {
+    "objectID": "posts/differencing/index.html#conclusion",
+    "href": "posts/differencing/index.html#conclusion",
+    "title": "Differencing",
+    "section": "Conclusion",
+    "text": "Conclusion\nDifferencing is a simple process that can generally be used to make a non-stationary time series stationary. We can difference our time series data using Pandas .diff() function. This is an important step in preparing your data for use in a statistical model like ARIMA.\nThe Google Stock Price data set used in this article was sourced from https://www.kaggle.com/datasets/varpit94/google-stock-data"
+  },
+  {
+    "objectID": "posts/naive-forecasting-basics/index.html",
+    "href": "posts/naive-forecasting-basics/index.html",
+    "title": "Naive Forecasting Basics",
+    "section": "",
+    "text": "In this article, we will explore the topic of naive forecasting models. We will explain the idea behind these simple models and what they are used for. Finally, we will walk through an example of building one in Python."
+  },
+  {
+    "objectID": "posts/naive-forecasting-basics/index.html#what-is-a-naive-forecast",
+    "href": "posts/naive-forecasting-basics/index.html#what-is-a-naive-forecast",
+    "title": "Naive Forecasting Basics",
+    "section": "What is a Naive Forecast?",
+    "text": "What is a Naive Forecast?\nThe idea behind a naive forecast is very simple: the most recent value becomes the next forecasted value.\nIn terms of weather, a naive forecast would be like saying, “Today’s temperature was 42 degrees, so I expect tomorrow’s forecast will be 42 degrees.”\nSounds pretty simple, right? It is simple. That’s actually the beauty of naive forecasts. Surprisingly, for many time series, this forecasting method can work quite well. Where they often fall short is when your time series has seasonality or trend. However, naive forecasts can be expanded upon to account for those time series structures as well.\nFor now, though, we will stick with just our simple naive forecast with no seasonality or trend."
+  },
+  {
+    "objectID": "posts/naive-forecasting-basics/index.html#how-can-we-use-naive-forecasts",
+    "href": "posts/naive-forecasting-basics/index.html#how-can-we-use-naive-forecasts",
+    "title": "Naive Forecasting Basics",
+    "section": "How can we use Naive Forecasts?",
+    "text": "How can we use Naive Forecasts?\nSometimes a naive forecast is used as a production model. These are cases when the best way to predict the future is with the most recent value in the past. They are easy to set up, not resource intensive, and very simple to explain.\nHowever, where naive forecasts are most often used is as a benchmark or baseline forecasting model. They set the bar for every other model you build. When you are exploring types of forecasting models for your time series, make sure a naive model is one that you build and validate against. If a more advanced model cannot outperform the naive model, this should call into question whether the complexity of the advanced model adds any true value."
+  },
+  {
+    "objectID": "posts/naive-forecasting-basics/index.html#what-are-the-limitations-of-naive-forecasts",
+    "href": "posts/naive-forecasting-basics/index.html#what-are-the-limitations-of-naive-forecasts",
+    "title": "Naive Forecasting Basics",
+    "section": "What are the limitations of Naive Forecasts?",
+    "text": "What are the limitations of Naive Forecasts?\nNaive forecasts can be too simple for a time series that possesses structure. Another important limitation is that a naive forecast, in its simplest form, can only forecast a flat line as it extends into the future. This means a basic naive forecasting model’s predictive power can degrade very quickly."
+  },
+  {
+    "objectID": "posts/naive-forecasting-basics/index.html#how-to-build-a-naive-model-in-python",
+    "href": "posts/naive-forecasting-basics/index.html#how-to-build-a-naive-model-in-python",
+    "title": "Naive Forecasting Basics",
+    "section": "How to Build a Naive Model in Python",
+    "text": "How to Build a Naive Model in Python\nBuilding a simple naive model in Python is easy. You can use Pandas .shift() method to “slide” your data forward by one instance. This shifted series becomes your fitted values. Future forecasts will simply take on whatever the last value is in your training set.\nMore information about Pandas .shift() method is available here\nBefore we get started, let’s prepare our data. The following code uses the flights data set from Seaborn. For more info about this data set, visit the seaborn documentation located here\n\n#Necessary imports\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom sklearn.model_selection import train_test_split\n\n#Load flights data into 'flights' dataframe\nflights = sns.load_dataset(\"flights\")\n\n#You will often need to convert your data into a more usable form, usually with some type of time index.\n#This code converts the 'year' and 'month' columns into a single datetime column then sets that column as our index.\n\nflights['date'] = pd.to_datetime(\n    flights['year'].astype(str) + '-' + flights['month'].astype(str), format='%Y-%b'\n)\n\nflights = flights.set_index('date')\n\n#Separate the target feature into a series. We no longer need the month/year columns since our index already has that information.\ny = flights['passengers']\n\n\n#We will split our data into train and test sets\ny_train, y_test = train_test_split(y, shuffle=False, train_size=.8) #Notice, the \"shuffle\" parameter is set to false here. It defaults to true.\n\nNow that our data is loaded, we are ready to move forward with getting our fitted values.\nIt is important to note, you will introduce missing values into your series for however many rows you shift with the .shift() method. You can drop these rows using Pandas dropna() method.\n\nfitted_values = y_train.shift(1) #Shifting by 1 to get our simple naive fitted values\nfitted_values = fitted_values.dropna() #Dropping the null value introduced by the shift\n\nWe have successfully generated our fitted values. Let’s now generate our forecast for the test set period. In this case, the final value of our training set will become the forecast for the entirety of the test set.\n\nfuture_forecast_value = y_train.iloc[-1] #Grab the last value of our train set\n\nforecasts = pd.Series(future_forecast_value, index=y_test.index) #Create a series with the same index as our test set that uses that one future value\n\nforecasts.head(5)\n\ndate\n1958-08-01    491\n1958-09-01    491\n1958-10-01    491\n1958-11-01    491\n1958-12-01    491\ndtype: int64\n\n\nAs you can see, our naive forecast model produces a constant value of 491. Let’s use a visualization to get an idea for how well our naive forecast captures this time series.\n\n#Combining fitted values and forecasts for simpler viewing\ncombined_fitted_and_forecasts = pd.concat([fitted_values, forecasts], axis=0)\n\n#Combining with y for visualization purposes\ncombined_forecasts_actuals = pd.concat([y, combined_fitted_and_forecasts], axis=1).dropna()\n\ncombined_forecasts_actuals.plot(figsize=(10, 7))\nplt.axvline(x=y_test.index[0], c='red', linestyle='--', label='Start of Test Set')\nplt.title('Naive Forecast vs. Actuals - Flight Passengers')\nplt.ylabel('Passengers (Thousands)')\nplt.xlabel('Date')\nplt.legend()\nplt.show();\n\n\n\n\n\n\n\n\nThe visualization drives the limitation of this model home. It does not do well at capturing the seasonality or trend in the flights time series once it enters the test period. For a data set without these structural components, however, a naive forecast may do quite well. Nevertheless, we have created what will serve as our most basic baseline forecast - one which future more advanced forecasting models will be compared to."
+  },
+  {
+    "objectID": "posts/naive-forecasting-basics/index.html#conclusion",
+    "href": "posts/naive-forecasting-basics/index.html#conclusion",
+    "title": "Naive Forecasting Basics",
+    "section": "Conclusion",
+    "text": "Conclusion\nIn conclusion, naive forecasts are among the simplest time series models available. They are sometimes used for production forecasts, but more often they serve as baseline models to compare with more advanced model options. Creating a naive forecast is simple in Python. It could also be easily done in Microsoft Excel.\nIn future articles, we will explore how to add seasonality and trend to our naive model to make it more competitive."
   },
   {
     "objectID": "posts/time-series-train-test-spit/index.html",

@@ -1,7 +1,8 @@
 [
   {
-    "listing": "/index.html",
+    "listing": "/archive.html",
     "items": [
+      "/posts/naive-forecasting-basics/index.html",
       "/posts/time-series-train-test-spit/index.html",
       "/posts/additive-vs-multiplicative-seasonality/index.html",
       "/posts/differencing/index.html",
@@ -11,8 +12,9 @@
     ]
   },
   {
-    "listing": "/archive.html",
+    "listing": "/index.html",
     "items": [
+      "/posts/naive-forecasting-basics/index.html",
       "/posts/time-series-train-test-spit/index.html",
       "/posts/additive-vs-multiplicative-seasonality/index.html",
       "/posts/differencing/index.html",
