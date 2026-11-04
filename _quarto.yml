@@ -23,6 +23,10 @@ website:
       - icon: github
         href: https://github.com/time-series-made-simple/time-series-made-simple
 
+execute:
+  freeze: auto
+
+
 format:
   html:
     theme: cosmo

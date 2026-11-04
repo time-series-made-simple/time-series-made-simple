@@ -103,6 +103,7 @@ As you can see, our naive forecast model produces a constant value of 491. Let's
 
 #Combining fitted values and forecasts for simpler viewing
 combined_fitted_and_forecasts = pd.concat([fitted_values, forecasts], axis=0)
+combined_fitted_and_forecasts.name = 'forecasts'
 
 #Combining with y for visualization purposes
 combined_forecasts_actuals = pd.concat([y, combined_fitted_and_forecasts], axis=1).dropna()

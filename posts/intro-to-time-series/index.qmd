@@ -8,6 +8,7 @@ categories:
   - Python
   - Basics
 
+jupyter: python3
 format:
   html:
     toc: true
