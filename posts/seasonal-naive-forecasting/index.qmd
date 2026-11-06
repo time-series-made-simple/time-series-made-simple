@@ -16,9 +16,9 @@ format:
     code-copy: true
 ---
 
-As described in our article on [simple naive forecasting models](../posts/simple-naive-forecasts/index.html), one of the major limitations of a simple naive forecasting model is that it cannot account for seasonality in time series data.
+As described in our article on [simple naive forecasting models](../naive-forecasting-basics/index.html), one of the major limitations of a simple naive forecasting model is that it cannot account for seasonality in time series data.
 
-As a reminder, seasonal variations refer to recurring fluctuations that happen at consistent frequencies. For more information about seasonality and other time series structures, feel free to check our article on time series structures [here](../posts/time-series-structures/index.html).
+As a reminder, seasonal variations refer to recurring fluctuations that happen at consistent frequencies. For more information about seasonality and other time series structures, feel free to check our article on time series structures [here](../time-series-structures/index.html).
 
 In this article, we will walk through how you can build upon a simple naive forecast by accounting for seasonal variations in your time series data. This one step alone can often take what may seem like an overly simplistic model and turn it into a very competitive baseline to compare more advanced time series models against.
 
