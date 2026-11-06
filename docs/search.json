@@ -133,13 +133,6 @@
     "text": "Understand the theory. Master the code. Build better forecasts.\nGood forecasting starts with understanding the data. Each tutorial aims to build intuition first, introduce the relevant statistical ideas, and then demonstrate how to apply them in Python.\n\n\n\nFoundations\nUnderstand trends, seasonality, stationarity, autocorrelation, and the structure of time-series data.\n\n\n\nStatistical forecasting\nExplore moving averages, exponential smoothing, ARIMA, SARIMA, and other statistical forecasting methods.\n\n\n\n\n\n\nPython in practice\nWork through examples using pandas, matplotlib, statsmodels, and scikit-learn, with code that illustrates the ideas being discussed.\n\n\n\nModel evaluation\nLearn how to compare forecasts, diagnose errors, establish meaningful baselines, and decide which models are useful for a particular problem."
   },
   {
-    "objectID": "index.html#a-practical-approach-to-learning",
-    "href": "index.html#a-practical-approach-to-learning",
-    "title": "Home",
-    "section": "A practical approach to learning",
-    "text": "A practical approach to learning\nThe tutorials follow a consistent progression:\n\nBuild intuition. Understand the problem and the patterns in the data.\nExplore the theory. Learn the statistical concepts behind the method.\nImplement the model. Work through a Python example.\nEvaluate the results. Examine forecast accuracy, limitations, and practical trade-offs.\n\nThe emphasis is on developing the judgment to choose and evaluate forecasting methods, rather than simply learning how to call a modeling function."
-  },
-  {
     "objectID": "index.html#latest-tutorials",
     "href": "index.html#latest-tutorials",
     "title": "Home",

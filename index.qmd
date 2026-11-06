@@ -68,19 +68,6 @@ Learn how to compare forecasts, diagnose errors, establish meaningful baselines,
 
 ---
 
-## A practical approach to learning
-
-The tutorials follow a consistent progression:
-
-1. **Build intuition.** Understand the problem and the patterns in the data.
-2. **Explore the theory.** Learn the statistical concepts behind the method.
-3. **Implement the model.** Work through a Python example.
-4. **Evaluate the results.** Examine forecast accuracy, limitations, and practical trade-offs.
-
-The emphasis is on developing the judgment to choose and evaluate forecasting methods, rather than simply learning how to call a modeling function.
-
----
-
 ## Latest tutorials
 
 Browse the latest articles below.
