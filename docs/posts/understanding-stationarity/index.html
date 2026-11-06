@@ -258,10 +258,13 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <h3 class="anchored" data-anchor-id="statistical-tests">Statistical Tests</h3>
 <p>At times, the visual evidence may be unclear, particularly if you have a noisy data set. In this case, you should use a statistical test to check whether your time series is stationary or non-stationary. There are different statistical tests available, but the most common is called the Augmented Dickey-Fuller test.</p>
 <p>This test checks the time series for the presence of something called a “unit root”. If there is a unit root present, it indicates a non-stationary time series. The test operates with the following hypotheses:</p>
-<p>Null Hypothesis: Has Unit Root: Time Series is Non-Stationary Alternate Hypothesis: Does not Have Unit Root: Time Series is Stationary</p>
-<p>A p-value of below .05 is typically interpreted as strong evidence to reject the null hypothesis (i.e., your time series is stationary), while a p-value of above .05 is interpreted as insufficient evidence to reject the null hypothesis (i.e., your time series is nonstationary). Note, this test, though helpful, is not a 100% guarantee. It should always be paired with visual exploration prior to model creation and additional testing of the model’s performance.</p>
+<ul>
+<li>Null Hypothesis: Has Unit Root (Time Series is Non-Stationary)</li>
+<li>Alternate Hypothesis: Does not Have Unit Root (Time Series is Stationary)</li>
+</ul>
+<p>A p-value of below .05 is typically interpreted as strong evidence to reject the null hypothesis, while a p-value of above .05 is interpreted as insufficient evidence to reject the null hypothesis. In other words, a p-value below .05 is interpretted as evidence for a stationary time series; a p-value above .05 is interpretted as evidence of a non-stationary time series. Note, this test, though helpful, is not a 100% guarantee. It should always be paired with visual exploration prior to model creation and additional testing of the model’s performance.</p>
 <p>The statsmodels <code>adfuller</code> function performs this test for us. Let’s run our electricity production data from earlier in the article through the adfuller test as an example.</p>
-<div id="9b9e4086" class="cell" data-execution_count="1">
+<div id="582327bb" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.stattools <span class="im">import</span> adfuller</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -279,6 +282,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 </div>
 <p>The p-value in our adfuller results is greater than the critical value of .05. This gives us additional evidence that we are dealing with a non-stationary time series, confirming what we observed from the visualization. If our p-value was below .05, that would typically be interpretted as evidence that of stationarity in our data.</p>
 <p>In future articles, we will explore this idea of stationarity further. We will consider additional examples and look at how we can make a non-stationary time series stationary by <em>differencing</em> the data set.</p>
+<p>To explore the topic of differencing your data, visit our article <a href="../../posts/differencing/index.html">here</a>.</p>
 
 
 </section>

@@ -235,7 +235,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <section id="what-is-a-time-series" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-a-time-series">What is a Time Series?</h2>
 <p>A time series is a data set in which the observations, the instances, or the rows, are in some type of sequential order. Consider the following example from a data set that includes average march temperatures for the state of Pennsylvania from 1895-2026:</p>
-<div id="aa25291b" class="cell" data-execution_count="1">
+<div id="3c5a7aeb" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -337,11 +337,11 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <p>You may be asking why we need separate training and instruction for working with time series data. “Could I not apply the same methods, concepts, and models that I learned on other types of data to time series?” The answer is: “not exactly”. Many of the same ideas and steps carry over, but there are also many differences. The following are the key differences that make working with time series unique. We will expand upon these in much greater detail in future articles.</p>
 <section id="key-difference-1-order-matters" class="level3">
 <h3 class="anchored" data-anchor-id="key-difference-1-order-matters">Key Difference #1: Order Matters</h3>
-<p>The first key difference is that order matters. The index of a time series provides a sequential order for the observations, and it is important to remember that. We cannot shuffle a time series the way we would shuffle a cross-sectional data set, because shuffling destroys many of the things that make the time series valuable, including the ways we can use it to predict future values. For this reason, order matters.</p>
+<p>The first key difference with time series is that the order of the data is important. The index of a time series provides a sequential order for the observations. We cannot shuffle a time series the way we would shuffle a cross-sectional data set, because shuffling destroys many of the things that make the time series valuable, including the ways we can use it to predict future values. For this reason, order matters.</p>
 </section>
 <section id="key-difference-2-autocorrelation" class="level3">
 <h3 class="anchored" data-anchor-id="key-difference-2-autocorrelation">Key Difference #2: Autocorrelation</h3>
-<p>The second key difference is autocorrelation. This is a fancy word that simply means correlation with itself. The data in a time series are typically not independent of each other; one instance may depend heavily on the instance that came before it. Think setting up a line of dominos next to each other. If you push the first domino, each successive domino is impacted. This is a simple illustration for how instances of a time series impact future instances. There is a great deal of correlation within many time series, and models are often built by using that autocorrelation to your advantage. We are therefore not dealing with independent instances, as we often want to with other types of data.</p>
+<p>The second key difference is autocorrelation. This is a fancy word that simply means correlation with itself. The data in a time series are typically not independent of each other; one instance may depend heavily on the instance that came before it. Think of a time series like setting up a line of dominos next to each other. If you push the first domino, each successive domino is impacted. This is a simple illustration for how instances of a time series impact future instances. There is a great deal of correlation within many time series, and models are often built by using that autocorrelation to your advantage. We are therefore not dealing with independent instances, as we often want to with other types of data.</p>
 </section>
 <section id="key-difference-3-structure" class="level3">
 <h3 class="anchored" data-anchor-id="key-difference-3-structure">Key Difference #3: Structure</h3>
@@ -349,7 +349,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 </section>
 <section id="key-difference-4-unique-preparation-and-models" class="level3">
 <h3 class="anchored" data-anchor-id="key-difference-4-unique-preparation-and-models">Key Difference #4: Unique Preparation and Models</h3>
-<p>Because of the points above, there are unique preparation steps to take when planning and choosing a model. Examples include rolling-horizon cross-validation, which we will cover in the future; not shuffling your data set, as already mentioned; and ensuring that you have a datetime index to work from. At times you may need to perform a process called differencing on your data set. We will cover these preparation steps in more detail later. There are also models designed specifically for time series, such as ARIMA, exponential smoothing, and state space models, as well as variations of models you may have learned about in past courses but designed with time series in mind.</p>
+<p>Because of the points above, there are unique preparation steps to take when planning and choosing a model. Examples include rolling-horizon cross-validation, which we will cover in the future; not shuffling your data set, as already mentioned; and ensuring that you have a datetime index to work from. At times you may need to perform a process called differencing on your data set. We will cover these preparation steps in more detail later. There are also models designed specifically for time series, such as ARIMA, exponential smoothing, and state space models, as well as variations of models you may have used with cross-sectional data but designed with time series in mind.</p>
 </section>
 <section id="key-difference-5-different-goals" class="level3">
 <h3 class="anchored" data-anchor-id="key-difference-5-different-goals">Key Difference #5: Different Goals</h3>

@@ -52,10 +52,10 @@ At times, the visual evidence may be unclear, particularly if you have a noisy d
 
 This test checks the time series for the presence of something called a "unit root". If there is a unit root present, it indicates a non-stationary time series. The test operates with the following hypotheses:
 
-Null Hypothesis: Has Unit Root: Time Series is Non-Stationary
-Alternate Hypothesis: Does not Have Unit Root: Time Series is Stationary
+- Null Hypothesis: Has Unit Root (Time Series is Non-Stationary)
+- Alternate Hypothesis: Does not Have Unit Root (Time Series is Stationary)
 
-A p-value of below .05 is typically interpreted as strong evidence to reject the null hypothesis (i.e., your time series is stationary), while a p-value of above .05 is interpreted as insufficient evidence to reject the null hypothesis (i.e., your time series is nonstationary). Note, this test, though helpful, is not a 100% guarantee. It should always be paired with visual exploration prior to model creation and additional testing of the model's performance.
+A p-value of below .05 is typically interpreted as strong evidence to reject the null hypothesis, while a p-value of above .05 is interpreted as insufficient evidence to reject the null hypothesis. In other words, a p-value below .05 is interpretted as evidence for a stationary time series; a p-value above .05 is interpretted as evidence of a non-stationary time series. Note, this test, though helpful, is not a 100% guarantee. It should always be paired with visual exploration prior to model creation and additional testing of the model's performance.
 
 The statsmodels `adfuller` function performs this test for us. Let's run our electricity production data from earlier in the article through the adfuller test as an example.
 
@@ -76,3 +76,5 @@ print('adf p-value:', elec_adf_result[1])
 The p-value in our adfuller results is greater than the critical value of .05. This gives us additional evidence that we are dealing with a non-stationary time series, confirming what we observed from the visualization. If our p-value was below .05, that would typically be interpretted as evidence that of stationarity in our data.
 
 In future articles, we will explore this idea of stationarity further. We will consider additional examples and look at how we can make a non-stationary time series stationary by *differencing* the data set.
+
+To explore the topic of differencing your data, visit our article [here](../differencing/index.qmd).
