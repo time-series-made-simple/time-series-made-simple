@@ -164,7 +164,7 @@ shampoo_naive_forecast_drift = shampoo_naive_forecast_drift.drop(
 Ok, we have successfully projected our naive model with drift through the test period. Let's now take a moment to examine how well our model performs using a simple visualization.
 
 ```{python}
-pd.concat([shampoo, pd.concat([shampoo_naive_fitted_drift, shampoo_naive_forecast_drift], axis=0)], axis=1).rename(columns={'Sales':'actual'}).plot(figsize=(10, 7))
+pd.concat([shampoo, pd.concat([shampoo_naive_fitted_drift, shampoo_naive_forecast_drift], axis=0)], axis=1).rename(columns={'Sales':'actual'}).plot(figsize=(8, 6))
 plt.axvline(x=y_train.index[-1], color='red', linestyle='--', label='Start of Test Set')
 plt.title('Shampoo Sales by Month: Naive with Trend Forecast vs. Actuals')
 plt.ylabel('Units Sold')

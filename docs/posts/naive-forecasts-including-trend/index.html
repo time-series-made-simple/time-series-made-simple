@@ -248,7 +248,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <section id="a-simple-example-in-python" class="level2">
 <h2 class="anchored" data-anchor-id="a-simple-example-in-python">A Simple Example in Python</h2>
 <p>To illustrate a naive forecast with drift, we will use a common time series dataset that captures three years of monthly shampoo sales. In the following code cell, we will load the libraries we need and prepare our data for use.</p>
-<div id="fc79a6d7" class="cell" data-execution_count="1">
+<div id="8b3847c6" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># common imports</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -272,13 +272,13 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>shampoo <span class="op">=</span> shampoo.drop(columns<span class="op">=</span>[<span class="st">'Month'</span>, <span class="st">'Year'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now, we will perform a simple train-test split to set aside a portion of our dataset for testing.</p>
-<div id="c270aff3" class="cell" data-execution_count="2">
+<div id="a74a00ed" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>y_train, y_test <span class="op">=</span> train_test_split(shampoo, shuffle<span class="op">=</span><span class="va">False</span>, test_size<span class="op">=</span><span class="dv">4</span>) <span class="co">#Shuffle parameter is set to Fase since we are working with a time series</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s take a quick look at our data using a simple line plot. In a real-world project, you would do much more during the exploratory data analysis stage. However, for our purposes, this will help us identify the trend structure within the data.</p>
-<div id="d1d3a3ab" class="cell" data-execution_count="3">
+<div id="87a1f324" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>shampoo.plot(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">7</span>))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Shampoo Sales by Month: 1995-1997'</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Units Sold'</span>)</span>
@@ -293,13 +293,13 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 </div>
 <p>There is no clear seasonality in this dataset. However, our data displays a strong upward trend. Shampoo sales steadily increased during the years the data was collected.</p>
 <p>Now we are ready to create our fitted values for the training set. We will use pandas’ .shift() method to shift our values forward by one row. Then, we will use the .dropna() method to remove the resulting null value created by this shift.</p>
-<div id="6d4040fd" class="cell" data-execution_count="4">
+<div id="c2b52bdd" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>shampoo_naive_fitted <span class="op">=</span> y_train.shift(<span class="dv">1</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>shampoo_naive_fitted <span class="op">=</span> shampoo_naive_fitted.dropna()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, we calculate our drift value. In this example, we will calculate it by subtracting the first observation from the last observation in our training set and dividing by the number of observations minus one.</p>
 <p>Pandas’ <code>.squeeze()</code> method turns the resulting single-value Series into a scalar value. More information about this method can be found in the pandas documentation <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.squeeze.html">here</a>.</p>
-<div id="9d14b3fe" class="cell" data-execution_count="5">
+<div id="d838146e" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>shampoo_naive_drift <span class="op">=</span> ((y_train.iloc[<span class="op">-</span><span class="dv">1</span>] <span class="op">-</span> y_train.iloc[<span class="dv">0</span>]) <span class="op">/</span> (<span class="bu">len</span>(y_train) <span class="op">-</span> <span class="dv">1</span>)).squeeze()</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(shampoo_naive_drift)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -309,7 +309,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 </div>
 <p>Our drift value is approximately 4.6. This means that, on average, our data has increased by around 4.6 units of sales each month across the training period.</p>
 <p>We will now add this drift value to our fitted values to create a naive forecast with drift.</p>
-<div id="c6027324" class="cell" data-execution_count="6">
+<div id="1c102ff5" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add drift to fitted values</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>shampoo_naive_fitted_drift <span class="op">=</span> shampoo_naive_fitted <span class="op">+</span> shampoo_naive_drift</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -318,7 +318,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 </div>
 <p>Okay, now we are ready to forecast into our test period. We will add the drift value at each successive step, allowing it to accumulate as we move further into the future.</p>
 <p>We will start with the last actual observation in our training set and calculate the forecast for each step in the test period.</p>
-<div id="c8b65403" class="cell" data-execution_count="7">
+<div id="24c0ba25" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Capture the final actual training observation as our starting point</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>last_observation <span class="op">=</span> y_train.iloc[<span class="op">-</span><span class="dv">1</span>].squeeze()</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -344,8 +344,8 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Ok, we have successfully projected our naive model with drift through the test period. Let’s now take a moment to examine how well our model performs using a simple visualization.</p>
-<div id="353a11bd" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pd.concat([shampoo, pd.concat([shampoo_naive_fitted_drift, shampoo_naive_forecast_drift], axis<span class="op">=</span><span class="dv">0</span>)], axis<span class="op">=</span><span class="dv">1</span>).rename(columns<span class="op">=</span>{<span class="st">'Sales'</span>:<span class="st">'actual'</span>}).plot(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">7</span>))</span>
+<div id="59730ba4" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pd.concat([shampoo, pd.concat([shampoo_naive_fitted_drift, shampoo_naive_forecast_drift], axis<span class="op">=</span><span class="dv">0</span>)], axis<span class="op">=</span><span class="dv">1</span>).rename(columns<span class="op">=</span>{<span class="st">'Sales'</span>:<span class="st">'actual'</span>}).plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plt.axvline(x<span class="op">=</span>y_train.index[<span class="op">-</span><span class="dv">1</span>], color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Start of Test Set'</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Shampoo Sales by Month: Naive with Trend Forecast vs. Actuals'</span>)</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Units Sold'</span>)</span>
@@ -354,7 +354,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-9-output-1.png" width="816" height="612" class="figure-img"></p>
+<p><img src="index_files/figure-html/cell-9-output-1.png" width="667" height="538" class="figure-img"></p>
 </figure>
 </div>
 </div>
