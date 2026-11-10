@@ -2,6 +2,7 @@
   {
     "listing": "/archive.html",
     "items": [
+      "/posts/intro-to-arima/index.html",
       "/posts/seasonal-naive-with-drift/index.html",
       "/posts/naive-forecasts-including-trend/index.html",
       "/posts/seasonal-naive-forecasting/index.html",
@@ -17,6 +18,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/intro-to-arima/index.html",
       "/posts/seasonal-naive-with-drift/index.html",
       "/posts/naive-forecasts-including-trend/index.html",
       "/posts/seasonal-naive-forecasting/index.html",

@@ -1,0 +1,94 @@
+---
+title: "Introduction to ARIMA Models"
+description: "Understanding the basics of ARIMA models for time series analysis and forecasting."
+date: "2026-11-10"
+categories:
+  - Time Series
+  - ARIMA
+  - Forecasting
+
+jupyter: python3
+format:
+  html:
+    toc: true
+    code-fold: false
+    code-copy: true
+---
+
+## Introduction
+
+ARIMA models are among the earliest time series models developed. They have been around for a very long time, but they remain popular to this day. They can be used for applications like predicting sales next quarter or forecasting a stock's opening price over the next 3 days.
+
+In this article, we lay the groundwork for understanding ARIMA models. We first look at the advantages and disadvantages of this family of models. Then we consider the basic concepts a data professional needs to understand before using an ARIMA model.
+
+## The Pros and Cons of ARIMA Models
+
+They offer several advantages:
+
+- Easy to interpret
+- Not resource intensive to build or forecast with
+- Can use a small amount of training data
+- Widely used and understood across industries
+- Accessible through user-friendly packages like statsmodels (Python) and forecast (R)
+
+They have some disadvantages as well, however. These are important to know about:
+
+- Can be overly simplistic, leading to underfitting the data
+- Seasonality is not handled in the simplest models
+- Stationarity is needed for the models to work properly
+- Assumes linearity in the data
+- Can be less effective at long-range forecastinng, particularly the simplest ARIMA models
+
+## ARIMA is Similar to Linear Regression
+
+When considering ARIMA models for the first time, it is helpful to think of them as a variation of linear regression.
+
+You may remember the equation of a line from a high school algebra course. With linear regression, you typically have a coefficient (sometimes referred to as the slope) times a variable *x*, plus a constant (sometimes called the y-intercept). The output of this linear formula is your predicted *y* value. You may also have used linear regression in other machine learning projects. The basic idea is that your predictor variable(s) when weighted and added together and combined with a constant, can be used to predict a target variable.
+
+ARIMA is very similar to this. It uses weights (coefficients) and a constant as well. The main difference is that the regression terms and their corresponding coefficients are based on past instances of the data itself (AR) and/or past forecast errors (MA), not a separate set of predictor variables.
+
+## What does the Acronym Stand For?
+
+The acronym, ARIMA, stands for Autoregressive Integrated Moving Average. This describes 3 separate parts of an ARIMA model. Note that you can have any one of these parts without the others. They can be used separately and often are.
+
+Let's examine each of these components in turn:
+
+### AR: Autoregressive
+
+An AR model uses past instances of a time series to predict the future. Think of it as "a regression of the time series' own past values". The order or number of past values to include in the model is represented with the label `p`. We often use a PACF plot, described in future articles, to determine what an appropriate `p` value may be.
+
+### I: Integrated
+
+The "I" in ARIMA refers to the differencing done to make a time series stationary. The order or number of times you will difference your data is referred to with the label `d`. We use visualizations and formal tests for stationarity to determine an appropriate `d` value. For more information check out [this article](../understanding-stationarity/index.html) on the topic of stationarity and [this article](../differencing/index.html) on the topic of differencing.
+
+### MA: Moving Average
+
+Despite the name, this is not the same as a rolling average used to smooth data. The MA model uses past forecast errors to adjust future predictions. Think "our past errors inform our future forecasts". The order or number of past forecast errors to include in the model is represented with the label `q`. We often use an ACF plot, described in future articles, to determine what an appropriate `q` value may be.
+
+## ARIMA Notation
+
+An ARIMA model is often listed as ARIMA(p, d, q) where p, d, and q represent the values (“order”) of each component. For example, you could have an ARIMA model that is represented as ARIMA(1, 1, 2). These numbers define how the model works.
+
+- p - the AR order - how many past values (lags) to include as regression terms in the model, in our case, this would be the past value at lag 1
+- d - the differencing order - how many times to difference the data (calculate the change between instances), in our case, the data is differenced once
+- q - the MA order - how many past errors to include as regression terms in the model, in our case, this would mean we include the forecast errors of the past 2 values
+
+## What can I do with ARIMA models?
+
+ARIMA models can be used to understand how a time series works and to forecast future values. A simple ARIMA model is often used as a baseline model to which more advanced models can be compared. ARIMA can be expanded to include seasonality (SARIMA) and exogenous features (data beyond the time series values themselves) (SARIMAX). To use those more advanced versions of ARIMA effectively, however, it is important to first grasp the simple version.
+
+## Conclusion
+
+To sum up, ARIMA is one of the most widely used time series modeling techniques around today. It relies on a mix of past values (AR), differencing (I), and past forecast errors (MA) to produce predictions. Though not without limitations, there are many advantages to ARIMA models. Every data professional who wants to be able to forecast effectively should devote time to understanding ARIMA.
+
+In the next article, we will walk through a simple coding example of how to build an ARIMA model using the statsmodels library in Python.
+
+
+
+
+
+
+
+
+
+
