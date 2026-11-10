@@ -2,6 +2,7 @@
   {
     "listing": "/archive.html",
     "items": [
+      "/posts/seasonal-naive-with-drift/index.html",
       "/posts/naive-forecasts-including-trend/index.html",
       "/posts/seasonal-naive-forecasting/index.html",
       "/posts/naive-forecasting-basics/index.html",
@@ -16,6 +17,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/seasonal-naive-with-drift/index.html",
       "/posts/naive-forecasts-including-trend/index.html",
       "/posts/seasonal-naive-forecasting/index.html",
       "/posts/naive-forecasting-basics/index.html",
