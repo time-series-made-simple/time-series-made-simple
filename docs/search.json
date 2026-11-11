@@ -242,7 +242,7 @@
     "href": "index.html#latest-tutorials",
     "title": "Home",
     "section": "Latest tutorials",
-    "text": "Latest tutorials\nBrowse the latest articles below.\n\n\n\n\n\nIntroduction to ARIMA Models\n\n\nLearn the basics of ARIMA models for time series analysis and forecasting\n\n\n\n\n\nNov 10, 2026\n\n\n\n\n\n\n\nNaive Forecasts with Seasonality & Drift\n\n\nHow to account for both seasonal variations and trend in a naive forecast\n\n\n\n\n\nNov 9, 2026\n\n\n\n\n\n\n\nNaive Forecasts with Trend\n\n\nLearn how to include a trend (drift) in your naive forecasts\n\n\n\n\n\nNov 7, 2026\n\n\n\n\n\n\n\nSeasonal Naive Forecasting\n\n\nUnderstanding seasonal naive forecasts and how to build them in Python\n\n\n\n\n\nNov 6, 2026\n\n\n\n\n\nNo matching items"
+    "text": "Latest tutorials\nBrowse the latest articles below.\n\n\n\n\n\nIntroduction to ARIMA Models\n\n\nLearn the basics of ARIMA models for time series analysis and forecasting\n\n\n\n\n\nNov 10, 2026\n\n\n\n\n\n\n\nNaive Forecasts with Seasonality & Drift\n\n\nHow to account for both seasonal variations and trend in a naive forecast\n\n\n\n\n\nNov 9, 2026\n\n\n\n\n\n\n\nNaive Forecasts with Trend\n\n\nLearn how to include a trend (drift) in your naive forecasts\n\n\n\n\n\nNov 7, 2026\n\n\n\n\n\n\n\nSeasonal Naive Forecasting\n\n\nUnderstanding seasonal naive forecasts and how to build them in Python\n\n\n\n\n\nNov 6, 2026\n\n\n\n\n\n\n\nNaive Forecasting Basics\n\n\nUnderstanding simple naive forecasts and how to build them in Python\n\n\n\n\n\nNov 4, 2026\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/differencing/index.html",
