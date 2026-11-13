@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-11-13">
+<meta name="description" content="Forecasting NVDA stock prices using ARIMA and Naive with Trend Models">
+
+<title>ARIMA Coding Example in Python – Time Series Made Simple</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-574f58f4068bb8f43535e6e9c10c5508.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-C9HXYCSWSJ"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Time Series Made Simple</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../archive.html"> 
+<span class="menu-text">All Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/time-series-made-simple/time-series-made-simple"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#step-1-import-packages-and-prepare-nvda-data" id="toc-step-1-import-packages-and-prepare-nvda-data" class="nav-link active" data-scroll-target="#step-1-import-packages-and-prepare-nvda-data">Step 1: Import Packages and Prepare NVDA Data</a></li>
+  <li><a href="#step-2-explore-the-data" id="toc-step-2-explore-the-data" class="nav-link" data-scroll-target="#step-2-explore-the-data">Step 2: Explore the Data</a>
+  <ul class="collapse">
+  <li><a href="#summary-statistics" id="toc-summary-statistics" class="nav-link" data-scroll-target="#summary-statistics">Summary Statistics</a></li>
+  <li><a href="#checking-for-structure" id="toc-checking-for-structure" class="nav-link" data-scroll-target="#checking-for-structure">Checking for Structure</a></li>
+  <li><a href="#checking-variance-over-time" id="toc-checking-variance-over-time" class="nav-link" data-scroll-target="#checking-variance-over-time">Checking Variance over Time</a></li>
+  <li><a href="#checking-data-distribution" id="toc-checking-data-distribution" class="nav-link" data-scroll-target="#checking-data-distribution">Checking Data Distribution</a></li>
+  <li><a href="#concluding-eda" id="toc-concluding-eda" class="nav-link" data-scroll-target="#concluding-eda">Concluding EDA</a></li>
+  </ul></li>
+  <li><a href="#step-3-arima-model-setup" id="toc-step-3-arima-model-setup" class="nav-link" data-scroll-target="#step-3-arima-model-setup">Step 3: ARIMA Model Setup</a>
+  <ul class="collapse">
+  <li><a href="#preparatory-steps" id="toc-preparatory-steps" class="nav-link" data-scroll-target="#preparatory-steps">Preparatory Steps</a></li>
+  <li><a href="#train-test-split" id="toc-train-test-split" class="nav-link" data-scroll-target="#train-test-split">Train-Test Split</a></li>
+  <li><a href="#acf-and-pacf-plots" id="toc-acf-and-pacf-plots" class="nav-link" data-scroll-target="#acf-and-pacf-plots">ACF and PACF Plots</a></li>
+  <li><a href="#model-creation-and-comparison" id="toc-model-creation-and-comparison" class="nav-link" data-scroll-target="#model-creation-and-comparison">Model Creation and Comparison</a></li>
+  <li><a href="#generating-fitted-values-and-forecasts" id="toc-generating-fitted-values-and-forecasts" class="nav-link" data-scroll-target="#generating-fitted-values-and-forecasts">Generating Fitted Values and Forecasts</a></li>
+  </ul></li>
+  <li><a href="#step-4-naive-model-creation" id="toc-step-4-naive-model-creation" class="nav-link" data-scroll-target="#step-4-naive-model-creation">Step 4: Naive Model Creation</a></li>
+  <li><a href="#step-5-measure-model-performance" id="toc-step-5-measure-model-performance" class="nav-link" data-scroll-target="#step-5-measure-model-performance">Step 5: Measure Model Performance</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">ARIMA Coding Example in Python</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Time Series</div>
+    <div class="quarto-category">ARIMA</div>
+    <div class="quarto-category">Forecasting</div>
+    <div class="quarto-category">Baseline Models</div>
+    <div class="quarto-category">Visualization</div>
+    <div class="quarto-category">Naive Forecasts</div>
+    <div class="quarto-category">End-to-End Projects</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Forecasting NVDA stock prices using ARIMA and Naive with Trend Models
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 13, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In the last <a href="../intro-to-arima/index.html">article</a>, we introduced the core concepts of one of the most enduring time series modeling techniques: ARIMA.</p>
+<p>We will build on that foundation in this article by walking through an end-to-end coding project.</p>
+<p>We will be using daily NVDA stock data from January 2022 through October 2026. Our goal? To see if a basic ARIMA model can do a better job of predicting the daily opening price of NVDA stock than a naive model with trend.</p>
+<p>As we go through this exercise, I would encourage you to follow along in your notebook. The CSV file is available for download <a href="../arima-coding-example/nvda.csv">here</a>.</p>
+<section id="step-1-import-packages-and-prepare-nvda-data" class="level2">
+<h2 class="anchored" data-anchor-id="step-1-import-packages-and-prepare-nvda-data">Step 1: Import Packages and Prepare NVDA Data</h2>
+<p>First, let’s get the necessary packages loaded. A simple explanation of what each module or function will be used for is included in the comments.</p>
+<div id="bcc55eb5" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Necessary imports</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Numpy/Pandas - used for working with the time series data and applying necessary transformations</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Matplotlib and seaborn used for visualizations</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Sklearn functions used for splitting data into training and test sets and running measures to gauge model performance</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, root_mean_squared_error</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#Statsmodels functions used to check stationarity, determine appropriate ARIMA orders, and set up ARIMA model</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.stattools <span class="im">import</span> adfuller</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.graphics.tsaplots <span class="im">import</span> plot_acf, plot_pacf</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.arima.model <span class="im">import</span> ARIMA</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now, we will load our data using pandas’ <code>read_csv()</code> function. Then we will set up our time series index.</p>
+<div id="b7eb1aec" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load data from CSV file</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>nvda <span class="op">=</span> pd.read_csv(<span class="st">'nvda.csv'</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Set up date index</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>nvda[<span class="st">'Date'</span>] <span class="op">=</span> nvda[<span class="st">'Date'</span>].<span class="bu">str</span>[:<span class="dv">10</span>] <span class="co">#Extract just the date (YYYY-MM-DD) from the timestamp - we don't need times for this exercise</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>nvda[<span class="st">'Date'</span>] <span class="op">=</span> pd.to_datetime(nvda[<span class="st">'Date'</span>]) <span class="co">#Convert string to datetime</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>nvda <span class="op">=</span> nvda.set_index(<span class="st">'Date'</span>) <span class="co">#Set Date as index</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Let’s separate out the “Open” stock price from the rest of the data. That is the feature we will focus on in this project.</p>
+<div id="cb386e93" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> nvda[<span class="st">'Open'</span>].copy()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>y.head(<span class="dv">10</span>) <span class="co">#Check first several rows to see how the data looks</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>Date
+2022-01-03    29.82
+2022-01-04    30.28
+2022-01-05    28.95
+2022-01-06    27.64
+2022-01-07    28.14
+2022-01-10    26.58
+2022-01-11    27.32
+2022-01-12    28.07
+2022-01-13    28.38
+2022-01-14    26.30
+Name: Open, dtype: float64</code></pre>
+</div>
+</div>
+<p>Okay, we are ready to move to our EDA (Exploratory Data Analysis) stage.</p>
+</section>
+<section id="step-2-explore-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="step-2-explore-the-data">Step 2: Explore the Data</h2>
+<section id="summary-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="summary-statistics">Summary Statistics</h3>
+<p>Let’s take a moment just to review some basic summary statistics about our data. We can use pandas’ <code>.describe()</code> method to get this information in one line of code.</p>
+<div id="031e4030" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>y.describe()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>count    1212.000000
+mean      100.724018
+std        71.425291
+min        10.970000
+25%        27.025000
+50%       100.455000
+75%       174.492500
+max       242.100000
+Name: Open, dtype: float64</code></pre>
+</div>
+</div>
+<p>From this, we can find the mean of our data (~$101), the midpoint (~$100), and the min (~$11) and max (~$242). We also can see the standard deviation (~$71). These are good numbers to have available as we move forward in our analysis.</p>
+</section>
+<section id="checking-for-structure" class="level3">
+<h3 class="anchored" data-anchor-id="checking-for-structure">Checking for Structure</h3>
+<p>Exploring the data for a time series is similar to working with cross-sectional datasets. However, one difference is that we try to identify any of the key <a href="../time-series-structures/index.html">time series structures</a> like trends, seasonality, or cycles.</p>
+<p>A good starting point is a basic line plot. This can be done using the built-in <code>.plot()</code> method for a pandas series like in the following cell. Note, it’s usually a good idea to add a title and ensure your x and y axes are labeled. This only takes a moment and can make your analysis much easier to understand for yourself or others later on.</p>
+<div id="3190aa6d" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>y.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'NVDA Opening Price: 2022-2026'</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Open Price (USD)'</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-6-output-1.png" width="668" height="487" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>What can we see here? The only noteworthy structure we see is a clear upward trend. There is no evidence of seasonality or observable cycles in this view. That trend is something we will need to account for in our modeling, so keep that observation in mind.</p>
+<p>Now, let’s check for any seasonal trends that may not have been readily apparent in the line chart above. We can plot each year’s worth of data to see if there are any changes at the monthly level that are not clear at the daily level.</p>
+<div id="e2485a97" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>monthly_nvda <span class="op">=</span> y.resample(<span class="st">'MS'</span>).mean() <span class="co">#Use pandas' `.resample()` method to make our data monthly in nature. We will summarize with the mean opening price for the month.</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>monthly_nvda <span class="op">=</span> pd.DataFrame(monthly_nvda)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>monthly_nvda[<span class="st">'Year'</span>] <span class="op">=</span> monthly_nvda.index.year</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>monthly_nvda[<span class="st">'Month'</span>] <span class="op">=</span> monthly_nvda.index.month</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>sns.lineplot(data<span class="op">=</span>monthly_nvda, x<span class="op">=</span><span class="st">'Month'</span>, y<span class="op">=</span><span class="st">'Open'</span>, hue<span class="op">=</span><span class="st">'Year'</span>, palette<span class="op">=</span><span class="st">'viridis'</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-7-output-1.png" width="593" height="429" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>At first glance, this may appear to show seasonal variations. After all, the price appears to be higher in the later months than in the earlier months. However, this is due to our upward trend, rather than seasonal fluctuations. We need to do something to remove the trend to get a clear picture. Let’s try differencing our data and see what that visual looks like.</p>
+<div id="c191a365" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>monthly_nvda[<span class="st">'Change in Open'</span>] <span class="op">=</span> monthly_nvda[<span class="st">'Open'</span>].diff(<span class="dv">1</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>sns.lineplot(data<span class="op">=</span>monthly_nvda, x<span class="op">=</span><span class="st">'Month'</span>, y<span class="op">=</span><span class="st">'Change in Open'</span>, hue<span class="op">=</span><span class="st">'Year'</span>, palette<span class="op">=</span><span class="st">'viridis'</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-8-output-1.png" width="596" height="429" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When we difference our data (removing the trend), we find that we are left with something more akin to abstract art than a clear seasonal structure. We are safe to move forward, confident that our data does not have a seasonal structure to it.</p>
+</section>
+<section id="checking-variance-over-time" class="level3">
+<h3 class="anchored" data-anchor-id="checking-variance-over-time">Checking Variance over Time</h3>
+<p>A scatterplot is another good visualization to check as well. Though very similar to the line plot at first glance, it can shed additional light on the distribution of the data and variance over time.</p>
+<div id="2be40d17" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(x<span class="op">=</span>y.index, y<span class="op">=</span>y, alpha<span class="op">=</span><span class="fl">.15</span>, s<span class="op">=</span><span class="dv">30</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'NVDA Opening Price: 2022-2026'</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Open Price (USD)'</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-9-output-1.png" width="677" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The clearest observation based on this plot is that the variance is very small from 2022-2024. From 2024-2026, the points are much more spread out, which indicates greater variance later in the dataset. This will affect our transformation steps before we can model this data.</p>
+<p>Let’s take a moment to assess the standard deviation over time to see if we can get a clearer picture of how the variance fluctuates throughout our time series. We can again use the <code>.resample()</code> method from pandas to help us out here. This time, we will summarize each month by the standard deviation, rather than the mean. Then we will use a line plot to view how this changes over time.</p>
+<div id="7d2a2bfa" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>monthly_nvda_std <span class="op">=</span> y.resample(<span class="st">'MS'</span>).std()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>monthly_nvda_std <span class="op">=</span> pd.DataFrame(monthly_nvda_std)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>monthly_nvda_std <span class="op">=</span> monthly_nvda_std.rename(columns<span class="op">=</span>{<span class="st">'Open'</span>: <span class="st">'Std'</span>})</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>monthly_nvda_std[<span class="st">'Year'</span>] <span class="op">=</span> monthly_nvda_std.index.year</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>monthly_nvda_std[<span class="st">'Month'</span>] <span class="op">=</span> monthly_nvda_std.index.month</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>monthly_nvda_std[<span class="st">'Std'</span>].plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Standard Deviation of Monthly NVDA Open Price: 2022-2026'</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Standard Deviation (USD)'</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-10-output-1.png" width="659" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Just as we suspected, the standard deviation increased from ~$2.25 to ~$10 by the end of our time series. This confirms what we observed earlier and helps us to quantify just how much the variance has increased over time.</p>
+</section>
+<section id="checking-data-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="checking-data-distribution">Checking Data Distribution</h3>
+<p>As with any dataset, we need to also understand the distribution of our data. We will use a histogram to examine this aspect of our NVDA stock data.</p>
+<div id="e960de41" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>y.hist(bins<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of NVDA Opening Price: 2022-2026'</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Open Price (USD)'</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Count of Days'</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-11-output-1.png" width="598" height="449" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s pair this with a boxplot. The box represents the IQR (interquartile range), the middle 50% of our data. The whiskers show the spread of the remaining data, extending up to 1.5 times the IQR beyond the box; any points past the whiskers are plotted individually as outliers. Note, the <code>patch_artist</code> parameter fills in the box.</p>
+<div id="4dbf42fd" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>plt.boxplot(y, patch_artist<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of NVDA Opening Price: 2022-2026'</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Open Price (USD)'</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'NVDA'</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>plt.xticks([])</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-12-output-1.png" width="593" height="427" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>What can we ascertain from these two visualizations? First, we note that our data is right-skewed. The largest number of days fall between $10 and $50 opening price. However, we do see smaller peaks around $100-$150 and $175-$190.</p>
+<p>Our boxplot brings the spread of our data into clearer view. The middle of our data ranges from around $25-$175. The short whisker from $10-$25 indicates much less spread in that direction, with much more upward spread from ~$175-$250. This again reinforces what we surmised earlier. Variance is greater at the higher price points than at the lower price points.</p>
+</section>
+<section id="concluding-eda" class="level3">
+<h3 class="anchored" data-anchor-id="concluding-eda">Concluding EDA</h3>
+<p>Our exploration uncovered some key insights about the NVDA stock price time series:</p>
+<ul>
+<li>The NVDA stock price has a clear upward trend from 2022-2026</li>
+<li>There is no repeating seasonal fluctuation to the data</li>
+<li>The variance of the stock price increases during this time period</li>
+<li>The data distribution is right-skewed but has a couple other smaller points of concentration</li>
+</ul>
+<p>Having explored our data, we are now ready to proceed with building our ARIMA model.</p>
+</section>
+</section>
+<section id="step-3-arima-model-setup" class="level2">
+<h2 class="anchored" data-anchor-id="step-3-arima-model-setup">Step 3: ARIMA Model Setup</h2>
+<section id="preparatory-steps" class="level3">
+<h3 class="anchored" data-anchor-id="preparatory-steps">Preparatory Steps</h3>
+<p>Setting up an ARIMA model for this data will require a few preparatory steps. First, we need to figure out what it will take to make our data stationary. The clear trend we observed in the data set will need to be removed. We already briefly discussed how to do this by differencing our data.</p>
+<p>As a reminder, differencing our data just means taking the change between instances rather than the values themselves. In other words, we will convert our NVDA stock open price to the <em>change</em> in the NVDA stock open price.</p>
+<p>For more information about differencing, check out <a href="../differencing/index.html">this article</a>.</p>
+<div id="f335b9e9" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Use pandas' .diff() method to create a differenced version of the time series</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>y_diff <span class="op">=</span> y.diff(<span class="dv">1</span>).dropna() <span class="co">#Drop the resulting null value</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot the differenced data to see if it appears stationary.</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>y_diff.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Change in NVDA Open Stock Price: 2022-2026'</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Change in Price (USD)'</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-13-output-1.png" width="670" height="487" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Differencing by 1 certainly removed the trend in our data. However, this does not automatically make our data stationary. Something will have to be done to address the increasing variance that is still apparent here.</p>
+<p>One way to address this is by taking the natural log of our data set first. We will then difference the log-transformed version of our time series. We use the <code>np.log()</code> function here to remove the change in variance.</p>
+<div id="de388569" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create the log-transformed version of our time series</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>y_log <span class="op">=</span> np.log(y)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Difference the log-transformed version of our time series</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>y_log_diff <span class="op">=</span> y_log.diff(<span class="dv">1</span>).dropna() <span class="co">#Drop the null value created by the differencing</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Now plot the data to check for stationarity</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>y_log_diff.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Log-Transformed, Differenced NVDA Open Stock Price'</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-14-output-1.png" width="656" height="487" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This transformed, differenced series shows strong evidence of stationarity. Just to confirm, let’s use an Augmented Dickey-Fuller test. As a reminder, this test provides us with a p-value. A low p-value, typically less than .05, is interpreted as evidence of stationarity. A high p-value, typically greater than .05, is interpreted as evidence of non-stationarity.</p>
+<div id="8d1ba480" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>adf_results <span class="op">=</span> adfuller(y_log_diff)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'ADFuller P-Value: '</span>, adf_results[<span class="dv">1</span>]) <span class="co">#Print just the p-value from the results</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ADFuller P-Value:  0.0</code></pre>
+</div>
+</div>
+<p>Our p-value is ~0.0. This confirms that our time series is stationary with the log-transformation and the differencing we have done.</p>
+<p>Our model plan is starting to come together: We will train our ARIMA on the log-transformed dataset. The ARIMA order for <code>d</code> will be 1, because we needed to only difference once to achieve stationarity. We do not train the ARIMA model on the differenced data, because it handles the differencing step for us.</p>
+</section>
+<section id="train-test-split" class="level3">
+<h3 class="anchored" data-anchor-id="train-test-split">Train-Test Split</h3>
+<p>Before we go any further, we need to split our data into a train set and test set. This ensures that we have part of our data that is “unseen” by our model. We will use that test set later in the process to check our model’s performance on data it was not trained on.</p>
+<div id="ac6570eb" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>y_log_train, y_log_test <span class="op">=</span> train_test_split(y_log, shuffle<span class="op">=</span><span class="va">False</span>, test_size<span class="op">=</span><span class="fl">.1</span>) <span class="co">#Shuffle set to False since this is a time series</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="acf-and-pacf-plots" class="level3">
+<h3 class="anchored" data-anchor-id="acf-and-pacf-plots">ACF and PACF Plots</h3>
+<p>All that is left now is to determine what the appropriate order values are for the AR (autoregression) and MA (moving average) components of our model. To do this, we will use two special types of visualizations: ACF (Autocorrelation Function) and PACF (Partial Autocorrelation Function) plots.</p>
+<p>We will delve deeper into what these plots represent and how they are interpreted in a future article, but here are the basics:</p>
+<ul>
+<li>The ACF plot shows how much the time series values correlate with past values (lags), without filtering out intervening correlation between lags. This is used to determine our MA order, known as <code>q</code>, which specifies how many previous forecast errors to include in the ARIMA model.</li>
+<li>The PACF plot shows how much the time series values correlate with past values (lags), filtering out intervening correlation between lags. This is used to determine our AR order, known as <code>p</code>, which specifies how many previous lags to include in the ARIMA model.</li>
+<li>In both plots, you are focusing on lags which show a point outside the blue shaded zone. These are points that show a significant correlation.</li>
+</ul>
+<p>The following table is sourced from Nielsen (2019, p.&nbsp;187). It gives a quick guide on how to interpret ACF and PACF plots.</p>
+<div id="cc8c5890" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#This code just generates the quick guide for interpreting ACF and PACF plots.</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#This will be very helpful in helping you determine the values of `p` and `q`.</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>acf_pacf_guide <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Plot Type'</span>: [<span class="st">'ACF'</span>, <span class="st">'PACF'</span>],</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">'AR(p)'</span>: [<span class="st">'Trails off slowly'</span>, <span class="st">'Sharp drop after lag=p'</span>],</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">'MA(q)'</span>: [<span class="st">'Sharp drop after lag=q'</span>, <span class="st">'Trails off slowly'</span>],</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">'ARMA'</span>: [<span class="st">'No sharp cutoff'</span>, <span class="st">'No sharp cutoff'</span>]</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>acf_pacf_guide</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Plot Type</th>
+<th data-quarto-table-cell-role="th">AR(p)</th>
+<th data-quarto-table-cell-role="th">MA(q)</th>
+<th data-quarto-table-cell-role="th">ARMA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>ACF</td>
+<td>Trails off slowly</td>
+<td>Sharp drop after lag=q</td>
+<td>No sharp cutoff</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>PACF</td>
+<td>Sharp drop after lag=p</td>
+<td>Trails off slowly</td>
+<td>No sharp cutoff</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Let’s generate our ACF and PACF plots for our log-transformed, differenced NVDA stock data now.</p>
+<div id="1ec32dd3" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plot_acf(y_log_diff)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>plot_pacf(y_log_diff)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-18-output-1.png" width="590" height="431" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-18-output-2.png" width="590" height="431" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The first point (at lag 0) is the time series value itself, so it will always show a correlation of 1.00. The only lag that appears to be truly significant in both the ACF and PACF plots is at lag 1. The point at lag 3 is borderline, so we will not use that lag at this time.</p>
+<p>Based on these, we will set our initial ARIMA values for <code>p</code> (the AR order) and <code>q</code> (the MA order) to 1. Because both plots show the same single significant lag, it isn’t clear whether an AR term, an MA term, or both best explain the pattern. So we will also compare versions that set one of these orders to 0 to see which model is most promising.</p>
+</section>
+<section id="model-creation-and-comparison" class="level3">
+<h3 class="anchored" data-anchor-id="model-creation-and-comparison">Model Creation and Comparison</h3>
+<p>Let’s create these different versions of our ARIMA model now. We will use statsmodels’ <code>ARIMA()</code> function to build these models. There are more automated versions of ARIMA available, but this is a good starting point when just learning how ARIMA works.</p>
+<div id="b7fbcf52" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>arima_111 <span class="op">=</span> ARIMA(y_log_train, order<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)).fit()</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>arima_110 <span class="op">=</span> ARIMA(y_log_train, order<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>)).fit()</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>arima_011 <span class="op">=</span> ARIMA(y_log_train, order<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>)).fit()</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Note, we do not use the differenced data here. We use the log-transformed data, and the ARIMA function differences it for us based on our d value.</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co">#The nice thing is that when we go to make predictions, our ARIMA model will automatically provide "undifferenced" results for us.</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co">#You must use the .fit() method before you can use the model. Many times, you can simply add it to the end of your code when initially setting up the model.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
+  self._init_dates(dates, freq)
+C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
+  self._init_dates(dates, freq)
+C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
+  self._init_dates(dates, freq)
+C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
+  self._init_dates(dates, freq)
+C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
+  self._init_dates(dates, freq)
+C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
+  self._init_dates(dates, freq)
+C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
+  self._init_dates(dates, freq)
+C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
+  self._init_dates(dates, freq)
+C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
+  self._init_dates(dates, freq)</code></pre>
+</div>
+</div>
+<p>Let’s compare the summary for each ARIMA model we set up to help determine which is most appropriate.</p>
+<div id="d8853776" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arima_111.summary())</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arima_110.summary())</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arima_011.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                               SARIMAX Results                                
+==============================================================================
+Dep. Variable:                   Open   No. Observations:                 1090
+Model:                 ARIMA(1, 1, 1)   Log Likelihood                2133.710
+Date:                Fri, 13 Nov 2026   AIC                          -4261.419
+Time:                        15:29:46   BIC                          -4246.440
+Sample:                             0   HQIC                         -4255.750
+                               - 1090                                         
+Covariance Type:                  opg                                         
+==============================================================================
+                 coef    std err          z      P&gt;|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+ar.L1         -0.6037      0.216     -2.796      0.005      -1.027      -0.181
+ma.L1          0.5352      0.227      2.357      0.018       0.090       0.980
+sigma2         0.0012   2.99e-05     38.868      0.000       0.001       0.001
+===================================================================================
+Ljung-Box (L1) (Q):                   0.04   Jarque-Bera (JB):               748.48
+Prob(Q):                              0.85   Prob(JB):                         0.00
+Heteroskedasticity (H):               0.61   Skew:                             0.07
+Prob(H) (two-sided):                  0.00   Kurtosis:                         7.06
+===================================================================================
+
+Warnings:
+[1] Covariance matrix calculated using the outer product of gradients (complex-step).
+                               SARIMAX Results                                
+==============================================================================
+Dep. Variable:                   Open   No. Observations:                 1090
+Model:                 ARIMA(1, 1, 0)   Log Likelihood                2132.816
+Date:                Fri, 13 Nov 2026   AIC                          -4261.632
+Time:                        15:29:46   BIC                          -4251.646
+Sample:                             0   HQIC                         -4257.853
+                               - 1090                                         
+Covariance Type:                  opg                                         
+==============================================================================
+                 coef    std err          z      P&gt;|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+ar.L1         -0.0748      0.024     -3.118      0.002      -0.122      -0.028
+sigma2         0.0012   2.99e-05     38.991      0.000       0.001       0.001
+===================================================================================
+Ljung-Box (L1) (Q):                   0.00   Jarque-Bera (JB):               738.32
+Prob(Q):                              0.97   Prob(JB):                         0.00
+Heteroskedasticity (H):               0.62   Skew:                             0.06
+Prob(H) (two-sided):                  0.00   Kurtosis:                         7.03
+===================================================================================
+
+Warnings:
+[1] Covariance matrix calculated using the outer product of gradients (complex-step).
+                               SARIMAX Results                                
+==============================================================================
+Dep. Variable:                   Open   No. Observations:                 1090
+Model:                 ARIMA(0, 1, 1)   Log Likelihood                2132.680
+Date:                Fri, 13 Nov 2026   AIC                          -4261.361
+Time:                        15:29:46   BIC                          -4251.375
+Sample:                             0   HQIC                         -4257.581
+                               - 1090                                         
+Covariance Type:                  opg                                         
+==============================================================================
+                 coef    std err          z      P&gt;|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+ma.L1         -0.0728      0.024     -3.037      0.002      -0.120      -0.026
+sigma2         0.0012   2.99e-05     38.978      0.000       0.001       0.001
+===================================================================================
+Ljung-Box (L1) (Q):                   0.01   Jarque-Bera (JB):               740.06
+Prob(Q):                              0.90   Prob(JB):                         0.00
+Heteroskedasticity (H):               0.62   Skew:                             0.06
+Prob(H) (two-sided):                  0.00   Kurtosis:                         7.04
+===================================================================================
+
+Warnings:
+[1] Covariance matrix calculated using the outer product of gradients (complex-step).</code></pre>
+</div>
+</div>
+<p>Comparing these summaries is a little tedious. However, just looking at the AIC and BIC, we see similar results across the board. In the first model, ARIMA(1, 1, 1), we see the coefficients for the AR and MA terms essentially cancel out. The ARIMA(0, 1, 1) and ARIMA(1, 1, 0) are very similar. For our purposes, we will go with the ARIMA(1, 1, 0) model because its AIC and BIC are slightly lower.</p>
+</section>
+<section id="generating-fitted-values-and-forecasts" class="level3">
+<h3 class="anchored" data-anchor-id="generating-fitted-values-and-forecasts">Generating Fitted Values and Forecasts</h3>
+<p>Now we will generate our fitted values and forecasts so we can see how well our model performs. We need to take the inverse of the log using the <code>np.exp()</code> function to return our values to the original USD units.</p>
+<div id="a80b16d2" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Generate fitted values by using the predict method</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>arima_fitted <span class="op">=</span> arima_110.predict(start<span class="op">=</span>y_log_train.index[<span class="dv">0</span>], end<span class="op">=</span>y_log_train.index[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>arima_fitted.name <span class="op">=</span> <span class="st">'arima_fitted'</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>arima_fitted <span class="op">=</span> np.exp(arima_fitted)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Generate predicted values in test set by using the forecast method</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>arima_forecasts <span class="op">=</span> arima_110.forecast(steps<span class="op">=</span><span class="bu">len</span>(y_log_test))</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>arima_forecasts.index <span class="op">=</span> y_log_test.index</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>arima_forecasts.name <span class="op">=</span> <span class="st">'arima_forecasts'</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>arima_forecasts <span class="op">=</span> np.exp(arima_forecasts)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Taking inverse of our test set actuals as well</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> np.exp(y_log_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:837: ValueWarning: No supported index is available. Prediction results will be given with an integer index beginning at `start`.
+  return get_prediction_index(
+C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:837: FutureWarning: No supported index is available. In the next version, calling this method in a model without a supported index will result in an exception.
+  return get_prediction_index(</code></pre>
+</div>
+</div>
+<p>We can plot our values to see how well our model performs visually against the actual stock prices. We will take just a portion of our fitted values to make it a little easier to see the test set period.</p>
+<div id="64b300ba" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>arima_projections <span class="op">=</span> pd.concat([arima_fitted, arima_forecasts], axis<span class="op">=</span><span class="dv">0</span>) <span class="co">#Combining for easier visualization</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>arima_projections[<span class="dv">500</span>:].plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>), label<span class="op">=</span><span class="st">'Forecast'</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>y[<span class="dv">500</span>:].plot(label<span class="op">=</span><span class="st">'Actuals'</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>plt.axvline(x<span class="op">=</span>y_test.index[<span class="dv">0</span>], c<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Start of Test Set'</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'NVDA Stock Opening Price: Forecasts vs Actuals'</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Stock Open Price (USD)'</span>)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-22-output-1.png" width="668" height="498" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Notice what happens as the ARIMA model forecasts through the test period; it turns into a flat line. This is because our model has no drift (constant) term. The forecasted daily change quickly decays toward zero, so the forecasted price levels off instead of continuing to climb.</p>
+<p>The main limitation of our model appears to be that it does not account well for the trend as it extends into the future. ARIMA can include a drift term through its <code>trend</code> parameter (trend=‘t’ when d=1). However, when we tested this parameter out on our NVDA time series data, the drift coefficient was not statistically significant, and because the model works with log prices, the drift compounds as a growth rate, which led to the model overshooting the test period badly. We’ll explore handling trend in more depth in a future article. We can also perform other types of models, such as Exponential Smoothing with Trend, to see if they perform better on our data set.</p>
+<p>For now, let’s create a naive model with trend and compare the results with our ARIMA model.</p>
+</section>
+</section>
+<section id="step-4-naive-model-creation" class="level2">
+<h2 class="anchored" data-anchor-id="step-4-naive-model-creation">Step 4: Naive Model Creation</h2>
+<p>For more details on how to set up a naive model with trend, check out <a href="../naive-forecasts-including-trend/index.html">this article</a>. The following code cell completes this process in its entirety.</p>
+<div id="b6b7d88f" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Take inverse of train set to reverse log transform</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> np.exp(y_log_train)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Create simple naive fitted values and forecast values</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>naive_fitted <span class="op">=</span> y_train.shift(<span class="dv">1</span>).dropna()</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>naive_forecast <span class="op">=</span> pd.Series(y_train.iloc[<span class="op">-</span><span class="dv">1</span>], index<span class="op">=</span>y_test.index)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Create drift value that will be used to include trend in the model</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>drift_value <span class="op">=</span> (y_train.iloc[<span class="op">-</span><span class="dv">1</span>]<span class="op">-</span>y_train.iloc[<span class="dv">0</span>])<span class="op">/</span>(<span class="bu">len</span>(y_train)<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Create naive fitted values with trend</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>naive_fitted_with_trend <span class="op">=</span> naive_fitted <span class="op">+</span> drift_value</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add in trend for forecast values using steps to make sure it accumulates properly over time</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>step <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(naive_forecast)<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>naive_forecast_with_trend <span class="op">=</span> naive_forecast <span class="op">+</span> (drift_value <span class="op">*</span> step)</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Create naive forecast vs actuals visual</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>naive_projections <span class="op">=</span> pd.concat([naive_fitted_with_trend, naive_forecast_with_trend], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>naive_projections.plot(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>), label<span class="op">=</span><span class="st">'Naive Forecasts'</span>)</span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>y.plot(label<span class="op">=</span><span class="st">'Actuals'</span>)</span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>plt.axvline(x<span class="op">=</span>y_test.index[<span class="dv">0</span>], c<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Start of Test Set'</span>)</span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'NVDA Stock Opening Price: Naive Forecasts vs Actuals'</span>)</span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Stock Open Price (USD)'</span>)</span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-23-output-1.png" width="668" height="487" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This visual shows that our naive forecast with trend keeps a better pace with the actual results in the test set. NVDA’s stock price has been increasing, and our ARIMA model, which does not include trend, is not as effective in this case.</p>
+<p>Let’s take a moment to run some metrics to quantify how much better our naive forecast with trend performs compared to our ARIMA model.</p>
+</section>
+<section id="step-5-measure-model-performance" class="level2">
+<h2 class="anchored" data-anchor-id="step-5-measure-model-performance">Step 5: Measure Model Performance</h2>
+<p>Ordinarily, we would use rolling-horizon cross-validation to compare models. We would not compare their performance directly on our test set, which is reserved for <em>after</em> a model has already been selected to gauge its performance on unseen data. Rolling-horizon cross-validation will be covered in a future article. In this case, we will use our test set to analyze how each model performs on unseen data.</p>
+<p>For this exercise, we will use sklearn’s <code>mean_absolute_error</code> and <code>root_mean_squared_error</code>. The mean absolute error (MAE) gives us an idea of how far off our forecasts are on average, in the same units as the original data (USD). The root mean squared error (RMSE) penalizes big misses more severely by squaring the errors first. Together, they help us understand, in quantitative terms, how our two models stack up. As a reminder, the lower the MAE and RMSE, the more accurate the model.</p>
+<div id="b69ba202" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>mae_arima <span class="op">=</span> mean_absolute_error(y_test, arima_forecasts)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>mae_naive <span class="op">=</span> mean_absolute_error(y_test, naive_forecast_with_trend)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>rmse_arima <span class="op">=</span> root_mean_squared_error(y_test, arima_forecasts)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>rmse_naive <span class="op">=</span> root_mean_squared_error(y_test, naive_forecast_with_trend)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"MAE"</span>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"    ARIMA: "</span>, mae_arima)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"    Naive: "</span>, mae_naive)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------"</span>)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"RMSE: "</span>)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"    ARIMA: "</span>, rmse_arima)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"    Naive: "</span>, rmse_naive)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MAE
+    ARIMA:  11.446889141262561
+    Naive:  8.74100671393516
+------------
+RMSE: 
+    ARIMA:  13.661101922743619
+    Naive:  10.678895609245771</code></pre>
+</div>
+</div>
+<p>As we suspected, our naive forecasting model with trend has a lower MAE and RMSE than our ARIMA model. On average, our ARIMA model’s forecast is off by ~$11.45 per day during the test period, while the naive model with trend is only off by ~$8.74 per day.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>In this article, we walked through a basic end-to-end time series modeling project. We explored NVDA’s daily stock prices and used them to build a basic ARIMA model. While the ARIMA model was slightly more complex to build, it did not outperform a naive model with trend. This is not surprising, as daily stock data often does not have much structure to draw from. The main structure of this time series is its trend, and the ARIMA model does not account for that.</p>
+<p>That being said, with many other time series data sets, ARIMA models can be quite useful and outperform naive baselines, particularly when there is more autocorrelation at previous lags. It is always a good idea to try a variety of different models and see which are most effective for your time series. Sometimes, though, the simpler model is the better one. Using metrics like MAE and RMSE is an important step to quantify and track model performance.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,7 +1,8 @@
 [
   {
-    "listing": "/archive.html",
+    "listing": "/index.html",
     "items": [
+      "/posts/arima-coding-example/index.html",
       "/posts/intro-to-arima/index.html",
       "/posts/seasonal-naive-with-drift/index.html",
       "/posts/naive-forecasts-including-trend/index.html",
@@ -16,8 +17,9 @@
     ]
   },
   {
-    "listing": "/index.html",
+    "listing": "/archive.html",
     "items": [
+      "/posts/arima-coding-example/index.html",
       "/posts/intro-to-arima/index.html",
       "/posts/seasonal-naive-with-drift/index.html",
       "/posts/naive-forecasts-including-trend/index.html",
