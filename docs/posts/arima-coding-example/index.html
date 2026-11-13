@@ -250,7 +250,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <section id="step-1-import-packages-and-prepare-nvda-data" class="level2">
 <h2 class="anchored" data-anchor-id="step-1-import-packages-and-prepare-nvda-data">Step 1: Import Packages and Prepare NVDA Data</h2>
 <p>First, let’s get the necessary packages loaded. A simple explanation of what each module or function will be used for is included in the comments.</p>
-<div id="bcc55eb5" class="cell" data-execution_count="1">
+<div id="76a0c12a" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Necessary imports</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Numpy/Pandas - used for working with the time series data and applying necessary transformations</span></span>
@@ -271,7 +271,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.arima.model <span class="im">import</span> ARIMA</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now, we will load our data using pandas’ <code>read_csv()</code> function. Then we will set up our time series index.</p>
-<div id="b7eb1aec" class="cell" data-execution_count="2">
+<div id="4cc16560" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load data from CSV file</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>nvda <span class="op">=</span> pd.read_csv(<span class="st">'nvda.csv'</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -281,7 +281,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>nvda <span class="op">=</span> nvda.set_index(<span class="st">'Date'</span>) <span class="co">#Set Date as index</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s separate out the “Open” stock price from the rest of the data. That is the feature we will focus on in this project.</p>
-<div id="cb386e93" class="cell" data-execution_count="3">
+<div id="7b769087" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> nvda[<span class="st">'Open'</span>].copy()</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>y.head(<span class="dv">10</span>) <span class="co">#Check first several rows to see how the data looks</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -307,7 +307,7 @@ Name: Open, dtype: float64</code></pre>
 <section id="summary-statistics" class="level3">
 <h3 class="anchored" data-anchor-id="summary-statistics">Summary Statistics</h3>
 <p>Let’s take a moment just to review some basic summary statistics about our data. We can use pandas’ <code>.describe()</code> method to get this information in one line of code.</p>
-<div id="031e4030" class="cell" data-execution_count="4">
+<div id="53b9598a" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>y.describe()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>count    1212.000000
@@ -327,7 +327,7 @@ Name: Open, dtype: float64</code></pre>
 <h3 class="anchored" data-anchor-id="checking-for-structure">Checking for Structure</h3>
 <p>Exploring the data for a time series is similar to working with cross-sectional datasets. However, one difference is that we try to identify any of the key <a href="../time-series-structures/index.html">time series structures</a> like trends, seasonality, or cycles.</p>
 <p>A good starting point is a basic line plot. This can be done using the built-in <code>.plot()</code> method for a pandas series like in the following cell. Note, it’s usually a good idea to add a title and ensure your x and y axes are labeled. This only takes a moment and can make your analysis much easier to understand for yourself or others later on.</p>
-<div id="3190aa6d" class="cell" data-execution_count="5">
+<div id="077d6980" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>y.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'NVDA Opening Price: 2022-2026'</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Open Price (USD)'</span>)</span>
@@ -343,7 +343,7 @@ Name: Open, dtype: float64</code></pre>
 </div>
 <p>What can we see here? The only noteworthy structure we see is a clear upward trend. There is no evidence of seasonality or observable cycles in this view. That trend is something we will need to account for in our modeling, so keep that observation in mind.</p>
 <p>Now, let’s check for any seasonal trends that may not have been readily apparent in the line chart above. We can plot each year’s worth of data to see if there are any changes at the monthly level that are not clear at the daily level.</p>
-<div id="e2485a97" class="cell" data-execution_count="6">
+<div id="0da46d15" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>monthly_nvda <span class="op">=</span> y.resample(<span class="st">'MS'</span>).mean() <span class="co">#Use pandas' `.resample()` method to make our data monthly in nature. We will summarize with the mean opening price for the month.</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>monthly_nvda <span class="op">=</span> pd.DataFrame(monthly_nvda)</span>
@@ -361,7 +361,7 @@ Name: Open, dtype: float64</code></pre>
 </div>
 </div>
 <p>At first glance, this may appear to show seasonal variations. After all, the price appears to be higher in the later months than in the earlier months. However, this is due to our upward trend, rather than seasonal fluctuations. We need to do something to remove the trend to get a clear picture. Let’s try differencing our data and see what that visual looks like.</p>
-<div id="c191a365" class="cell" data-execution_count="7">
+<div id="11bd9b38" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>monthly_nvda[<span class="st">'Change in Open'</span>] <span class="op">=</span> monthly_nvda[<span class="st">'Open'</span>].diff(<span class="dv">1</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>sns.lineplot(data<span class="op">=</span>monthly_nvda, x<span class="op">=</span><span class="st">'Month'</span>, y<span class="op">=</span><span class="st">'Change in Open'</span>, hue<span class="op">=</span><span class="st">'Year'</span>, palette<span class="op">=</span><span class="st">'viridis'</span>)</span>
@@ -379,7 +379,7 @@ Name: Open, dtype: float64</code></pre>
 <section id="checking-variance-over-time" class="level3">
 <h3 class="anchored" data-anchor-id="checking-variance-over-time">Checking Variance over Time</h3>
 <p>A scatterplot is another good visualization to check as well. Though very similar to the line plot at first glance, it can shed additional light on the distribution of the data and variance over time.</p>
-<div id="2be40d17" class="cell" data-execution_count="8">
+<div id="08ad042b" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(x<span class="op">=</span>y.index, y<span class="op">=</span>y, alpha<span class="op">=</span><span class="fl">.15</span>, s<span class="op">=</span><span class="dv">30</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'NVDA Opening Price: 2022-2026'</span>)</span>
@@ -396,7 +396,7 @@ Name: Open, dtype: float64</code></pre>
 </div>
 <p>The clearest observation based on this plot is that the variance is very small from 2022-2024. From 2024-2026, the points are much more spread out, which indicates greater variance later in the dataset. This will affect our transformation steps before we can model this data.</p>
 <p>Let’s take a moment to assess the standard deviation over time to see if we can get a clearer picture of how the variance fluctuates throughout our time series. We can again use the <code>.resample()</code> method from pandas to help us out here. This time, we will summarize each month by the standard deviation, rather than the mean. Then we will use a line plot to view how this changes over time.</p>
-<div id="7d2a2bfa" class="cell" data-execution_count="9">
+<div id="4d31e4ab" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>monthly_nvda_std <span class="op">=</span> y.resample(<span class="st">'MS'</span>).std()</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>monthly_nvda_std <span class="op">=</span> pd.DataFrame(monthly_nvda_std)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>monthly_nvda_std <span class="op">=</span> monthly_nvda_std.rename(columns<span class="op">=</span>{<span class="st">'Open'</span>: <span class="st">'Std'</span>})</span>
@@ -421,7 +421,7 @@ Name: Open, dtype: float64</code></pre>
 <section id="checking-data-distribution" class="level3">
 <h3 class="anchored" data-anchor-id="checking-data-distribution">Checking Data Distribution</h3>
 <p>As with any dataset, we need to also understand the distribution of our data. We will use a histogram to examine this aspect of our NVDA stock data.</p>
-<div id="e960de41" class="cell" data-execution_count="10">
+<div id="6ed8b4e0" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>y.hist(bins<span class="op">=</span><span class="dv">25</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of NVDA Opening Price: 2022-2026'</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Open Price (USD)'</span>)</span>
@@ -436,7 +436,7 @@ Name: Open, dtype: float64</code></pre>
 </div>
 </div>
 <p>Let’s pair this with a boxplot. The box represents the IQR (interquartile range), the middle 50% of our data. The whiskers show the spread of the remaining data, extending up to 1.5 times the IQR beyond the box; any points past the whiskers are plotted individually as outliers. Note, the <code>patch_artist</code> parameter fills in the box.</p>
-<div id="4dbf42fd" class="cell" data-execution_count="11">
+<div id="5bb5b815" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>plt.boxplot(y, patch_artist<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of NVDA Opening Price: 2022-2026'</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Open Price (USD)'</span>)</span>
@@ -473,7 +473,7 @@ Name: Open, dtype: float64</code></pre>
 <p>Setting up an ARIMA model for this data will require a few preparatory steps. First, we need to figure out what it will take to make our data stationary. The clear trend we observed in the data set will need to be removed. We already briefly discussed how to do this by differencing our data.</p>
 <p>As a reminder, differencing our data just means taking the change between instances rather than the values themselves. In other words, we will convert our NVDA stock open price to the <em>change</em> in the NVDA stock open price.</p>
 <p>For more information about differencing, check out <a href="../differencing/index.html">this article</a>.</p>
-<div id="f335b9e9" class="cell" data-execution_count="12">
+<div id="c848c659" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Use pandas' .diff() method to create a differenced version of the time series</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>y_diff <span class="op">=</span> y.diff(<span class="dv">1</span>).dropna() <span class="co">#Drop the resulting null value</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -493,7 +493,7 @@ Name: Open, dtype: float64</code></pre>
 </div>
 <p>Differencing by 1 certainly removed the trend in our data. However, this does not automatically make our data stationary. Something will have to be done to address the increasing variance that is still apparent here.</p>
 <p>One way to address this is by taking the natural log of our data set first. We will then difference the log-transformed version of our time series. We use the <code>np.log()</code> function here to remove the change in variance.</p>
-<div id="de388569" class="cell" data-execution_count="13">
+<div id="1d763636" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create the log-transformed version of our time series</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>y_log <span class="op">=</span> np.log(y)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -514,7 +514,7 @@ Name: Open, dtype: float64</code></pre>
 </div>
 </div>
 <p>This transformed, differenced series shows strong evidence of stationarity. Just to confirm, let’s use an Augmented Dickey-Fuller test. As a reminder, this test provides us with a p-value. A low p-value, typically less than .05, is interpreted as evidence of stationarity. A high p-value, typically greater than .05, is interpreted as evidence of non-stationarity.</p>
-<div id="8d1ba480" class="cell" data-execution_count="14">
+<div id="af8adef3" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>adf_results <span class="op">=</span> adfuller(y_log_diff)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'ADFuller P-Value: '</span>, adf_results[<span class="dv">1</span>]) <span class="co">#Print just the p-value from the results</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -527,7 +527,7 @@ Name: Open, dtype: float64</code></pre>
 <section id="train-test-split" class="level3">
 <h3 class="anchored" data-anchor-id="train-test-split">Train-Test Split</h3>
 <p>Before we go any further, we need to split our data into a train set and test set. This ensures that we have part of our data that is “unseen” by our model. We will use that test set later in the process to check our model’s performance on data it was not trained on.</p>
-<div id="ac6570eb" class="cell" data-execution_count="15">
+<div id="cd0dfe7d" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>y_log_train, y_log_test <span class="op">=</span> train_test_split(y_log, shuffle<span class="op">=</span><span class="va">False</span>, test_size<span class="op">=</span><span class="fl">.1</span>) <span class="co">#Shuffle set to False since this is a time series</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
@@ -541,7 +541,7 @@ Name: Open, dtype: float64</code></pre>
 <li>In both plots, you are focusing on lags which show a point outside the blue shaded zone. These are points that show a significant correlation.</li>
 </ul>
 <p>The following table is sourced from Nielsen (2019, p.&nbsp;187). It gives a quick guide on how to interpret ACF and PACF plots.</p>
-<div id="cc8c5890" class="cell" data-execution_count="16">
+<div id="8e5e727a" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#This code just generates the quick guide for interpreting ACF and PACF plots.</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#This will be very helpful in helping you determine the values of `p` and `q`.</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>acf_pacf_guide <span class="op">=</span> pd.DataFrame(</span>
@@ -590,7 +590,7 @@ Name: Open, dtype: float64</code></pre>
 </div>
 </div>
 <p>Let’s generate our ACF and PACF plots for our log-transformed, differenced NVDA stock data now.</p>
-<div id="1ec32dd3" class="cell" data-execution_count="17">
+<div id="2ccba55f" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plot_acf(y_log_diff)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>plot_pacf(y_log_diff)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -615,7 +615,7 @@ Name: Open, dtype: float64</code></pre>
 <section id="model-creation-and-comparison" class="level3">
 <h3 class="anchored" data-anchor-id="model-creation-and-comparison">Model Creation and Comparison</h3>
 <p>Let’s create these different versions of our ARIMA model now. We will use statsmodels’ <code>ARIMA()</code> function to build these models. There are more automated versions of ARIMA available, but this is a good starting point when just learning how ARIMA works.</p>
-<div id="b7fbcf52" class="cell" data-execution_count="18">
+<div id="f5265c2f" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>arima_111 <span class="op">=</span> ARIMA(y_log_train, order<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)).fit()</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>arima_110 <span class="op">=</span> ARIMA(y_log_train, order<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>)).fit()</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>arima_011 <span class="op">=</span> ARIMA(y_log_train, order<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>)).fit()</span>
@@ -624,39 +624,19 @@ Name: Open, dtype: float64</code></pre>
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co">#The nice thing is that when we go to make predictions, our ARIMA model will automatically provide "undifferenced" results for us.</span></span>
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co">#You must use the .fit() method before you can use the model. Many times, you can simply add it to the end of your code when initially setting up the model.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
-  self._init_dates(dates, freq)
-C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
-  self._init_dates(dates, freq)
-C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
-  self._init_dates(dates, freq)
-C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
-  self._init_dates(dates, freq)
-C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
-  self._init_dates(dates, freq)
-C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
-  self._init_dates(dates, freq)
-C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
-  self._init_dates(dates, freq)
-C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
-  self._init_dates(dates, freq)
-C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:473: ValueWarning: A date index has been provided, but it has no associated frequency information and so will be ignored when e.g. forecasting.
-  self._init_dates(dates, freq)</code></pre>
-</div>
 </div>
 <p>Let’s compare the summary for each ARIMA model we set up to help determine which is most appropriate.</p>
-<div id="d8853776" class="cell" data-execution_count="19">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arima_111.summary())</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arima_110.summary())</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arima_011.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="0539d86e" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arima_111.summary())</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arima_110.summary())</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arima_011.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                               SARIMAX Results                                
 ==============================================================================
 Dep. Variable:                   Open   No. Observations:                 1090
 Model:                 ARIMA(1, 1, 1)   Log Likelihood                2133.710
 Date:                Fri, 13 Nov 2026   AIC                          -4261.419
-Time:                        15:29:46   BIC                          -4246.440
+Time:                        15:34:29   BIC                          -4246.440
 Sample:                             0   HQIC                         -4255.750
                                - 1090                                         
 Covariance Type:                  opg                                         
@@ -680,7 +660,7 @@ Warnings:
 Dep. Variable:                   Open   No. Observations:                 1090
 Model:                 ARIMA(1, 1, 0)   Log Likelihood                2132.816
 Date:                Fri, 13 Nov 2026   AIC                          -4261.632
-Time:                        15:29:46   BIC                          -4251.646
+Time:                        15:34:29   BIC                          -4251.646
 Sample:                             0   HQIC                         -4257.853
                                - 1090                                         
 Covariance Type:                  opg                                         
@@ -703,7 +683,7 @@ Warnings:
 Dep. Variable:                   Open   No. Observations:                 1090
 Model:                 ARIMA(0, 1, 1)   Log Likelihood                2132.680
 Date:                Fri, 13 Nov 2026   AIC                          -4261.361
-Time:                        15:29:46   BIC                          -4251.375
+Time:                        15:34:29   BIC                          -4251.375
 Sample:                             0   HQIC                         -4257.581
                                - 1090                                         
 Covariance Type:                  opg                                         
@@ -728,20 +708,20 @@ Warnings:
 <section id="generating-fitted-values-and-forecasts" class="level3">
 <h3 class="anchored" data-anchor-id="generating-fitted-values-and-forecasts">Generating Fitted Values and Forecasts</h3>
 <p>Now we will generate our fitted values and forecasts so we can see how well our model performs. We need to take the inverse of the log using the <code>np.exp()</code> function to return our values to the original USD units.</p>
-<div id="a80b16d2" class="cell" data-execution_count="20">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Generate fitted values by using the predict method</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>arima_fitted <span class="op">=</span> arima_110.predict(start<span class="op">=</span>y_log_train.index[<span class="dv">0</span>], end<span class="op">=</span>y_log_train.index[<span class="op">-</span><span class="dv">1</span>])</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>arima_fitted.name <span class="op">=</span> <span class="st">'arima_fitted'</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>arima_fitted <span class="op">=</span> np.exp(arima_fitted)</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Generate predicted values in test set by using the forecast method</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>arima_forecasts <span class="op">=</span> arima_110.forecast(steps<span class="op">=</span><span class="bu">len</span>(y_log_test))</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>arima_forecasts.index <span class="op">=</span> y_log_test.index</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>arima_forecasts.name <span class="op">=</span> <span class="st">'arima_forecasts'</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>arima_forecasts <span class="op">=</span> np.exp(arima_forecasts)</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Taking inverse of our test set actuals as well</span></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> np.exp(y_log_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="bad1a14a" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Generate fitted values by using the predict method</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>arima_fitted <span class="op">=</span> arima_110.predict(start<span class="op">=</span>y_log_train.index[<span class="dv">0</span>], end<span class="op">=</span>y_log_train.index[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>arima_fitted.name <span class="op">=</span> <span class="st">'arima_fitted'</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>arima_fitted <span class="op">=</span> np.exp(arima_fitted)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Generate predicted values in test set by using the forecast method</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>arima_forecasts <span class="op">=</span> arima_110.forecast(steps<span class="op">=</span><span class="bu">len</span>(y_log_test))</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>arima_forecasts.index <span class="op">=</span> y_log_test.index</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>arima_forecasts.name <span class="op">=</span> <span class="st">'arima_forecasts'</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>arima_forecasts <span class="op">=</span> np.exp(arima_forecasts)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Taking inverse of our test set actuals as well</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> np.exp(y_log_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmodels\tsa\base\tsa_model.py:837: ValueWarning: No supported index is available. Prediction results will be given with an integer index beginning at `start`.
   return get_prediction_index(
@@ -750,17 +730,17 @@ C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmod
 </div>
 </div>
 <p>We can plot our values to see how well our model performs visually against the actual stock prices. We will take just a portion of our fitted values to make it a little easier to see the test set period.</p>
-<div id="64b300ba" class="cell" data-execution_count="21">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>arima_projections <span class="op">=</span> pd.concat([arima_fitted, arima_forecasts], axis<span class="op">=</span><span class="dv">0</span>) <span class="co">#Combining for easier visualization</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>arima_projections[<span class="dv">500</span>:].plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>), label<span class="op">=</span><span class="st">'Forecast'</span>)</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>y[<span class="dv">500</span>:].plot(label<span class="op">=</span><span class="st">'Actuals'</span>)</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>plt.axvline(x<span class="op">=</span>y_test.index[<span class="dv">0</span>], c<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Start of Test Set'</span>)</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'NVDA Stock Opening Price: Forecasts vs Actuals'</span>)</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Stock Open Price (USD)'</span>)</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="619f7d9d" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>arima_projections <span class="op">=</span> pd.concat([arima_fitted, arima_forecasts], axis<span class="op">=</span><span class="dv">0</span>) <span class="co">#Combining for easier visualization</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>arima_projections[<span class="dv">500</span>:].plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>), label<span class="op">=</span><span class="st">'Forecast'</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>y[<span class="dv">500</span>:].plot(label<span class="op">=</span><span class="st">'Actuals'</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>plt.axvline(x<span class="op">=</span>y_test.index[<span class="dv">0</span>], c<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Start of Test Set'</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'NVDA Stock Opening Price: Forecasts vs Actuals'</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Stock Open Price (USD)'</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -777,38 +757,38 @@ C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmod
 <section id="step-4-naive-model-creation" class="level2">
 <h2 class="anchored" data-anchor-id="step-4-naive-model-creation">Step 4: Naive Model Creation</h2>
 <p>For more details on how to set up a naive model with trend, check out <a href="../naive-forecasts-including-trend/index.html">this article</a>. The following code cell completes this process in its entirety.</p>
-<div id="b6b7d88f" class="cell" data-execution_count="22">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Take inverse of train set to reverse log transform</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> np.exp(y_log_train)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Create simple naive fitted values and forecast values</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>naive_fitted <span class="op">=</span> y_train.shift(<span class="dv">1</span>).dropna()</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>naive_forecast <span class="op">=</span> pd.Series(y_train.iloc[<span class="op">-</span><span class="dv">1</span>], index<span class="op">=</span>y_test.index)</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Create drift value that will be used to include trend in the model</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>drift_value <span class="op">=</span> (y_train.iloc[<span class="op">-</span><span class="dv">1</span>]<span class="op">-</span>y_train.iloc[<span class="dv">0</span>])<span class="op">/</span>(<span class="bu">len</span>(y_train)<span class="op">-</span><span class="dv">1</span>)</span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Create naive fitted values with trend</span></span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>naive_fitted_with_trend <span class="op">=</span> naive_fitted <span class="op">+</span> drift_value</span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add in trend for forecast values using steps to make sure it accumulates properly over time</span></span>
-<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>step <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(naive_forecast)<span class="op">+</span><span class="dv">1</span>)</span>
-<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>naive_forecast_with_trend <span class="op">=</span> naive_forecast <span class="op">+</span> (drift_value <span class="op">*</span> step)</span>
-<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Create naive forecast vs actuals visual</span></span>
-<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>naive_projections <span class="op">=</span> pd.concat([naive_fitted_with_trend, naive_forecast_with_trend], axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>naive_projections.plot(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>), label<span class="op">=</span><span class="st">'Naive Forecasts'</span>)</span>
-<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>y.plot(label<span class="op">=</span><span class="st">'Actuals'</span>)</span>
-<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>plt.axvline(x<span class="op">=</span>y_test.index[<span class="dv">0</span>], c<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Start of Test Set'</span>)</span>
-<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'NVDA Stock Opening Price: Naive Forecasts vs Actuals'</span>)</span>
-<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
-<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Stock Open Price (USD)'</span>)</span>
-<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="e600888d" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Take inverse of train set to reverse log transform</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> np.exp(y_log_train)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Create simple naive fitted values and forecast values</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>naive_fitted <span class="op">=</span> y_train.shift(<span class="dv">1</span>).dropna()</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>naive_forecast <span class="op">=</span> pd.Series(y_train.iloc[<span class="op">-</span><span class="dv">1</span>], index<span class="op">=</span>y_test.index)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Create drift value that will be used to include trend in the model</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>drift_value <span class="op">=</span> (y_train.iloc[<span class="op">-</span><span class="dv">1</span>]<span class="op">-</span>y_train.iloc[<span class="dv">0</span>])<span class="op">/</span>(<span class="bu">len</span>(y_train)<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Create naive fitted values with trend</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>naive_fitted_with_trend <span class="op">=</span> naive_fitted <span class="op">+</span> drift_value</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add in trend for forecast values using steps to make sure it accumulates properly over time</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>step <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(naive_forecast)<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>naive_forecast_with_trend <span class="op">=</span> naive_forecast <span class="op">+</span> (drift_value <span class="op">*</span> step)</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Create naive forecast vs actuals visual</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>naive_projections <span class="op">=</span> pd.concat([naive_fitted_with_trend, naive_forecast_with_trend], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>naive_projections.plot(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>), label<span class="op">=</span><span class="st">'Naive Forecasts'</span>)</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>y.plot(label<span class="op">=</span><span class="st">'Actuals'</span>)</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>plt.axvline(x<span class="op">=</span>y_test.index[<span class="dv">0</span>], c<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Start of Test Set'</span>)</span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'NVDA Stock Opening Price: Naive Forecasts vs Actuals'</span>)</span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Stock Open Price (USD)'</span>)</span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -824,20 +804,20 @@ C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmod
 <h2 class="anchored" data-anchor-id="step-5-measure-model-performance">Step 5: Measure Model Performance</h2>
 <p>Ordinarily, we would use rolling-horizon cross-validation to compare models. We would not compare their performance directly on our test set, which is reserved for <em>after</em> a model has already been selected to gauge its performance on unseen data. Rolling-horizon cross-validation will be covered in a future article. In this case, we will use our test set to analyze how each model performs on unseen data.</p>
 <p>For this exercise, we will use sklearn’s <code>mean_absolute_error</code> and <code>root_mean_squared_error</code>. The mean absolute error (MAE) gives us an idea of how far off our forecasts are on average, in the same units as the original data (USD). The root mean squared error (RMSE) penalizes big misses more severely by squaring the errors first. Together, they help us understand, in quantitative terms, how our two models stack up. As a reminder, the lower the MAE and RMSE, the more accurate the model.</p>
-<div id="b69ba202" class="cell" data-execution_count="23">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>mae_arima <span class="op">=</span> mean_absolute_error(y_test, arima_forecasts)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>mae_naive <span class="op">=</span> mean_absolute_error(y_test, naive_forecast_with_trend)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>rmse_arima <span class="op">=</span> root_mean_squared_error(y_test, arima_forecasts)</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>rmse_naive <span class="op">=</span> root_mean_squared_error(y_test, naive_forecast_with_trend)</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"MAE"</span>)</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"    ARIMA: "</span>, mae_arima)</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"    Naive: "</span>, mae_naive)</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------"</span>)</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"RMSE: "</span>)</span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"    ARIMA: "</span>, rmse_arima)</span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"    Naive: "</span>, rmse_naive)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="13f818fc" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>mae_arima <span class="op">=</span> mean_absolute_error(y_test, arima_forecasts)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>mae_naive <span class="op">=</span> mean_absolute_error(y_test, naive_forecast_with_trend)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>rmse_arima <span class="op">=</span> root_mean_squared_error(y_test, arima_forecasts)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>rmse_naive <span class="op">=</span> root_mean_squared_error(y_test, naive_forecast_with_trend)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"MAE"</span>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"    ARIMA: "</span>, mae_arima)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"    Naive: "</span>, mae_naive)</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------"</span>)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"RMSE: "</span>)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"    ARIMA: "</span>, rmse_arima)</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"    Naive: "</span>, rmse_naive)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>MAE
     ARIMA:  11.446889141262561

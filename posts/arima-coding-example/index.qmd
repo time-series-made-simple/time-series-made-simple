@@ -310,6 +310,7 @@ Based on these, we will set our initial ARIMA values for `p` (the AR order) and 
 Let's create these different versions of our ARIMA model now. We will use statsmodels' `ARIMA()` function to build these models. There are more automated versions of ARIMA available, but this is a good starting point when just learning how ARIMA works.
 
 ```{python}
+#| output: false
 
 arima_111 = ARIMA(y_log_train, order=(1, 1, 1)).fit()
 arima_110 = ARIMA(y_log_train, order=(1, 1, 0)).fit()
