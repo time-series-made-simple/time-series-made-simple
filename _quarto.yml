@@ -8,6 +8,7 @@ project:
 jupyter: python3
 website:
   title: "Time Series Made Simple"
+  favicon: images/favicon.png
   google-analytics: "G-C9HXYCSWSJ"
   draft-mode: unlinked
   description: "Practical tutorials on time-series analysis and forecasting with Python."
