@@ -293,11 +293,15 @@ acf_pacf_guide = pd.DataFrame(
 acf_pacf_guide
 ```
 
-Let's generate our ACF and PACF plots for our log-transformed, differenced NVDA stock data now.
+Let's generate our ACF and PACF plots for our log-transformed, differenced NVDA stock data now. We will use the training set data to avoid data leakage.
 
 ```{python}
-plot_acf(y_log_diff)
-plot_pacf(y_log_diff)
+
+y_train_log_diff = y_log_train.diff(1).dropna() #create version of training set that is differenced, for acf/pacf purposes.
+
+
+plot_acf(y_train_log_diff)
+plot_pacf(y_train_log_diff)
 plt.show()
 ```
 
@@ -372,7 +376,9 @@ plt.show()
 
 Notice what happens as the ARIMA model forecasts through the test period; it turns into a flat line. This is because our model has no drift (constant) term. The forecasted daily change quickly decays toward zero, so the forecasted price levels off instead of continuing to climb.
 
-The main limitation of our model appears to be that it does not account well for the trend as it extends into the future. ARIMA can include a drift term through its `trend` parameter (trend='t' when d=1). However, when we tested this parameter out on our NVDA time series data, the drift coefficient was not statistically significant, and because the model works with log prices, the drift compounds as a growth rate, which led to the model overshooting the test period badly. We'll explore handling trend in more depth in a future article. We can also perform other types of models, such as Exponential Smoothing with Trend, to see if they perform better on our data set.
+Another important step at this point would be to analyze the residuals of our model. A residual is the difference between the actual and forecasted values. Plotting these residuals can be very helpful in identifying limitations of our model. We will save that for another article for now, but it is important to know about.
+
+The main limitation of our model, based on the information we have, is that it does not account well for the trend as it extends into the future. ARIMA can include a drift term through its `trend` parameter (trend='t' when d=1). However, when we tested this parameter out on our NVDA time series data, the drift coefficient was not statistically significant, and because the model works with log prices, the drift compounds as a growth rate, which led to the model overshooting the test period badly. We'll explore handling trend in more depth in future articles. We can also perform other types of models, such as Exponential Smoothing with Trend, to see if they perform better on our data set.
 
 For now, let's create a naive model with trend and compare the results with our ARIMA model.
 
