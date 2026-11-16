@@ -8,6 +8,7 @@ project:
 jupyter: python3
 website:
   title: "Time Series Made Simple"
+  site-url: "https://timeseriesmadesimple.com"
   favicon: images/favicon.png
   google-analytics: "G-C9HXYCSWSJ"
   draft-mode: unlinked
