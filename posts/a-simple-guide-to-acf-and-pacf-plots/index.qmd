@@ -112,7 +112,9 @@ Great! Now that we have our plots, let's walk through a few important things to 
 
 ## How can ACF and PACF plots help with ARIMA forecasting?
 
-In this last section, we will consider what these plots can tell us about our time series and, specifically, how they can help us identify potential AR (`p`) and MA (`q`) orders for an ARIMA model.
+In this last section, we will consider what these plots can tell us about our time series and, specifically, how they can help us identify potential AR (`p`) and MA (`q`) orders for an ARIMA model. 
+
+For a full treatment of the underlying concepts behind ARIMA models check out [this article](../intro-to-arima/index.html). Look [here](../arima-coding-example/index.html) for an end-to-end coding example using ARIMA forecasting.
 
 Points that lie outside the blue shaded region in the ACF plot provide evidence of a significant correlation between observations in the time series and observations at the corresponding lags. However, the ACF does not separate the relationship at a given lag from the relationships at the intervening lags. In other words, the correlation we see at a particular lag may partly reflect the influence of other lags.
 
@@ -164,9 +166,9 @@ acf_pacf_guide
 
 Keep in mind that these are general guidelines, not strict rules. Real-world time series do not always follow these patterns perfectly, and ACF and PACF plots alone cannot determine the best model. It is good practice to compare several candidate models and examine their residuals before settling on one.
 
-We will leave the differencing order, `d`, at 0 for this example because we are modeling the original, undifferenced series. However, this choice should ideally be supported by checking whether the series is stationary. Tests such as the Augmented Dickey-Fuller (ADF) test and the KPSS test can help assess stationarity and whether differencing may be appropriate.
+We will leave the differencing order, `d`, at 0 for this example because we are modeling the original, undifferenced series. However, this choice should ideally be supported by checking whether the series is stationary. Tests such as the Augmented Dickey-Fuller (ADF) test and the KPSS test can help assess stationarity and whether differencing may be appropriate. For more information about stationarity, check out [this article](../understanding-stationarity/index.html). For information about differencing a time series, check out [this article](../differencing/.index.html).
 
-Let's fit an ARIMA(2, 0, 0) model.
+Let's fit an ARIMA(2, 0, 0) model now.
 
 ```{python}
 from statsmodels.tsa.arima.model import ARIMA
