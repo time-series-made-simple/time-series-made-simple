@@ -259,7 +259,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <h2 class="anchored" data-anchor-id="how-to-create-acf-and-pacf-plots-in-python">How to create ACF and PACF plots in Python</h2>
 <p>Creating ACF and PACF plots in Python is straightforward. You can do it with two functions from the <code>statsmodels</code> module: <code>plot_acf()</code> and <code>plot_pacf()</code>. More information about these functions can be found <a href="https://www.statsmodels.org/stable/generated/statsmodels.graphics.tsaplots.plot_acf.html">here</a> and <a href="https://www.statsmodels.org/stable/generated/statsmodels.graphics.tsaplots.plot_pacf.html">here</a>.</p>
 <p>We will demonstrate this in the following code cells, using the annual unemployment rate for Finland from 1980 to 2025, available from <a href="https://data360.worldbank.org/en/indicator/IMF_WEO_LUR">the World Bank</a>.</p>
-<div id="60c42fed" class="cell" data-execution_count="1">
+<div id="f1708313" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd  <span class="co"># For loading and manipulating the data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  <span class="co"># For creating visualizations</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -290,7 +290,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <p>We should now have 46 annual observations, covering 1980 through 2025. It is also worth checking that there are no missing values in the unemployment rate before proceeding.</p>
 <p>Now that we have our data loaded and prepared, we will skip the usual exploration steps and go straight to our ACF and PACF plots.</p>
 <p>There are several parameters you can use to customize these functions. For example, you can control the number of lags to include, the title, whether to display vertical lines or just markers, and whether to include lag 0. For now, however, we will use the default parameters and simply pass in our unemployment rate data.</p>
-<div id="45ad5b7d" class="cell" data-execution_count="2">
+<div id="b233d895" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the ACF and PACF plots</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plot_acf(data[<span class="st">'unemployment_pct'</span>])</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>plot_pacf(data[<span class="st">'unemployment_pct'</span>])</span>
@@ -341,7 +341,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <p>A common guideline is that an MA(q) process has an ACF that cuts off after lag <code>q</code>, while its PACF gradually tails off. An AR(p) process tends to show the opposite pattern: its PACF cuts off after lag <code>p</code>, while its ACF gradually tails off.</p>
 <p>In our case, the ACF gradually tapers off, while the PACF appears to cut off after lag 2. This suggests an AR(2) model as a reasonable starting point.</p>
 <p>The following guide summarizes these common patterns. It is based on Nielsen (2019, p.&nbsp;187).</p>
-<div id="cd9d2a0b" class="cell" data-execution_count="3">
+<div id="0b0e48b9" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A quick guide to interpreting ACF and PACF plots</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>acf_pacf_guide <span class="op">=</span> pd.DataFrame(</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    {</span>
@@ -391,7 +391,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <p>Keep in mind that these are general guidelines, not strict rules. Real-world time series do not always follow these patterns perfectly, and ACF and PACF plots alone cannot determine the best model. It is good practice to compare several candidate models and examine their residuals before settling on one.</p>
 <p>We will leave the differencing order, <code>d</code>, at 0 for this example because we are modeling the original, undifferenced series. However, this choice should ideally be supported by checking whether the series is stationary. Tests such as the Augmented Dickey-Fuller (ADF) test and the KPSS test can help assess stationarity and whether differencing may be appropriate. For more information about stationarity, check out <a href="../understanding-stationarity/index.html">this article</a>. For information about differencing a time series, check out <a href="../differencing/.index.html">this article</a>.</p>
 <p>Let’s fit an ARIMA(2, 0, 0) model now.</p>
-<div id="2510502e" class="cell" data-execution_count="4">
+<div id="9736f753" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.arima.model <span class="im">import</span> ARIMA</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create and fit the ARIMA(2, 0, 0) model</span></span>
@@ -431,7 +431,7 @@ C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmod
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">Time:</th>
-<td>12:02:07</td>
+<td>12:06:53</td>
 <th data-quarto-table-cell-role="th">BIC</th>
 <td>147.238</td>
 </tr>
@@ -547,12 +547,12 @@ C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmod
 </ul>
 <p>One more step will help us evaluate the suitability of our model: examining its residuals. Residuals are the differences between the observed values and the values predicted by the fitted model.</p>
 <p>We can access them using the <code>.resid</code> property of our fitted ARIMA model.</p>
-<div id="2015efbc" class="cell" data-execution_count="5">
+<div id="4b9fe78d" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the residuals</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>residuals <span class="op">=</span> model.resid</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the residuals over time</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plt.plot(residuals.index, residuals)</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
@@ -563,57 +563,26 @@ C:\Users\Joel\AppData\Local\Programs\Python\Python313\Lib\site-packages\statsmod
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-6-output-1.png" width="810" height="449" class="figure-img"></p>
+<p><img src="index_files/figure-html/cell-6-output-1.png" width="662" height="523" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Ideally, residuals should fluctuate randomly around zero, without any obvious patterns or systematic structure. If a pattern remains, it may indicate that the model has not captured all of the information in the time series.</p>
 <p>What we see here is mostly encouraging. The residuals appear to fluctuate around the zero line, with no obvious remaining pattern. However, they do show some increased variance in the 1990s. This is worth investigating, as it may indicate that the variability of the errors is not constant over time.</p>
-<p>We can also examine the ACF plot of the residuals to see whether any autocorrelation remains. Ideally, most residual autocorrelations should fall within the approximate confidence intervals. A Ljung-Box test can provide an additional check for remaining autocorrelation across multiple lags.</p>
-<div id="5f639f30" class="cell" data-execution_count="6">
+<p>We can also examine the ACF plot of the residuals to see whether any autocorrelation remains. Ideally, most residual autocorrelations should fall within the approximate confidence intervals.</p>
+<div id="7971ae95" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.graphics.tsaplots <span class="im">import</span> plot_acf</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.stats.diagnostic <span class="im">import</span> acorr_ljungbox</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the residual ACF</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>plot_acf(residuals)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Test for remaining autocorrelation at several lags</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>acorr_ljungbox(residuals, lags<span class="op">=</span>[<span class="dv">5</span>, <span class="dv">10</span>], return_df<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
 <p><img src="index_files/figure-html/cell-7-output-1.png" width="590" height="431" class="figure-img"></p>
 </figure>
-</div>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="6">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">lb_stat</th>
-<th data-quarto-table-cell-role="th">lb_pvalue</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">5</th>
-<td>0.702527</td>
-<td>0.98283</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">10</th>
-<td>3.605327</td>
-<td>0.96340</td>
-</tr>
-</tbody>
-</table>
-
 </div>
 </div>
 </div>

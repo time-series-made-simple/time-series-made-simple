@@ -195,7 +195,7 @@ We can access them using the `.resid` property of our fitted ARIMA model.
 residuals = model.resid
 
 # Plot the residuals over time
-plt.figure(figsize=(10, 5))
+plt.figure(figsize=(8, 6))
 plt.plot(residuals.index, residuals)
 plt.axhline(y=0, color='red', linestyle='--')
 
@@ -209,7 +209,7 @@ Ideally, residuals should fluctuate randomly around zero, without any obvious pa
 
 What we see here is mostly encouraging. The residuals appear to fluctuate around the zero line, with no obvious remaining pattern. However, they do show some increased variance in the 1990s. This is worth investigating, as it may indicate that the variability of the errors is not constant over time.
 
-We can also examine the ACF plot of the residuals to see whether any autocorrelation remains. Ideally, most residual autocorrelations should fall within the approximate confidence intervals. A Ljung-Box test can provide an additional check for remaining autocorrelation across multiple lags.
+We can also examine the ACF plot of the residuals to see whether any autocorrelation remains. Ideally, most residual autocorrelations should fall within the approximate confidence intervals.
 
 ```{python}
 from statsmodels.graphics.tsaplots import plot_acf
@@ -219,8 +219,6 @@ from statsmodels.stats.diagnostic import acorr_ljungbox
 plot_acf(residuals)
 plt.show()
 
-# Test for remaining autocorrelation at several lags
-acorr_ljungbox(residuals, lags=[5, 10], return_df=True)
 ```
 
 It is important to remember that, when dealing with a relatively small dataset like this one, we may not achieve an exceptional model, especially on our first attempt. In a real-world project, we would create and compare several candidate models, considering their AIC and BIC values, residual plots, diagnostic tests, and performance in time-series cross-validation. We would also investigate any signs of changing residual variance before deciding which model is most appropriate.
