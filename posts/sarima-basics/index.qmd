@@ -5,10 +5,9 @@ date: "2026-11-21"
 
 categories:
   - ARIMA
-  - Visualization
-  - Analysis
-  - EDA
-  - Statistics
+  - Basics
+  - Time Series Modeling
+  - Forecasting
 
 jupyter: python3
 

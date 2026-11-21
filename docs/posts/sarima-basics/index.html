@@ -197,10 +197,9 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <h1 class="title">Seasonal ARIMA: The Basics</h1>
   <div class="quarto-categories">
     <div class="quarto-category">ARIMA</div>
-    <div class="quarto-category">Visualization</div>
-    <div class="quarto-category">Analysis</div>
-    <div class="quarto-category">EDA</div>
-    <div class="quarto-category">Statistics</div>
+    <div class="quarto-category">Basics</div>
+    <div class="quarto-category">Time Series Modeling</div>
+    <div class="quarto-category">Forecasting</div>
   </div>
   </div>
 
@@ -241,7 +240,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <h2 class="anchored" data-anchor-id="importing-packages-and-loading-our-data">Importing Packages and Loading Our Data</h2>
 <p>We will first import the packages we need, then load the <code>flights</code> dataset from seaborn. This classic time series dataset contains monthly passenger totals (in thousands) for U.S. flights from 1949 through 1960. It has strong yearly seasonality and a consistent upward trend.</p>
 <p>For more information about this dataset, check out <a href="https://seaborn.pydata.org/tutorial/data_structure.html#data-structures-accepted-by-seaborn">this link</a>.</p>
-<div id="f6e73870" class="cell" data-execution_count="1">
+<div id="0fa9ab39" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Necessary imports</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -252,7 +251,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>flights <span class="op">=</span> sns.load_dataset(<span class="st">"flights"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, we need to create a datetime index. The exact method may differ depending on the frequency and layout of your data, but creating a datetime index is an important step when preparing time series data for modeling.</p>
-<div id="8c5af13a" class="cell" data-execution_count="2">
+<div id="a96f7ca8" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the 'year' and 'month' columns into a single datetime column,</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># then set that column as the index.</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>flights[<span class="st">'date'</span>] <span class="op">=</span> pd.to_datetime(</span>
@@ -273,7 +272,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <section id="explore-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="explore-the-data">Explore the Data</h2>
 <p>Now that our data is loaded, let’s take a moment to explore it visually. In a real-world project, you would investigate the data in much greater depth. For this example, we will use a simple line plot to visualize its trend and seasonal structure.</p>
-<div id="da2b58d3" class="cell" data-execution_count="3">
+<div id="5ffb8c49" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the Series .plot() method to create a quick line graph.</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>y.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Flight Passengers: 1949-1960'</span>)</span>
@@ -299,7 +298,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <h2 class="anchored" data-anchor-id="split-the-data">Split the Data</h2>
 <p>Before going any further, let’s divide our time series into training and test sets. This sets aside part of the data so we can evaluate the model on observations it has not seen during fitting. It gives us an indication of how the model might perform on future data.</p>
 <p>With time series data, you generally do not want to shuffle the observations as you might with cross-sectional data. The reason is simple: <strong>with time series, order matters.</strong> We need to train on the earlier observations and test on the later ones to preserve the chronological order.</p>
-<div id="2f459560" class="cell" data-execution_count="4">
+<div id="3d144e6d" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>y_train, y_test <span class="op">=</span> train_test_split(</span>
@@ -321,11 +320,11 @@ Test Set Size: 29 rows</code></pre>
 <p>A standard SARIMA model describes additive relationships on the scale of the data being modeled. To better accommodate multiplicative seasonality, we can first apply a logarithmic transformation. This helps stabilize the seasonal fluctuations, making them more consistent in size as the underlying data increases.</p>
 <p>For more information about additive versus multiplicative seasonality, take a look <a href="../additive-vs-multiplicative-seasonality/index.html">here</a>.</p>
 <p>Taking the log of our data is easy using NumPy’s <code>np.log()</code> function.</p>
-<div id="cbef9060" class="cell" data-execution_count="5">
+<div id="1fa0d2fa" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>y_train_log <span class="op">=</span> np.log(y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Plotting our transformed training data will help us see how the log transformation changes the seasonal pattern.</p>
-<div id="ff56040a" class="cell" data-execution_count="6">
+<div id="48a3a09e" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>y_train_log.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Log-Transformed Flight Passengers'</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
@@ -349,7 +348,7 @@ Test Set Size: 29 rows</code></pre>
 <p>In this case, our seasonal cycle is 12 months. Seasonal differencing therefore compares January 1949 with January 1950, February 1949 with February 1950, and so on. Seasonal differencing may be enough, by itself, to make a time series stationary. If it is not, we can follow it with ordinary differencing.</p>
 <p>When working with seasonal data, it is often useful to try seasonal differencing first. This helps remove recurring seasonal patterns before determining whether additional nonseasonal differencing is necessary.</p>
 <p>Let’s see whether seasonal differencing is enough to make our flights time series stationary.</p>
-<div id="575e3558" class="cell" data-execution_count="7">
+<div id="1b7996d0" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply seasonal differencing at lag 12 because the seasonal period</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># is one year, or 12 months.</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>y_train_log_diff <span class="op">=</span> y_train_log.diff(<span class="dv">12</span>).dropna()</span>
@@ -369,7 +368,7 @@ Test Set Size: 29 rows</code></pre>
 </div>
 <p>After the log transformation and seasonal differencing, the data may be harder to interpret in terms of actual passenger counts. What matters here is the structure of the resulting series. Does it appear stationary?</p>
 <p>The mean and variance do not appear to be fully consistent over time, so seasonal differencing may not have been sufficient. We can use the Augmented Dickey-Fuller (ADF) test to investigate further.</p>
-<div id="cecedc19" class="cell" data-execution_count="8">
+<div id="a54510d3" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.stattools <span class="im">import</span> adfuller</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>adfuller_results <span class="op">=</span> adfuller(y_train_log_diff)</span>
@@ -379,7 +378,7 @@ Test Set Size: 29 rows</code></pre>
 </div>
 </div>
 <p>Our p-value of 0.2905 is well above the commonly used significance level of 0.05. The ADF test’s null hypothesis is that the series has a unit root. Therefore, we fail to reject the null hypothesis, which suggests that seasonal differencing alone has not been sufficient to remove the unit root. Let’s try ordinary differencing as well.</p>
-<div id="7684da11" class="cell" data-execution_count="9">
+<div id="fac9c3e1" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply ordinary differencing at lag 1.</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>y_train_log_diff <span class="op">=</span> y_train_log_diff.diff(<span class="dv">1</span>).dropna()</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -413,7 +412,7 @@ Test Set Size: 29 rows</code></pre>
 <h2 class="anchored" data-anchor-id="finding-the-ar-and-ma-orders">Finding the AR and MA Orders</h2>
 <p>Next, we need to determine our AR (autoregressive) and MA (moving average) orders, both at the nonseasonal level and at the seasonal level. To do this, we will turn to ACF and PACF plots.</p>
 <p>These visualizations help us identify the remaining correlation structure in our differenced data. In other words, they help us examine how observations relate to previous observations in the series. For a full explanation of ACF and PACF plots and how to interpret them, check out <a href="../a-simple-guide-to-acf-and-pacf-plots/index.html">this article</a>.</p>
-<div id="80fbcf5d" class="cell" data-execution_count="10">
+<div id="b4813c58" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.graphics.tsaplots <span class="im">import</span> plot_acf, plot_pacf</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set lags to 48 so we can inspect several seasonal periods.</span></span>
@@ -461,7 +460,7 @@ Test Set Size: 29 rows</code></pre>
 <p>[ SARIMA(p,d,q)(P,D,Q)_m ]</p>
 <p>Here, <code>m</code> represents the number of observations in one seasonal cycle. Because our data is monthly and the seasonal cycle is one year, <code>m = 12</code>.</p>
 <p>As a reminder, we fit the model using the log-transformed but <strong>non-differenced</strong> training data. The ARIMA model handles the differencing for us!</p>
-<div id="2309b834" class="cell" data-execution_count="11">
+<div id="1c8c7657" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.arima.model <span class="im">import</span> ARIMA</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Increase the maximum number of iterations available to the optimizer.</span></span>
@@ -471,7 +470,7 @@ Test Set Size: 29 rows</code></pre>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    seasonal_order<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">12</span>)</span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>).fit(method_kwargs<span class="op">=</span>{<span class="st">"maxiter"</span>: <span class="dv">200</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="be1053a1" class="cell" data-execution_count="12">
+<div id="12b5c159" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Review the model summary.</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(seasonal_arima_mod.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -480,7 +479,7 @@ Test Set Size: 29 rows</code></pre>
 Dep. Variable:                       passengers   No. Observations:                  115
 Model:             ARIMA(1, 1, 1)x(1, 1, 1, 12)   Log Likelihood                 189.368
 Date:                          Sat, 21 Nov 2026   AIC                           -368.737
-Time:                                  03:23:24   BIC                           -355.612
+Time:                                  12:19:09   BIC                           -355.612
 Sample:                              01-01-1949   HQIC                          -363.422
                                    - 07-01-1958                                         
 Covariance Type:                            opg                                         
@@ -504,14 +503,14 @@ Warnings:
 </div>
 </div>
 <p>Our first model was based on the candidate orders suggested by the ACF and PACF plots. However, the summary shows some potential problems. Most noticeably, the coefficient p-values in the <code>P&gt;|z|</code> column are relatively high for the AR terms. This suggests that these coefficients may not be statistically significant. We will try building the model again, this time removing the AR terms.</p>
-<div id="c59da5eb" class="cell" data-execution_count="13">
+<div id="18c93194" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>seasonal_arima_mod_revised <span class="op">=</span> ARIMA(</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    y_train_log,</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    order<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    seasonal_order<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">12</span>)</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>).fit(method_kwargs<span class="op">=</span>{<span class="st">"maxiter"</span>: <span class="dv">200</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="46003bb8" class="cell" data-execution_count="14">
+<div id="34638171" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(seasonal_arima_mod_revised.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                    SARIMAX Results                                     
@@ -519,7 +518,7 @@ Warnings:
 Dep. Variable:                       passengers   No. Observations:                  115
 Model:             ARIMA(0, 1, 1)x(0, 1, 1, 12)   Log Likelihood                 189.086
 Date:                          Sat, 21 Nov 2026   AIC                           -372.171
-Time:                                  03:23:24   BIC                           -364.296
+Time:                                  12:19:10   BIC                           -364.296
 Sample:                              01-01-1949   HQIC                          -368.982
                                    - 07-01-1958                                         
 Covariance Type:                            opg                                         
@@ -547,7 +546,7 @@ Warnings:
 <h2 class="anchored" data-anchor-id="assessing-model-performance">Assessing Model Performance</h2>
 <p>We will obtain the fitted values for the training period and the forecast values for the test period, then combine them for easier visualization.</p>
 <p>Fitted values are the model’s estimates over the training period. Forecasts are predictions for observations outside the training period. Comparing both with the actual values helps us understand how well the model fits historical data and how well it generalizes to unseen data.</p>
-<div id="f7dcb07d" class="cell" data-execution_count="15">
+<div id="a32f69e1" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate fitted values for the training period and forecasts for the test period.</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># np.exp() reverses the logarithmic transformation.</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>sarima_fitted_values <span class="op">=</span> np.exp(</span>
@@ -606,7 +605,7 @@ Warnings:
 <p>From a visual standpoint, we have reason to be optimistic. Our SARIMA model appears to do a decent job of capturing the seasonal fluctuations and, at least partially, the underlying trend. This is encouraging, particularly given its performance on the test set.</p>
 <p>One important detail: because we modeled the logarithm of passenger counts, exponentiating the predictions does not necessarily produce an unbiased estimate of the expected passenger count. A simple inverse transformation is appropriate for this introductory example, but more advanced applications may require a bias correction.</p>
 <p>Let’s also check MAE and RMSE, two common metrics for evaluating forecasting errors.</p>
-<div id="6b7344b6" class="cell" data-execution_count="16">
+<div id="182d0d12" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import the necessary metric functions from scikit-learn.</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, mean_squared_error</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
