@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-11-21">
+<meta name="description" content="A Simple Walkthrough of Forecasting with SARIMA">
+
+<title>Seasonal ARIMA: The Basics – Time Series Made Simple</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-574f58f4068bb8f43535e6e9c10c5508.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-C9HXYCSWSJ"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
+</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Time Series Made Simple</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../archive.html"> 
+<span class="menu-text">All Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/time-series-made-simple/time-series-made-simple"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#importing-packages-and-loading-our-data" id="toc-importing-packages-and-loading-our-data" class="nav-link" data-scroll-target="#importing-packages-and-loading-our-data">Importing Packages and Loading Our Data</a></li>
+  <li><a href="#explore-the-data" id="toc-explore-the-data" class="nav-link" data-scroll-target="#explore-the-data">Explore the Data</a></li>
+  <li><a href="#split-the-data" id="toc-split-the-data" class="nav-link" data-scroll-target="#split-the-data">Split the Data</a></li>
+  <li><a href="#dealing-with-multiplicative-seasonality" id="toc-dealing-with-multiplicative-seasonality" class="nav-link" data-scroll-target="#dealing-with-multiplicative-seasonality">Dealing with Multiplicative Seasonality</a></li>
+  <li><a href="#dealing-with-nonstationarity" id="toc-dealing-with-nonstationarity" class="nav-link" data-scroll-target="#dealing-with-nonstationarity">Dealing with Nonstationarity</a></li>
+  <li><a href="#finding-the-ar-and-ma-orders" id="toc-finding-the-ar-and-ma-orders" class="nav-link" data-scroll-target="#finding-the-ar-and-ma-orders">Finding the AR and MA Orders</a></li>
+  <li><a href="#building-our-model-first-attempt" id="toc-building-our-model-first-attempt" class="nav-link" data-scroll-target="#building-our-model-first-attempt">Building Our Model (First Attempt)</a></li>
+  <li><a href="#assessing-model-performance" id="toc-assessing-model-performance" class="nav-link" data-scroll-target="#assessing-model-performance">Assessing Model Performance</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Seasonal ARIMA: The Basics</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">ARIMA</div>
+    <div class="quarto-category">Visualization</div>
+    <div class="quarto-category">Analysis</div>
+    <div class="quarto-category">EDA</div>
+    <div class="quarto-category">Statistics</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    A Simple Walkthrough of Forecasting with SARIMA
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 21, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>As discussed in a <a href="../intro-to-arima/index.html">previous post</a>, one of the major limitations of an ARIMA model, in its most basic form, is that it does not account for seasonal patterns in a time series.</p>
+<p>As a reminder, <strong>seasonality</strong> refers to patterns in a time series that repeat at a consistent frequency.</p>
+<p>We all recognize seasonality in our daily lives. Rush-hour traffic is a familiar example. Any city dweller knows that weekday traffic between 7:00 a.m. and 8:00 a.m. and between 5:00 p.m. and 6:00 p.m. is often at its peak, while traffic at other times is lighter. This repetitive, consistent pattern helps us understand traffic behavior. Time series with seasonal fluctuations may require models that can account for these patterns.</p>
+<p><strong>SARIMA (Seasonal ARIMA)</strong> is one of the best-known and widely used models for forecasting time series that exhibit seasonality. In this article, we will walk through the basics of building and using a SARIMA model in Python.</p>
+<p>Throughout our coding, we will use the <code>flights</code> dataset from the seaborn package. I encourage you to open a notebook and follow along. As you will see, SARIMA models are relatively straightforward to set up and can be effective for forecasting seasonal time series. Let’s get started.</p>
+</section>
+<section id="importing-packages-and-loading-our-data" class="level2">
+<h2 class="anchored" data-anchor-id="importing-packages-and-loading-our-data">Importing Packages and Loading Our Data</h2>
+<p>We will first import the packages we need, then load the <code>flights</code> dataset from seaborn. This classic time series dataset contains monthly passenger totals (in thousands) for U.S. flights from 1949 through 1960. It has strong yearly seasonality and a consistent upward trend.</p>
+<p>For more information about this dataset, check out <a href="https://seaborn.pydata.org/tutorial/data_structure.html#data-structures-accepted-by-seaborn">this link</a>.</p>
+<div id="f6e73870" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Necessary imports</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the flights data into a DataFrame</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>flights <span class="op">=</span> sns.load_dataset(<span class="st">"flights"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Next, we need to create a datetime index. The exact method may differ depending on the frequency and layout of your data, but creating a datetime index is an important step when preparing time series data for modeling.</p>
+<div id="8c5af13a" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the 'year' and 'month' columns into a single datetime column,</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># then set that column as the index.</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>flights[<span class="st">'date'</span>] <span class="op">=</span> pd.to_datetime(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    flights[<span class="st">'year'</span>].astype(<span class="bu">str</span>) <span class="op">+</span> <span class="st">'-'</span> <span class="op">+</span> flights[<span class="st">'month'</span>].astype(<span class="bu">str</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">format</span><span class="op">=</span><span class="st">'%Y-%b'</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>flights <span class="op">=</span> flights.set_index(<span class="st">'date'</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Explicitly set monthly frequency</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>flights.index <span class="op">=</span> pd.DatetimeIndex(flights.index, freq<span class="op">=</span><span class="st">'MS'</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate the target variable into a Series.</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># The index now contains the year and month information.</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> flights[<span class="st">'passengers'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="explore-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="explore-the-data">Explore the Data</h2>
+<p>Now that our data is loaded, let’s take a moment to explore it visually. In a real-world project, you would investigate the data in much greater depth. For this example, we will use a simple line plot to visualize its trend and seasonal structure.</p>
+<div id="da2b58d3" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the Series .plot() method to create a quick line graph.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>y.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Flight Passengers: 1949-1960'</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Passengers (Thousands)'</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-4-output-1.png" width="667" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This simple line graph immediately reveals some clear and important features of the time series:</p>
+<ul>
+<li>A noticeable upward trend.</li>
+<li>Recurring seasonal fluctuations that appear to become larger as the underlying data increases.</li>
+<li>A nonstationary pattern: both the mean and the variance appear to change over time.</li>
+</ul>
+</section>
+<section id="split-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="split-the-data">Split the Data</h2>
+<p>Before going any further, let’s divide our time series into training and test sets. This sets aside part of the data so we can evaluate the model on observations it has not seen during fitting. It gives us an indication of how the model might perform on future data.</p>
+<p>With time series data, you generally do not want to shuffle the observations as you might with cross-sectional data. The reason is simple: <strong>with time series, order matters.</strong> We need to train on the earlier observations and test on the later ones to preserve the chronological order.</p>
+<div id="2f459560" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>y_train, y_test <span class="op">=</span> train_test_split(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    y, shuffle<span class="op">=</span><span class="va">False</span>, train_size<span class="op">=</span><span class="fl">0.8</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the sizes of the training and test sets.</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Train Set Size:'</span>, <span class="bu">len</span>(y_train), <span class="st">'rows'</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test Set Size:'</span>, <span class="bu">len</span>(y_test), <span class="st">'rows'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Train Set Size: 115 rows
+Test Set Size: 29 rows</code></pre>
+</div>
+</div>
+</section>
+<section id="dealing-with-multiplicative-seasonality" class="level2">
+<h2 class="anchored" data-anchor-id="dealing-with-multiplicative-seasonality">Dealing with Multiplicative Seasonality</h2>
+<p>The flights dataset demonstrates what is called <strong>multiplicative seasonality</strong>, rather than additive seasonality. This means that the size of the seasonal fluctuations—the peaks and valleys in our line graph—becomes more pronounced as the underlying data increases.</p>
+<p>A standard SARIMA model describes additive relationships on the scale of the data being modeled. To better accommodate multiplicative seasonality, we can first apply a logarithmic transformation. This helps stabilize the seasonal fluctuations, making them more consistent in size as the underlying data increases.</p>
+<p>For more information about additive versus multiplicative seasonality, take a look <a href="../additive-vs-multiplicative-seasonality/index.html">here</a>.</p>
+<p>Taking the log of our data is easy using NumPy’s <code>np.log()</code> function.</p>
+<div id="cbef9060" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>y_train_log <span class="op">=</span> np.log(y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Plotting our transformed training data will help us see how the log transformation changes the seasonal pattern.</p>
+<div id="ff56040a" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>y_train_log.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Log-Transformed Flight Passengers'</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-7-output-1.png" width="645" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The seasonal fluctuations are still present, but they are now more consistent in size rather than increasing along with the underlying data. In other words, the log transformation makes the seasonal pattern look more additive.</p>
+</section>
+<section id="dealing-with-nonstationarity" class="level2">
+<h2 class="anchored" data-anchor-id="dealing-with-nonstationarity">Dealing with Nonstationarity</h2>
+<p>Now that we have addressed the changing size of the seasonal fluctuations, we can turn to determining our ARIMA orders, starting with <code>d</code> and <code>D</code>, the differencing orders. What will it take to make our data stationary?</p>
+<p>As a reminder, a stationary time series has statistical properties—particularly its mean and variance—that remain relatively stable over time. For more information about stationarity and how to assess it, check out <a href="../understanding-stationarity/index.html">this article</a>.</p>
+<p>For our purposes, we can see that the increasing trend and seasonal fluctuations mean the flights data is not stationary. ARIMA models are designed to model stationary behavior after any necessary differencing has been applied. The model performs the differencing, but we need to determine which differencing orders to use.</p>
+<p>Stationarity can sometimes be achieved through the process of <a href="../differencing/index.html">differencing</a>. With ordinary differencing, we calculate the change from one observation to the next. With seasonal data, we may also need to apply <strong>seasonal differencing</strong>, which calculates the change between observations one full seasonal cycle apart.</p>
+<p>In this case, our seasonal cycle is 12 months. Seasonal differencing therefore compares January 1949 with January 1950, February 1949 with February 1950, and so on. Seasonal differencing may be enough, by itself, to make a time series stationary. If it is not, we can follow it with ordinary differencing.</p>
+<p>When working with seasonal data, it is often useful to try seasonal differencing first. This helps remove recurring seasonal patterns before determining whether additional nonseasonal differencing is necessary.</p>
+<p>Let’s see whether seasonal differencing is enough to make our flights time series stationary.</p>
+<div id="575e3558" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply seasonal differencing at lag 12 because the seasonal period</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># is one year, or 12 months.</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>y_train_log_diff <span class="op">=</span> y_train_log.diff(<span class="dv">12</span>).dropna()</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop the missing values created by differencing.</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>y_train_log_diff.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Log-Transformed, Seasonally Differenced Flight Passengers'</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-8-output-1.png" width="664" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>After the log transformation and seasonal differencing, the data may be harder to interpret in terms of actual passenger counts. What matters here is the structure of the resulting series. Does it appear stationary?</p>
+<p>The mean and variance do not appear to be fully consistent over time, so seasonal differencing may not have been sufficient. We can use the Augmented Dickey-Fuller (ADF) test to investigate further.</p>
+<div id="cecedc19" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.stattools <span class="im">import</span> adfuller</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>adfuller_results <span class="op">=</span> adfuller(y_train_log_diff)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'ADF p-value:'</span>, <span class="bu">round</span>(adfuller_results[<span class="dv">1</span>], <span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ADF p-value: 0.2905</code></pre>
+</div>
+</div>
+<p>Our p-value of 0.2905 is well above the commonly used significance level of 0.05. The ADF test’s null hypothesis is that the series has a unit root. Therefore, we fail to reject the null hypothesis, which suggests that seasonal differencing alone has not been sufficient to remove the unit root. Let’s try ordinary differencing as well.</p>
+<div id="7684da11" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply ordinary differencing at lag 1.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>y_train_log_diff <span class="op">=</span> y_train_log_diff.diff(<span class="dv">1</span>).dropna()</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>y_train_log_diff.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Log-Transformed, Seasonally and Ordinarily Differenced Flight Passengers'</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>adfuller_results_diff <span class="op">=</span> adfuller(y_train_log_diff)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'ADF p-value:'</span>, <span class="bu">round</span>(adfuller_results_diff[<span class="dv">1</span>], <span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-10-output-1.png" width="664" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ADF p-value: 0.0017</code></pre>
+</div>
+</div>
+<p>Our plot looks more promising, although we may still want to investigate the decreasing variance over time. The ADF p-value of 0.0051 is now well below the commonly used significance level of 0.05. This provides evidence against the presence of a unit root, suggesting that we have made substantial progress toward stationarity.</p>
+<p>Keep in mind that the ADF test evaluates evidence for a unit root; it does not establish stationarity in every respect or test whether the variance is constant. We should therefore consider the plot and other diagnostics as well.</p>
+<p>In the process, we have identified the <code>d</code> and <code>D</code> orders of our ARIMA model:</p>
+<ul>
+<li><code>d = 1</code>: Apply ordinary differencing once.</li>
+<li><code>D = 1</code>: Apply seasonal differencing once.</li>
+</ul>
+</section>
+<section id="finding-the-ar-and-ma-orders" class="level2">
+<h2 class="anchored" data-anchor-id="finding-the-ar-and-ma-orders">Finding the AR and MA Orders</h2>
+<p>Next, we need to determine our AR (autoregressive) and MA (moving average) orders, both at the nonseasonal level and at the seasonal level. To do this, we will turn to ACF and PACF plots.</p>
+<p>These visualizations help us identify the remaining correlation structure in our differenced data. In other words, they help us examine how observations relate to previous observations in the series. For a full explanation of ACF and PACF plots and how to interpret them, check out <a href="../a-simple-guide-to-acf-and-pacf-plots/index.html">this article</a>.</p>
+<div id="80fbcf5d" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.graphics.tsaplots <span class="im">import</span> plot_acf, plot_pacf</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set lags to 48 so we can inspect several seasonal periods.</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>plot_acf(y_train_log_diff, lags<span class="op">=</span><span class="dv">48</span>)   <span class="co"># Helps inform the q (MA) order</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>plot_pacf(y_train_log_diff, lags<span class="op">=</span><span class="dv">48</span>)  <span class="co"># Helps inform the p (AR) order</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-11-output-1.png" width="590" height="431" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-11-output-2.png" width="590" height="431" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To interpret these plots, we need to think at two levels: the nonseasonal ARIMA level and the seasonal level.</p>
+<p><strong>Nonseasonal ARIMA level:</strong> We will look at the early lags, especially lags 1–3. Both the ACF and PACF plots show a significant spike at lag 1. Traditionally, we look to the PACF to help identify the AR order (<code>p</code>) and the ACF to help identify the MA order (<code>q</code>). Based on these plots, we will start by testing <code>p = 1</code> and <code>q = 1</code>. We will set aside the potentially significant spike at lag 3 for now and revisit the model if diagnostics suggest that additional structure remains.</p>
+<p><strong>Seasonal level:</strong> Next, we focus on the seasonal lags (12, 24, 36, 48, and so on). Both plots show a significant spike at lag 12, while the higher seasonal lags do not appear significant. Traditionally, the PACF helps inform the seasonal AR order (<code>P</code>), while the ACF helps inform the seasonal MA order (<code>Q</code>). Based on these plots, we will start by testing <code>P = 1</code> and <code>Q = 1</code>.</p>
+<p>These ACF/PACF patterns are useful guidelines, not definitive rules. They help us identify promising candidate orders, but we still need to compare models and check their residuals and forecasting performance.</p>
+</section>
+<section id="building-our-model-first-attempt" class="level2">
+<h2 class="anchored" data-anchor-id="building-our-model-first-attempt">Building Our Model (First Attempt)</h2>
+<p>Let’s build our first model. Combining what we learned from the differencing and ACF/PACF plots, we have:</p>
+<p><strong>Nonseasonal ARIMA orders:</strong></p>
+<ul>
+<li><code>p</code>: 1</li>
+<li><code>d</code>: 1</li>
+<li><code>q</code>: 1</li>
+</ul>
+<p><strong>Seasonal orders:</strong></p>
+<ul>
+<li><code>P</code>: 1</li>
+<li><code>D</code>: 1</li>
+<li><code>Q</code>: 1</li>
+<li><code>m</code>: 12</li>
+</ul>
+<p>The general SARIMA notation is:</p>
+<p>[ SARIMA(p,d,q)(P,D,Q)_m ]</p>
+<p>Here, <code>m</code> represents the number of observations in one seasonal cycle. Because our data is monthly and the seasonal cycle is one year, <code>m = 12</code>.</p>
+<p>As a reminder, we fit the model using the log-transformed but <strong>non-differenced</strong> training data. The ARIMA model handles the differencing for us!</p>
+<div id="2309b834" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.arima.model <span class="im">import</span> ARIMA</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Increase the maximum number of iterations available to the optimizer.</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>seasonal_arima_mod <span class="op">=</span> ARIMA(</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    y_train_log,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    order<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    seasonal_order<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">12</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>).fit(method_kwargs<span class="op">=</span>{<span class="st">"maxiter"</span>: <span class="dv">200</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="be1053a1" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Review the model summary.</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(seasonal_arima_mod.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                    SARIMAX Results                                     
+========================================================================================
+Dep. Variable:                       passengers   No. Observations:                  115
+Model:             ARIMA(1, 1, 1)x(1, 1, 1, 12)   Log Likelihood                 189.368
+Date:                          Sat, 21 Nov 2026   AIC                           -368.737
+Time:                                  03:23:24   BIC                           -355.612
+Sample:                              01-01-1949   HQIC                          -363.422
+                                   - 07-01-1958                                         
+Covariance Type:                            opg                                         
+==============================================================================
+                 coef    std err          z      P&gt;|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+ar.L1          0.2377      0.277      0.858      0.391      -0.305       0.781
+ma.L1         -0.5580      0.249     -2.244      0.025      -1.045      -0.071
+ar.S.L12      -0.0807      0.232     -0.347      0.728      -0.536       0.375
+ma.S.L12      -0.5164      0.252     -2.047      0.041      -1.011      -0.022
+sigma2         0.0014      0.000      7.008      0.000       0.001       0.002
+===================================================================================
+Ljung-Box (L1) (Q):                   0.03   Jarque-Bera (JB):                 2.33
+Prob(Q):                              0.87   Prob(JB):                         0.31
+Heteroskedasticity (H):               0.27   Skew:                             0.07
+Prob(H) (two-sided):                  0.00   Kurtosis:                         3.73
+===================================================================================
+
+Warnings:
+[1] Covariance matrix calculated using the outer product of gradients (complex-step).</code></pre>
+</div>
+</div>
+<p>Our first model was based on the candidate orders suggested by the ACF and PACF plots. However, the summary shows some potential problems. Most noticeably, the coefficient p-values in the <code>P&gt;|z|</code> column are relatively high for the AR terms. This suggests that these coefficients may not be statistically significant. We will try building the model again, this time removing the AR terms.</p>
+<div id="c59da5eb" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>seasonal_arima_mod_revised <span class="op">=</span> ARIMA(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    y_train_log,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    order<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    seasonal_order<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">12</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>).fit(method_kwargs<span class="op">=</span>{<span class="st">"maxiter"</span>: <span class="dv">200</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="46003bb8" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(seasonal_arima_mod_revised.summary())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                    SARIMAX Results                                     
+========================================================================================
+Dep. Variable:                       passengers   No. Observations:                  115
+Model:             ARIMA(0, 1, 1)x(0, 1, 1, 12)   Log Likelihood                 189.086
+Date:                          Sat, 21 Nov 2026   AIC                           -372.171
+Time:                                  03:23:24   BIC                           -364.296
+Sample:                              01-01-1949   HQIC                          -368.982
+                                   - 07-01-1958                                         
+Covariance Type:                            opg                                         
+==============================================================================
+                 coef    std err          z      P&gt;|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+ma.L1         -0.3273      0.090     -3.618      0.000      -0.505      -0.150
+ma.S.L12      -0.5677      0.106     -5.335      0.000      -0.776      -0.359
+sigma2         0.0014      0.000      7.758      0.000       0.001       0.002
+===================================================================================
+Ljung-Box (L1) (Q):                   0.01   Jarque-Bera (JB):                 1.12
+Prob(Q):                              0.91   Prob(JB):                         0.57
+Heteroskedasticity (H):               0.26   Skew:                             0.11
+Prob(H) (two-sided):                  0.00   Kurtosis:                         3.46
+===================================================================================
+
+Warnings:
+[1] Covariance matrix calculated using the outer product of gradients (complex-step).</code></pre>
+</div>
+</div>
+<p>Our coefficient p-values are now approximately 0.00, which is encouraging. The AIC and BIC values have also decreased slightly compared with the first model. Lower AIC and BIC values generally indicate a better balance between model fit and complexity when comparing models fitted to the same data.</p>
+<p>However, coefficient significance alone does not determine whether a forecasting model is good. In a real-world setting, you would want to train several candidate SARIMA models and compare criteria such as AIC and BIC, inspect their residuals, and evaluate their out-of-sample performance using time-series cross-validation where appropriate. For now, let’s see how our revised model performs against the actual values in the test set.</p>
+</section>
+<section id="assessing-model-performance" class="level2">
+<h2 class="anchored" data-anchor-id="assessing-model-performance">Assessing Model Performance</h2>
+<p>We will obtain the fitted values for the training period and the forecast values for the test period, then combine them for easier visualization.</p>
+<p>Fitted values are the model’s estimates over the training period. Forecasts are predictions for observations outside the training period. Comparing both with the actual values helps us understand how well the model fits historical data and how well it generalizes to unseen data.</p>
+<div id="f7dcb07d" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate fitted values for the training period and forecasts for the test period.</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># np.exp() reverses the logarithmic transformation.</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>sarima_fitted_values <span class="op">=</span> np.exp(</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    seasonal_arima_mod_revised.predict(</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>        start<span class="op">=</span>y_train.index[<span class="dv">0</span>],</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>        end<span class="op">=</span>y_train.index[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>sarima_forecast_values <span class="op">=</span> np.exp(</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    seasonal_arima_mod_revised.predict(</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>        start<span class="op">=</span>y_test.index[<span class="dv">0</span>],</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>        end<span class="op">=</span>y_test.index[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine actual and fitted training values.</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>combined_sarima_train <span class="op">=</span> (</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    pd.concat([y_train, sarima_fitted_values], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>    .rename(columns<span class="op">=</span>{<span class="st">'predicted_mean'</span>: <span class="st">'sarima_forecast'</span>})</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>    .iloc[<span class="dv">13</span>:]</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Exclude the earliest fitted values, which are affected by the</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co"># model's initialization and differencing requirements.</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>combined_sarima_test <span class="op">=</span> (</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>    pd.concat([y_test, sarima_forecast_values], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>    .rename(columns<span class="op">=</span>{<span class="st">'predicted_mean'</span>: <span class="st">'sarima_forecast'</span>})</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>combined_sarima_train_test <span class="op">=</span> pd.concat(</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>    [combined_sarima_train, combined_sarima_test],</span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>    axis<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>combined_sarima_train_test.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>plt.axvline(</span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>y_train.index[<span class="op">-</span><span class="dv">1</span>],</span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">'red'</span>,</span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>    linestyle<span class="op">=</span><span class="st">'--'</span>,</span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">'Start of Test Set'</span></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'SARIMA Forecast vs. Actuals - Flight Passengers Data'</span>)</span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Passengers (Thousands)'</span>)</span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-16-output-1.png" width="667" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From a visual standpoint, we have reason to be optimistic. Our SARIMA model appears to do a decent job of capturing the seasonal fluctuations and, at least partially, the underlying trend. This is encouraging, particularly given its performance on the test set.</p>
+<p>One important detail: because we modeled the logarithm of passenger counts, exponentiating the predictions does not necessarily produce an unbiased estimate of the expected passenger count. A simple inverse transformation is appropriate for this introductory example, but more advanced applications may require a bias correction.</p>
+<p>Let’s also check MAE and RMSE, two common metrics for evaluating forecasting errors.</p>
+<div id="6b7344b6" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import the necessary metric functions from scikit-learn.</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, mean_squared_error</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>mae <span class="op">=</span> mean_absolute_error(y_test, sarima_forecast_values)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>rmse <span class="op">=</span> np.sqrt(mean_squared_error(y_test, sarima_forecast_values))</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'MAE:'</span>, np.<span class="bu">round</span>(mae, <span class="dv">4</span>))</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'RMSE:'</span>, np.<span class="bu">round</span>(rmse, <span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MAE: 12.6036
+RMSE: 15.6789</code></pre>
+</div>
+</div>
+<p>MAE (Mean Absolute Error) gives us the average absolute difference between our forecasts and the actual values. RMSE (Root Mean Squared Error) also measures forecast error, but it penalizes larger errors more heavily because the errors are squared before being averaged.</p>
+<p>One final step in a more complete modeling workflow would be to examine the model residuals. Residuals are the differences between the observed values and the model’s fitted values. Ideally, they should have a mean close to zero and show little or no remaining autocorrelation. If substantial patterns remain in the residuals, the model may not have captured all the structure in the data.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>In this walkthrough, we used a log transformation to make the seasonal fluctuations more consistent, applied seasonal and ordinary differencing to address nonstationarity, and used ACF and PACF plots to identify candidate AR and MA orders. We then fitted a SARIMA model and evaluated its forecasts using both a visual comparison and error metrics.</p>
+<p>The key takeaway is that building a SARIMA model is an iterative process. The ACF and PACF plots help us identify candidate orders, but model selection should also consider information criteria, residual diagnostics, and performance on data that was not used to fit the model.</p>
+<p>This example provides a starting point for working with seasonal time series. In practice, you may need to test several candidate models and revisit earlier steps before settling on a model that forecasts well.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/timeseriesmadesimple\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

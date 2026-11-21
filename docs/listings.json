@@ -1,7 +1,8 @@
 [
   {
-    "listing": "/archive.html",
+    "listing": "/index.html",
     "items": [
+      "/posts/sarima-basics/index.html",
       "/posts/a-simple-guide-to-acf-and-pacf-plots/index.html",
       "/posts/arima-coding-example/index.html",
       "/posts/intro-to-arima/index.html",
@@ -18,8 +19,9 @@
     ]
   },
   {
-    "listing": "/index.html",
+    "listing": "/archive.html",
     "items": [
+      "/posts/sarima-basics/index.html",
       "/posts/a-simple-guide-to-acf-and-pacf-plots/index.html",
       "/posts/arima-coding-example/index.html",
       "/posts/intro-to-arima/index.html",
