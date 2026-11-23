@@ -1,7 +1,8 @@
 [
   {
-    "listing": "/index.html",
+    "listing": "/archive.html",
     "items": [
+      "/posts/intro-to-exponential-smoothing/index.html",
       "/posts/sarima-basics/index.html",
       "/posts/a-simple-guide-to-acf-and-pacf-plots/index.html",
       "/posts/arima-coding-example/index.html",
@@ -19,8 +20,9 @@
     ]
   },
   {
-    "listing": "/archive.html",
+    "listing": "/index.html",
     "items": [
+      "/posts/intro-to-exponential-smoothing/index.html",
       "/posts/sarima-basics/index.html",
       "/posts/a-simple-guide-to-acf-and-pacf-plots/index.html",
       "/posts/arima-coding-example/index.html",
