@@ -1,0 +1,39 @@
+---
+title: "Sources & AI Use"
+date-modified: last-modified
+---
+
+## References
+
+The articles on Time Series Made Simple draw on the resources below. Direct quotes
+and code examples are credited within each article, and especially helpful links
+are included there as well.
+
+**Hyndman, R. J., & Athanasopoulos, G. (2021). *Forecasting: Principles and practice*
+(3rd ed.). OTexts. <https://otexts.com/fpp3>**
+
+Probably the most widely used text on forecasting and time series: well organized,
+accessible, and free online. Its examples are in R while this site uses Python, but
+the principles carry over, and most methods have direct equivalents in libraries
+like statsmodels.
+
+**Nielsen, A. (2019). *Practical time series analysis: Prediction with statistics and
+machine learning*. O'Reilly Media.**
+
+A useful companion text, a little less structured than Hyndman, with examples in
+both Python and R.
+
+**McKinney, W. (2022). *Python for data analysis: Data wrangling with pandas, NumPy,
+and Jupyter* (3rd ed.). O'Reilly Media.**
+
+The standard guide to pandas, including a full chapter on time series data.
+
+**Documentation**
+
+- [statsmodels](https://www.statsmodels.org)
+- [pandas](https://pandas.pydata.org)
+
+## How AI Is Used
+
+Every article is drafted by me. I use AI tools such as Claude and ChatGPT to
+proofread, flag possible technical errors, and brainstorm structure. I also use AI to make coding suggestions but not to draw up large code blocks. I review and verify every suggestion myself, and all code is run and tested before it's published. AI does not write the articles.

@@ -1,6 +1,6 @@
 [
   {
-    "listing": "/archive.html",
+    "listing": "/index.html",
     "items": [
       "/posts/intro-to-exponential-smoothing/index.html",
       "/posts/sarima-basics/index.html",
@@ -20,7 +20,7 @@
     ]
   },
   {
-    "listing": "/index.html",
+    "listing": "/archive.html",
     "items": [
       "/posts/intro-to-exponential-smoothing/index.html",
       "/posts/sarima-basics/index.html",
