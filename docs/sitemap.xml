@@ -5,76 +5,80 @@
     <lastmod>2026-11-23T18:10:30.499Z</lastmod>
   </url>
   <url>
-    <loc>https://timeseriesmadesimple.com/posts/time-series-train-test-spit/index.html</loc>
-    <lastmod>2026-11-06T14:15:47.602Z</lastmod>
+    <loc>https://timeseriesmadesimple.com/posts/triple-exponential-smoothing/index.html</loc>
+    <lastmod>2026-11-24T23:43:25.960Z</lastmod>
   </url>
   <url>
-    <loc>https://timeseriesmadesimple.com/posts/seasonal-naive-with-drift/index.html</loc>
-    <lastmod>2026-11-10T14:50:19.459Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/posts/sarima-basics/index.html</loc>
-    <lastmod>2026-11-21T17:17:33.566Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/posts/naive-forecasting-basics/index.html</loc>
-    <lastmod>2026-11-07T14:07:36.702Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/posts/intro-to-exponential-smoothing/index.html</loc>
-    <lastmod>2026-11-23T17:35:47.694Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/posts/exponential-smoothing-with-trend/index.html</loc>
-    <lastmod>2026-11-24T16:42:06.445Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/posts/arima-coding-example/index.html</loc>
-    <lastmod>2026-11-14T01:52:18.400Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/posts/a-simple-guide-to-acf-and-pacf-plots/index.html</loc>
-    <lastmod>2026-11-17T17:06:21.033Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/archive.html</loc>
-    <lastmod>2026-10-28T19:35:40.331Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/about.html</loc>
-    <lastmod>2026-10-28T19:19:58.341Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/index.html</loc>
-    <lastmod>2026-11-11T02:16:40.068Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/posts/additive-vs-multiplicative-seasonality/index.html</loc>
-    <lastmod>2026-11-01T02:13:58.015Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/posts/differencing/index.html</loc>
-    <lastmod>2026-10-31T02:33:07.483Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/posts/intro-to-arima/index.html</loc>
-    <lastmod>2026-11-11T00:25:12.745Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/posts/intro-to-time-series/index.html</loc>
-    <lastmod>2026-11-06T02:35:15.954Z</lastmod>
-  </url>
-  <url>
-    <loc>https://timeseriesmadesimple.com/posts/naive-forecasts-including-trend/index.html</loc>
-    <lastmod>2026-11-07T16:44:13.206Z</lastmod>
+    <loc>https://timeseriesmadesimple.com/posts/time-series-structures/index.html</loc>
+    <lastmod>2026-10-29T22:27:39.202Z</lastmod>
   </url>
   <url>
     <loc>https://timeseriesmadesimple.com/posts/seasonal-naive-forecasting/index.html</loc>
     <lastmod>2026-11-07T14:07:51.560Z</lastmod>
   </url>
   <url>
-    <loc>https://timeseriesmadesimple.com/posts/time-series-structures/index.html</loc>
-    <lastmod>2026-10-29T22:27:39.202Z</lastmod>
+    <loc>https://timeseriesmadesimple.com/posts/naive-forecasts-including-trend/index.html</loc>
+    <lastmod>2026-11-07T16:44:13.206Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/posts/intro-to-time-series/index.html</loc>
+    <lastmod>2026-11-06T02:35:15.954Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/posts/intro-to-arima/index.html</loc>
+    <lastmod>2026-11-11T00:25:12.745Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/posts/differencing/index.html</loc>
+    <lastmod>2026-10-31T02:33:07.483Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/posts/additive-vs-multiplicative-seasonality/index.html</loc>
+    <lastmod>2026-11-01T02:13:58.015Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/index.html</loc>
+    <lastmod>2026-11-11T02:16:40.068Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/about.html</loc>
+    <lastmod>2026-10-28T19:19:58.341Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/archive.html</loc>
+    <lastmod>2026-10-28T19:35:40.331Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/posts/a-simple-guide-to-acf-and-pacf-plots/index.html</loc>
+    <lastmod>2026-11-17T17:06:21.033Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/posts/arima-coding-example/index.html</loc>
+    <lastmod>2026-11-14T01:52:18.400Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/posts/exponential-smoothing-with-trend/index.html</loc>
+    <lastmod>2026-11-24T16:42:06.445Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/posts/intro-to-exponential-smoothing/index.html</loc>
+    <lastmod>2026-11-23T17:35:47.694Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/posts/naive-forecasting-basics/index.html</loc>
+    <lastmod>2026-11-07T14:07:36.702Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/posts/sarima-basics/index.html</loc>
+    <lastmod>2026-11-21T17:17:33.566Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/posts/seasonal-naive-with-drift/index.html</loc>
+    <lastmod>2026-11-10T14:50:19.459Z</lastmod>
+  </url>
+  <url>
+    <loc>https://timeseriesmadesimple.com/posts/time-series-train-test-spit/index.html</loc>
+    <lastmod>2026-11-06T14:15:47.602Z</lastmod>
   </url>
   <url>
     <loc>https://timeseriesmadesimple.com/posts/understanding-stationarity/index.html</loc>
