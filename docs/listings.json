@@ -2,8 +2,8 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/exponential-smoothing-with-trend/index.html",
       "/posts/triple-exponential-smoothing/index.html",
+      "/posts/exponential-smoothing-with-trend/index.html",
       "/posts/intro-to-exponential-smoothing/index.html",
       "/posts/sarima-basics/index.html",
       "/posts/a-simple-guide-to-acf-and-pacf-plots/index.html",
@@ -24,8 +24,8 @@
   {
     "listing": "/archive.html",
     "items": [
-      "/posts/exponential-smoothing-with-trend/index.html",
       "/posts/triple-exponential-smoothing/index.html",
+      "/posts/exponential-smoothing-with-trend/index.html",
       "/posts/intro-to-exponential-smoothing/index.html",
       "/posts/sarima-basics/index.html",
       "/posts/a-simple-guide-to-acf-and-pacf-plots/index.html",

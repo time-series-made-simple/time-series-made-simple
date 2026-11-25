@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-11-24">
+<meta name="dcterms.date" content="2026-11-25">
 <meta name="description" content="Learn how to use Exponential Smoothing to forecast time series that have trend and seasonality">
 
 <title>Triple Exponential Smoothing – Time Series Made Simple</title>
@@ -238,7 +238,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 24, 2026</p>
+      <p class="date">November 25, 2026</p>
     </div>
   </div>
   
@@ -269,7 +269,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="a-simple-walkthrough-in-python">A Simple Walkthrough in Python</h2>
 <p>Thankfully, the statsmodels package in Python makes it easy to create and use Holt-Winters Models for forecasting. The following code uses the <code>flights</code> dataset from the seaborn package. This is a classic time series dataset that has data with strong seasonality and trend - perfect for the type of model we want to demonstrate.</p>
 <p>Let’s go ahead and import our packages, load our data, and prepare the time index.</p>
-<div id="50901bd7" class="cell" data-execution_count="1">
+<div id="56abc628" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Necessary imports</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -292,7 +292,7 @@ window.Quarto = {
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> flights[<span class="st">'passengers'</span>].asfreq(<span class="st">'MS'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Alright, now that we have our data loaded, we will take a moment to explore this dataset visually. In a real-world project, you would go into much more depth at this stage, but for our purposes here, we will just use a simple line plot to visualize the trend and seasonal structure of our data.</p>
-<div id="eaf11a7d" class="cell" data-execution_count="2">
+<div id="cd2549a2" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The easiest and quickest way to visualize the data is with the `.plot()` method. This gives you a quick line graph.</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>y.plot(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>))</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Flight Passengers: 1949-1960'</span>)</span>
@@ -315,7 +315,7 @@ window.Quarto = {
 </ul>
 <p>Before we go any further, let’s divide our time series into a train and test set. This allows us to have part of our data set that is set aside for checking our model on data “it has never seen”. This will give us an idea of how our model might perform were it to go into production.</p>
 <p>As a reminder, with time series datasets, you never want to “shuffle” the data like you would usually do with cross-sectional data. The reason you do not shuffle is because with time series <em>order matters.</em></p>
-<div id="af42500c" class="cell" data-execution_count="3">
+<div id="66485679" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>y_train, y_test <span class="op">=</span> train_test_split(y, shuffle<span class="op">=</span><span class="va">False</span>, train_size<span class="op">=</span><span class="fl">.8</span>) <span class="co">#Notice the shuffle parameter is set to False.</span></span>
@@ -330,7 +330,7 @@ Test Set Size: 29 rows</code></pre>
 </div>
 <p>Having explored our data briefly and divided it into training and testing sets, we are now ready to build our Exponential Smoothing model.</p>
 <p>Be sure to specify the <code>trend</code>, <code>seasonal</code>, and <code>seasonal_periods</code> parameters! These default to “None” which would leave us with a Simple Exponential Smoothing model (i.e., no trend or seasonality included).</p>
-<div id="da98eb61" class="cell" data-execution_count="4">
+<div id="188bdbbd" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.holtwinters <span class="im">import</span> ExponentialSmoothing</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>exp_smooth_mod <span class="op">=</span> ExponentialSmoothing(</span>
@@ -343,7 +343,7 @@ Test Set Size: 29 rows</code></pre>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#With optimized=True (default), the `.fit()` method will automatically try to find the best alpha, beta, and gamma for you (minimizing SSE)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Using the optimized=True option is often best, but you can also try other values for alpha, beta (trend), and gamma (seasonality) as part of your grid search and cross-validation. Next, you can see what the optimizer came up with by accessing the params property of your model.</p>
-<div id="ec1b34f7" class="cell" data-execution_count="5">
+<div id="582dec17" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>exp_smooth_mod.params</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>{'smoothing_level': np.float64(0.31921386884562136),
@@ -362,7 +362,7 @@ Test Set Size: 29 rows</code></pre>
 </div>
 <p>From this, we find that the optimizer settled on an alpha (<code>smoothing_level</code>), the basic smoothing value, of ~.32. Beta (<code>smoothing_trend</code>), the smoothing level for the trend, was set at ~.04, while gamma (<code>smoothing_seasonal</code>), for seasonality, was set at ~.67.</p>
 <p>Now that our model is set up, let’s retrieve our fitted values and forecasts for the test period. In a real-world project, you would likely compare a variety of models using cross-validation. For the purposes of our article, however, we will go ahead and assess our one model’s performance on the test set.</p>
-<div id="51a4edfa" class="cell" data-execution_count="6">
+<div id="0838e802" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The .fittedvalues attribute gives us our fitted values on the training data, and the .predict() method gives us the forecast values for the test period.</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>exp_smooth_fitted <span class="op">=</span> exp_smooth_mod.fittedvalues</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -378,7 +378,7 @@ Test Set Size: 29 rows</code></pre>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>actuals_fitted_forecast <span class="op">=</span> actuals_fitted_forecast.rename(columns<span class="op">=</span>{<span class="st">'passengers'</span>:<span class="st">'Actuals'</span>, <span class="dv">0</span>: <span class="st">'Fitted/Forecasts'</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now, let’s plot our actuals and forecasts to get an idea of how our model did at predicting monthly flight passenger numbers.</p>
-<div id="c242f1ab" class="cell" data-execution_count="7">
+<div id="151484ae" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>actuals_fitted_forecast.plot(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>))</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plt.axvline(x<span class="op">=</span>y_test.index[<span class="dv">0</span>], c<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Start of Test Set'</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Holt-Winters Exponential Smoothing Forecast vs. Actuals - Flight Passengers Data'</span>)</span>
@@ -396,7 +396,7 @@ Test Set Size: 29 rows</code></pre>
 </div>
 <p>Overall, our model appears to track the training data and test data values well. It’s not perfect. In particular, as our trend appears to accelerate during the test period, it appears to underpredict the actual values. This would require additional analysis and review in a real-world project.</p>
 <p>A chart is a good start, but we should also put a number on the model’s test set performance. Here we use the Mean Absolute Percentage Error (MAPE), which tells us how far off our forecasts are, on average, as a percentage of the actual values.</p>
-<div id="6eab46d2" class="cell" data-execution_count="8">
+<div id="418a2c5c" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_percentage_error</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>test_mape <span class="op">=</span> mean_absolute_percentage_error(y_test, exp_smooth_forecasts)</span>

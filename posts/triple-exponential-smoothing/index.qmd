@@ -1,7 +1,7 @@
 ---
 title: "Triple Exponential Smoothing"
 description: "Learn how to use Exponential Smoothing to forecast time series that have trend and seasonality"
-date: "2026-11-24"
+date: "2026-11-25"
 categories:
   - Time Series
   - Exponential Smoothing
