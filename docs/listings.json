@@ -1,7 +1,8 @@
 [
   {
-    "listing": "/index.html",
+    "listing": "/archive.html",
     "items": [
+      "/posts/time-series-cross-validation/index.html",
       "/posts/triple-exponential-smoothing/index.html",
       "/posts/exponential-smoothing-with-trend/index.html",
       "/posts/intro-to-exponential-smoothing/index.html",
@@ -22,8 +23,9 @@
     ]
   },
   {
-    "listing": "/archive.html",
+    "listing": "/index.html",
     "items": [
+      "/posts/time-series-cross-validation/index.html",
       "/posts/triple-exponential-smoothing/index.html",
       "/posts/exponential-smoothing-with-trend/index.html",
       "/posts/intro-to-exponential-smoothing/index.html",

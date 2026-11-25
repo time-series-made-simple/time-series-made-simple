@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-11-26">
+<meta name="description" content="Learn how to use rolling-origin cross-validation to compare models without data leakage">
+
+<title>Time Series Cross-Validation – Time Series Made Simple</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-574f58f4068bb8f43535e6e9c10c5508.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-C9HXYCSWSJ"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Time Series Made Simple</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../archive.html"> 
+<span class="menu-text">All Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/time-series-made-simple/time-series-made-simple"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#the-key-concept" id="toc-the-key-concept" class="nav-link" data-scroll-target="#the-key-concept">The Key Concept</a></li>
+  <li><a href="#a-simple-example-in-python" id="toc-a-simple-example-in-python" class="nav-link" data-scroll-target="#a-simple-example-in-python">A Simple Example in Python</a>
+  <ul class="collapse">
+  <li><a href="#import-packages-and-load-data" id="toc-import-packages-and-load-data" class="nav-link" data-scroll-target="#import-packages-and-load-data">Import Packages and Load Data</a></li>
+  <li><a href="#explore-the-data" id="toc-explore-the-data" class="nav-link" data-scroll-target="#explore-the-data">Explore the Data</a></li>
+  <li><a href="#rolling-origin-cross-validation" id="toc-rolling-origin-cross-validation" class="nav-link" data-scroll-target="#rolling-origin-cross-validation">Rolling-Origin Cross-Validation</a></li>
+  <li><a href="#analyze-results" id="toc-analyze-results" class="nav-link" data-scroll-target="#analyze-results">Analyze Results</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Time Series Cross-Validation</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python</div>
+    <div class="quarto-category">sklearn</div>
+    <div class="quarto-category">Model Selection</div>
+    <div class="quarto-category">ARIMA</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Learn how to use rolling-origin cross-validation to compare models without data leakage
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 26, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>When undertaking a time series forecasting project, you will generally want to compare a variety of models before settling on the one that performs best on your dataset. To be able to compare models effectively, you need to be able to see how each model performs on data it was not trained on (i.e.&nbsp;“unseen data”).</p>
+<p>A simple <a href="../time-series-train-test-split/index.html">train-test split</a> is not sufficient for this task because the test set is specifically set aside for seeing how your final model performs on unseen data. It is not used for comparing candidate models.</p>
+<p>What you need is some form of a validation set: a portion of the training set that is set aside for comparing models, fine-tuning hyperparameters, and assessing performance. You could create a separate validation set for this purpose, but there is a way that is even more flexible, efficient, and effective. It’s a process called cross-validation.</p>
+<p>Cross-validation is used in many machine learning applications. The basic idea is that instead of setting part of your training data aside as a “validation set”, you divide your training data up into “folds”. Then you train your model on all but one of the folds and validate the model’s performance on the remaining fold. By repeating this process until every fold has been used for both training and validation, you get not just a single result for model performance but multiple results. These can be considered individually or averaged together.</p>
+<p>Performing cross-validation for time series is similar in concept but different in application. Since time series require that the order of the data be kept intact, randomly dividing your training set into folds and testing on them like you would with cross-sectional data will create data leakage.</p>
+<p>In this article, we explore the basic idea behind time-series cross-validation (tsCV), sometimes called rolling-origin cross-validation. Then we walk through a basic coding example of how to implement this type of cross-validation in Python.</p>
+</section>
+<section id="the-key-concept" class="level2">
+<h2 class="anchored" data-anchor-id="the-key-concept">The Key Concept</h2>
+<p>With time-series cross-validation, the first rule is to keep your data in chronological order. Unlike regular cross-validation, the data is never shuffled.</p>
+<p>Second, the way the data is split is different. Instead of every fold taking a turn as training data and as test data, each test fold is always <em>later</em> than the data used to train the model. The model only ever learns from the past and is tested on the future, just like it would be in real life.</p>
+<p>Imagine you have monthly sales numbers for the past 3 years (36 months in total), and you want a model that forecasts the next 3 months. Because your forecast horizon is 3 months, each test fold is also 3 months long. A 3-fold split would look like this:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Round</th>
+<th>Train on</th>
+<th>Test on</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Months 1–27</td>
+<td>Months 28–30</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Months 1–30</td>
+<td>Months 31–33</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Months 1–33</td>
+<td>Months 34–36</td>
+</tr>
+</tbody>
+</table>
+<p>In each round, you fit your candidate model(s) from scratch on the training months, forecast the next 3 months, and measure the error against what actually happened. The training data grows by one fold each round, mimicking how you would refit a model as new data arrives.</p>
+<p>Finally, compare models using the mean and standard deviation of their errors across all folds, and also look at the fold-by-fold results to see where each model wins or struggles.</p>
+<p>This approach is called an <strong>expanding window</strong>, and it is the most common setup. The training data “expands” with each successive round of cross-validation. A popular variation is the <strong>rolling window</strong>, where the training set stays a fixed length and slides forward each round, dropping the oldest data. Choosing the right approach often comes down to domain knowledge and an understanding of the unique constraints and aspects of your data.</p>
+</section>
+<section id="a-simple-example-in-python" class="level2">
+<h2 class="anchored" data-anchor-id="a-simple-example-in-python">A Simple Example in Python</h2>
+<p>Having discussed the basic idea behind time-series cross-validation, let’s walk through a coding example in Python. For the purpose of this example, we will use a dataset that tracks the monthly global price of copper in USD per metric ton.</p>
+<p>The dataset can be downloaded <a href="copper_price_usd_per_ton.csv">here</a> if you would like to follow along. It was accessed from <a href="https://govspending.org/downloads">GovSpending.org</a> on 11/25/2026.</p>
+<section id="import-packages-and-load-data" class="level3">
+<h3 class="anchored" data-anchor-id="import-packages-and-load-data">Import Packages and Load Data</h3>
+<p>Let’s start by importing the necessary packages, loading our data, and preparing its datetime index.</p>
+<div id="34bd535b" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Necessary imports</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> TimeSeriesSplit</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> root_mean_squared_error</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.arima.model <span class="im">import</span> ARIMA</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.graphics.tsaplots <span class="im">import</span> plot_acf, plot_pacf</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Load copper price data</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Data is in USD/Metric Ton</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Data is monthly</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'copper_price_usd_per_ton.csv'</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Convert date column to datetime data type and index</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'date'</span>] <span class="op">=</span> pd.to_datetime(data[<span class="st">'date'</span>])</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.set_index(<span class="st">'date'</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.asfreq(freq<span class="op">=</span><span class="st">'MS'</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Converting from dataframe to series to make this easier to work with later on</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data[<span class="st">'PCOPPUSDM'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Next, we will check some basic info about the dataset and view the first 5 rows.</p>
+<div id="5195623d" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data.info())</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data.head())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.series.Series'&gt;
+DatetimeIndex: 417 entries, 1992-01-01 to 2026-09-01
+Freq: MS
+Series name: PCOPPUSDM
+Non-Null Count  Dtype  
+--------------  -----  
+417 non-null    float64
+dtypes: float64(1)
+memory usage: 6.5 KB
+None
+date
+1992-01-01    2150.579629
+1992-02-01    2208.892259
+1992-03-01    2231.785510
+1992-04-01    2214.166816
+1992-05-01    2219.315056
+Freq: MS, Name: PCOPPUSDM, dtype: float64</code></pre>
+</div>
+</div>
+</section>
+<section id="explore-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="explore-the-data">Explore the Data</h3>
+<p>Now, let’s do some basic exploration of this dataset, starting by plotting the data.</p>
+<div id="53564953" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Build a simple line plot to view the data</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>data.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>), legend<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span><span class="st">'orange'</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Global Price of Copper: 1992-2026'</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'USD per Metric Ton'</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-4-output-1.png" width="684" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From this line plot, we can see that the price of copper, overall, has an upward trend from 1992 to 2026. The variance of the price was fairly low from around 1992 to 2005. The price became much more unstable after that point.</p>
+<p>The price saw a dramatic increase from 2025 to 2026. In a real-world project, it would be important to do more research to see if this trend is likely to continue.</p>
+<p>Let’s use a scatterplot to further assess the direction and spread of the data.</p>
+<div id="b67fc684" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(x<span class="op">=</span>data.index, y<span class="op">=</span>data, alpha<span class="op">=</span><span class="fl">.4</span>, color<span class="op">=</span><span class="st">'orange'</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Global Price of Copper: 1992-2026'</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'USD per Metric Ton'</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-5-output-1.png" width="621" height="449" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Even more than with the line plot, the extent of the variance and changing nature of the trend over time becomes apparent with this visual. The points are very tightly clustered together from 1992 to 2005. Then came a period of instability, with sharp rises and falls, from 2005 to 2024. Finally, as noted before, we see a sharp increase from 2025 to 2026.</p>
+<p>One last chart will help us understand the changing variance over time. We will resample our data to yearly data and calculate the standard deviation. Then we will plot these values to see how variance has fluctuated over time.</p>
+<div id="7b2a158d" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data_std_by_year <span class="op">=</span> data.resample(<span class="st">'YS'</span>).std() <span class="co">#Resample to yearly frequency</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>data_std_by_year.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Standard Deviation in Monthly Copper Price: 1992-2026'</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Year'</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Standard Deviation (in USD/Metric Ton)'</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-6-output-1.png" width="676" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The takeaway is clear: variance in our data increased significantly toward the middle years of the dataset. It has since come down somewhat, but not to the low levels seen early in the time series.</p>
+<p>We want to explore ARIMA models as a forecasting option. In order to help stabilize our data, we will take the natural log of the series using numpy’s <code>np.log()</code> function before moving further.</p>
+<div id="b447a468" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Log transform the data to control for the fluctuating variance</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>data_log <span class="op">=</span> np.log(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This will help to take care of the changing variance within the dataset. Now let’s check to see if <a href="../differencing/index.html">differencing</a> the data can successfully make it <a href="../understanding-stationarity/index.html">stationary</a>.</p>
+<p>As a reminder, ARIMA models assume that your time series is stable in mean and variance over time (i.e.&nbsp;stationary). We need to find the correct differencing order (known as <code>d</code>) to be able to specify it within the ARIMA model. For more information about ARIMA models check out our <a href="../intro-to-arima/index.html">Introduction to ARIMA Article</a>.</p>
+<div id="21b5f125" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Difference the data to make it stationary, dropping the resulting null value</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>data_log_diff <span class="op">=</span> data_log.diff(<span class="dv">1</span>).dropna()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot the differenced series to check visually for stationarity</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>data_log_diff.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Global Price of Copper - Log Transformed and Differenced: 1992-2026'</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-8-output-1.png" width="656" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Our mean and variance appear relatively stable now, indicating that we have successfully made our time series stationary through differencing it one time. Therefore, our <code>d</code> order, the differencing order, will be set to “1” in our ARIMA models.</p>
+<p>Now, let’s check <a href="../a-simple-guide-to-acf-and-pacf-plots/index.html">ACF and PACF plots</a> to determine which AR (<code>p</code>) and MA (<code>q</code>) orders are most suitable.</p>
+<div id="ce70f42c" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plot_acf(data_log_diff)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plot_pacf(data_log_diff)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-9-output-1.png" width="590" height="431" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-9-output-2.png" width="590" height="431" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Looking at these, we see that the ACF plot shows a gradual decline from lag 1 to lag 3. The PACF plot shows a sharp decline from lag 1 to lag 2. This suggests an AR order of 1 (<code>p</code>) and an MA order of 0 (<code>q</code>) are likely appropriate. However, we will include another variation of the model as well for consideration.</p>
+<p>In addition, since our data has a clear trend, we will set the <code>trend</code> parameter to ‘t’ for a linear trend as an alternate option to each of our standard ARIMA (without trend) models.</p>
+<p>So, here are the models we will be testing using rolling-origin cross-validation:</p>
+<ul>
+<li>ARIMA(1, 1, 0)</li>
+<li>ARIMA(1, 1, 1)</li>
+<li>ARIMA(1, 1, 0) with Drift</li>
+<li>ARIMA(1, 1, 1) with Drift</li>
+</ul>
+<p>We will also consider a naive model as a baseline to compare our ARIMA options with.</p>
+</section>
+<section id="rolling-origin-cross-validation" class="level3">
+<h3 class="anchored" data-anchor-id="rolling-origin-cross-validation">Rolling-Origin Cross-Validation</h3>
+<p>Okay, now for the fun part. First, let’s set up a dictionary that contains our candidate models’ names and the parameters we will be setting up for them:</p>
+<div id="2cb87f0a" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Each entry: a name for the model and the corresponding settings to use</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> {</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"arima_110"</span>:       {<span class="st">"order"</span>: (<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="st">"trend"</span>: <span class="va">None</span>},</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"arima_111"</span>:       {<span class="st">"order"</span>: (<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="st">"trend"</span>: <span class="va">None</span>},</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"arima_110_trend"</span>: {<span class="st">"order"</span>: (<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="st">"trend"</span>: <span class="st">"t"</span>},</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"arima_111_trend"</span>: {<span class="st">"order"</span>: (<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="st">"trend"</span>: <span class="st">"t"</span>},</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Next, we will use the sklearn function <code>TimeSeriesSplit</code> to generate the correct indices for our cross-validation folds. You can find more information about this function in the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html">official scikit-learn documentation</a>.</p>
+<p>We will specifically set the <code>test_size</code> parameter here to the horizon we wish to calibrate our models for. In this case, we will say that a 12-month forecasting horizon is expected. Because we have plenty of historical data and a relatively short horizon, we can afford to set the <code>n_splits</code> parameter higher than the default 5. You need to consider the size of your dataset and how far out you want to forecast in production when choosing these parameters.</p>
+<div id="8211baec" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare time-series split for 10 folds with a test size of 12 months</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>tscv <span class="op">=</span> TimeSeriesSplit(n_splits<span class="op">=</span><span class="dv">10</span>, test_size<span class="op">=</span><span class="dv">12</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Okay, we are ready to run our cross-validation now. This is done using a <code>for</code> loop, a standard Python feature that runs the same block of code once for each item in a sequence. In our case, there are two loops, one inside the other. The outer loop cycles through the folds, using the indices provided by our time-series split. The inner loop cycles through the model settings in the dictionary we set up earlier, fitting and scoring each model on the current fold.</p>
+<p>Loops like this can become quite complicated, so the goal here is to keep the process understandable and efficient.</p>
+<div id="bf750ffe" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create blank list to hold results from the loop</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Set up loop to loop through our folds and train/test models against the indices provided by our split</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Results are saved for analysis</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fold, (train_index, test_index) <span class="kw">in</span> <span class="bu">enumerate</span>(tscv.split(data_log)):</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    train, test <span class="op">=</span> data_log.iloc[train_index], data_log.iloc[test_index]</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    actual <span class="op">=</span> np.exp(test.to_numpy())</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Basic info about this fold</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    row <span class="op">=</span> {</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"fold"</span>: fold,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">"train_end"</span>: train.index[<span class="op">-</span><span class="dv">1</span>],</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"n_train"</span>: <span class="bu">len</span>(train),</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fit and score every model in the dictionary, incorporating a bias correction in our predictions</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name, settings <span class="kw">in</span> models.items():</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> ARIMA(train, order<span class="op">=</span>settings[<span class="st">"order"</span>], trend<span class="op">=</span>settings[<span class="st">"trend"</span>]).fit()</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>        fc <span class="op">=</span> res.get_forecast(steps<span class="op">=</span><span class="bu">len</span>(test))</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>        mu <span class="op">=</span> fc.predicted_mean.to_numpy()</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>        var <span class="op">=</span> fc.var_pred_mean.to_numpy()</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>        preds <span class="op">=</span> np.exp(mu <span class="op">+</span> var <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>        row[<span class="st">"rmse_"</span> <span class="op">+</span> name] <span class="op">=</span> root_mean_squared_error(actual, preds)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Naive baseline: repeat the last training value</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    naive <span class="op">=</span> np.repeat(np.exp(train.iloc[<span class="op">-</span><span class="dv">1</span>]), <span class="bu">len</span>(test))</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    row[<span class="st">"rmse_naive"</span>] <span class="op">=</span> root_mean_squared_error(actual, naive)</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>    results.append(row)</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>cv <span class="op">=</span> pd.DataFrame(results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><em>Note: Claude was used to help organize this code clearly.</em></p>
+<p>Because we modelled the log of the price, we convert the forecasts back with exp(). Adding half the forecast variance corrects a small downward bias that a plain exp() would introduce.</p>
+</section>
+<section id="analyze-results" class="level3">
+<h3 class="anchored" data-anchor-id="analyze-results">Analyze Results</h3>
+<p>Now we are ready to analyze the results of our cross-validation. If we set up our loop in an organized way, this should be easy to do. In our case, we use the Root Mean Squared Error (RMSE) to compare our models’ performance. This metric quantifies the error in our models’ forecasts while penalizing “big misses” more severely.</p>
+<p>We assess performance across individual folds, the mean performance across all folds, and the standard deviation across all folds to see which models are most consistent. The standard deviation is sometimes overlooked, but it is a very important part of the analysis. You could have a model that performs very well on an error metric, but if it is wildly inconsistent across folds it could be less trustworthy in production.</p>
+<div id="52c4c3c6" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Show the full performance across folds</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cv.<span class="bu">round</span>(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">fold</th>
+<th data-quarto-table-cell-role="th">train_end</th>
+<th data-quarto-table-cell-role="th">n_train</th>
+<th data-quarto-table-cell-role="th">rmse_arima_110</th>
+<th data-quarto-table-cell-role="th">rmse_arima_111</th>
+<th data-quarto-table-cell-role="th">rmse_arima_110_trend</th>
+<th data-quarto-table-cell-role="th">rmse_arima_111_trend</th>
+<th data-quarto-table-cell-role="th">rmse_naive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>0</td>
+<td>2016-09-01</td>
+<td>297</td>
+<td>1035.2605</td>
+<td>1033.5828</td>
+<td>951.3998</td>
+<td>948.5878</td>
+<td>1155.1629</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>1</td>
+<td>2017-09-01</td>
+<td>309</td>
+<td>447.2568</td>
+<td>433.8481</td>
+<td>573.4314</td>
+<td>551.3769</td>
+<td>365.3773</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2</td>
+<td>2018-09-01</td>
+<td>321</td>
+<td>326.7990</td>
+<td>324.1172</td>
+<td>437.0468</td>
+<td>435.7364</td>
+<td>236.1670</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>3</td>
+<td>2019-09-01</td>
+<td>333</td>
+<td>480.7013</td>
+<td>482.4412</td>
+<td>499.8020</td>
+<td>502.5303</td>
+<td>509.5604</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>4</td>
+<td>2020-09-01</td>
+<td>345</td>
+<td>1933.1637</td>
+<td>1956.0084</td>
+<td>1777.5467</td>
+<td>1797.0094</td>
+<td>2238.4407</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>5</td>
+<td>2021-09-01</td>
+<td>357</td>
+<td>1062.4341</td>
+<td>1056.0967</td>
+<td>1252.2756</td>
+<td>1247.5353</td>
+<td>918.0985</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>6</td>
+<td>2022-09-01</td>
+<td>369</td>
+<td>771.4809</td>
+<td>776.3358</td>
+<td>649.9905</td>
+<td>654.5179</td>
+<td>801.6419</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>7</td>
+<td>2023-09-01</td>
+<td>381</td>
+<td>736.6137</td>
+<td>736.8125</td>
+<td>581.3914</td>
+<td>580.6307</td>
+<td>896.3589</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>8</td>
+<td>2024-09-01</td>
+<td>393</td>
+<td>320.4414</td>
+<td>322.0660</td>
+<td>464.5026</td>
+<td>465.5527</td>
+<td>401.0023</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>9</td>
+<td>2025-09-01</td>
+<td>405</td>
+<td>2637.4033</td>
+<td>2647.2070</td>
+<td>2366.4335</td>
+<td>2376.0113</td>
+<td>3074.4097</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="3bbe0812" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cv.<span class="bu">filter</span>(like<span class="op">=</span><span class="st">"rmse"</span>).agg([<span class="st">"mean"</span>, <span class="st">"std"</span>]).<span class="bu">round</span>(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">rmse_arima_110</th>
+<th data-quarto-table-cell-role="th">rmse_arima_111</th>
+<th data-quarto-table-cell-role="th">rmse_arima_110_trend</th>
+<th data-quarto-table-cell-role="th">rmse_arima_111_trend</th>
+<th data-quarto-table-cell-role="th">rmse_naive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">mean</th>
+<td>975.1555</td>
+<td>976.8516</td>
+<td>955.3820</td>
+<td>955.9489</td>
+<td>1059.6220</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">std</th>
+<td>757.3816</td>
+<td>763.7815</td>
+<td>654.1652</td>
+<td>660.0621</td>
+<td>910.9061</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="e134f6e1" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>cv.<span class="bu">filter</span>(like<span class="op">=</span><span class="st">"rmse"</span>).agg([<span class="st">"mean"</span>, <span class="st">"std"</span>]).<span class="bu">round</span>(<span class="dv">4</span>).plot(kind<span class="op">=</span><span class="st">'bar'</span>, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Model Performance - Mean and Standard Dev. of RMSE'</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>plt.legend(bbox_to_anchor<span class="op">=</span>(<span class="fl">1.05</span>, <span class="dv">1</span>), loc<span class="op">=</span><span class="st">'upper left'</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-15-output-1.png" width="895" height="530" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Taking all these results together, we can see some interesting points that help us determine what type of model is most appropriate for this dataset, given the 12-month forecasting horizon.</p>
+<p>Taking all these results together, a few points stand out. The picture becomes a little less clear than it might appear at first.</p>
+<section id="what-the-averages-tell-us" class="level4">
+<h4 class="anchored" data-anchor-id="what-the-averages-tell-us">What the averages tell us</h4>
+<ul>
+<li>The ARIMA(1, 1, 0) model with trend has the lowest mean RMSE and the lowest standard deviation. The ARIMA(1, 1, 1) model with trend is nearly identical on every fold, so the extra MA term adds nothing. When two models perform the same, it is best to go with the simpler one.</li>
+<li>The naive model has the highest mean RMSE.</li>
+</ul>
+<p>On averages alone, ARIMA(1, 1, 0) with trend looks like the clear winner. But averages can hide a lot, so let’s look at the folds individually.</p>
+</section>
+<section id="what-the-individual-folds-tell-us" class="level4">
+<h4 class="anchored" data-anchor-id="what-the-individual-folds-tell-us">What the individual folds tell us</h4>
+<div id="ef26a5d6" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># How many folds did the trend model beat the naive model?</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>wins <span class="op">=</span> (cv[<span class="st">"rmse_arima_110_trend"</span>] <span class="op">&lt;</span> cv[<span class="st">"rmse_naive"</span>]).<span class="bu">sum</span>()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ARIMA(1,1,0) with trend beat naive in </span><span class="sc">{</span>wins<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span><span class="bu">len</span>(cv)<span class="sc">}</span><span class="ss"> folds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ARIMA(1,1,0) with trend beat naive in 6 of 10 folds</code></pre>
+</div>
+</div>
+<div id="599b7554" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare the two models fold by fold, labelled by the start of each test window</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>fold_view <span class="op">=</span> cv[[<span class="st">"rmse_arima_110_trend"</span>, <span class="st">"rmse_naive"</span>]].copy()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>fold_view.index <span class="op">=</span> (cv[<span class="st">"train_end"</span>] <span class="op">+</span> pd.DateOffset(months<span class="op">=</span><span class="dv">1</span>)).dt.strftime(<span class="st">"%b %Y"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>fold_view.plot(kind<span class="op">=</span><span class="st">"bar"</span>, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"RMSE by Fold: ARIMA(1,1,0) with Trend vs. Naive"</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Start of 12-Month Test Window"</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"RMSE (USD/Metric Ton)"</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-17-output-1.png" width="676" height="572" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The picture is much closer than the averages suggest:</p>
+<ul>
+<li>The trend model beats the naive model in 6 of 10 folds. That’s more often than not, but it is far from a sweep.</li>
+<li>Two folds stand out: the 12-month windows starting in October 2020 and October 2025. Both were periods of sharp price movement, and in both, the naive model missed badly while the ARIMA models with trend held up better.</li>
+<li>Those two folds account for the trend model’s entire lead. If we set them aside, the naive model actually edges ahead.</li>
+</ul>
+</section>
+<section id="so-which-model-should-we-choose" class="level4">
+<h4 class="anchored" data-anchor-id="so-which-model-should-we-choose">So which model should we choose?</h4>
+<p>The fair conclusion is that the ARIMA models with trend handle sharp price movements better, while in calmer periods the simple naive forecast is similar in performance. Which matters more depends on how the forecast will be used. If a big miss is costly, the trend model’s ability to hold up in volatile years is a real advantage. If not, the naive model is hard to beat for its simplicity.</p>
+<p>Because each model wins in different conditions, it would also be worth trying an ensemble that averages the naive and ARIMA forecasts. Combinations like this often outperform both of their individual parts.</p>
+<p>In a real-world project, we would likely want to consider other types of models alongside the ARIMA models. Exponential Smoothing models, naive models with drift, or even more advanced machine learning models could be considered.</p>
+</section>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Time-series cross-validation is an important and powerful tool in finding the best forecasting model for almost any time series. It allows us to see how our model performs on unseen data without sacrificing the temporal order of our data in the process. While mastering the concepts and code takes a little practice, the end result will be better and more thoughtful forecasts. I would encourage you to find a time series dataset that interests you and see if you can put together a cross-validation loop to determine the appropriate model.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/timeseriesmadesimple\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p><a href="https://timeseriesmadesimple.com/sources.html">Sources &amp; AI Use</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
