@@ -122,7 +122,10 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 </script>
 <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
+
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
 
 
 </head>
@@ -234,7 +237,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>When undertaking a time series forecasting project, you will generally want to compare a variety of models before settling on the one that performs best on your dataset. To be able to compare models effectively, you need to be able to see how each model performs on data it was not trained on (i.e.&nbsp;“unseen data”).</p>
-<p>A simple <a href="../time-series-train-test-split/index.html">train-test split</a> is not sufficient for this task because the test set is specifically set aside for seeing how your final model performs on unseen data. It is not used for comparing candidate models.</p>
+<p>A simple <a href="../time-series-train-test-spit/index.html">train-test split</a> is not sufficient for this task because the test set is specifically set aside for seeing how your final model performs on unseen data. It is not used for comparing candidate models.</p>
 <p>What you need is some form of a validation set: a portion of the training set that is set aside for comparing models, fine-tuning hyperparameters, and assessing performance. You could create a separate validation set for this purpose, but there is a way that is even more flexible, efficient, and effective. It’s a process called cross-validation.</p>
 <p>Cross-validation is used in many machine learning applications. The basic idea is that instead of setting part of your training data aside as a “validation set”, you divide your training data up into “folds”. Then you train your model on all but one of the folds and validate the model’s performance on the remaining fold. By repeating this process until every fold has been used for both training and validation, you get not just a single result for model performance but multiple results. These can be considered individually or averaged together.</p>
 <p>Performing cross-validation for time series is similar in concept but different in application. Since time series require that the order of the data be kept intact, randomly dividing your training set into folds and testing on them like you would with cross-sectional data will create data leakage.</p>
@@ -282,7 +285,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <section id="import-packages-and-load-data" class="level3">
 <h3 class="anchored" data-anchor-id="import-packages-and-load-data">Import Packages and Load Data</h3>
 <p>Let’s start by importing the necessary packages, loading our data, and preparing its datetime index.</p>
-<div id="34bd535b" class="cell" data-execution_count="1">
+<div id="5cd7c026" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Necessary imports</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -308,7 +311,7 @@ gtag('config', 'G-C9HXYCSWSJ', { 'anonymize_ip': true});
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data[<span class="st">'PCOPPUSDM'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, we will check some basic info about the dataset and view the first 5 rows.</p>
-<div id="5195623d" class="cell" data-execution_count="2">
+<div id="9e672ec9" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data.info())</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data.head())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -336,7 +339,7 @@ Freq: MS, Name: PCOPPUSDM, dtype: float64</code></pre>
 <section id="explore-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="explore-the-data">Explore the Data</h3>
 <p>Now, let’s do some basic exploration of this dataset, starting by plotting the data.</p>
-<div id="53564953" class="cell" data-execution_count="3">
+<div id="3071c2ee" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Build a simple line plot to view the data</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>data.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>), legend<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span><span class="st">'orange'</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Global Price of Copper: 1992-2026'</span>)</span>
@@ -354,7 +357,7 @@ Freq: MS, Name: PCOPPUSDM, dtype: float64</code></pre>
 <p>From this line plot, we can see that the price of copper, overall, has an upward trend from 1992 to 2026. The variance of the price was fairly low from around 1992 to 2005. The price became much more unstable after that point.</p>
 <p>The price saw a dramatic increase from 2025 to 2026. In a real-world project, it would be important to do more research to see if this trend is likely to continue.</p>
 <p>Let’s use a scatterplot to further assess the direction and spread of the data.</p>
-<div id="b67fc684" class="cell" data-execution_count="4">
+<div id="66c97701" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(x<span class="op">=</span>data.index, y<span class="op">=</span>data, alpha<span class="op">=</span><span class="fl">.4</span>, color<span class="op">=</span><span class="st">'orange'</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Global Price of Copper: 1992-2026'</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>)</span>
@@ -370,7 +373,7 @@ Freq: MS, Name: PCOPPUSDM, dtype: float64</code></pre>
 </div>
 <p>Even more than with the line plot, the extent of the variance and changing nature of the trend over time becomes apparent with this visual. The points are very tightly clustered together from 1992 to 2005. Then came a period of instability, with sharp rises and falls, from 2005 to 2024. Finally, as noted before, we see a sharp increase from 2025 to 2026.</p>
 <p>One last chart will help us understand the changing variance over time. We will resample our data to yearly data and calculate the standard deviation. Then we will plot these values to see how variance has fluctuated over time.</p>
-<div id="7b2a158d" class="cell" data-execution_count="5">
+<div id="71025ebf" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data_std_by_year <span class="op">=</span> data.resample(<span class="st">'YS'</span>).std() <span class="co">#Resample to yearly frequency</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>data_std_by_year.plot(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
@@ -388,13 +391,13 @@ Freq: MS, Name: PCOPPUSDM, dtype: float64</code></pre>
 </div>
 <p>The takeaway is clear: variance in our data increased significantly toward the middle years of the dataset. It has since come down somewhat, but not to the low levels seen early in the time series.</p>
 <p>We want to explore ARIMA models as a forecasting option. In order to help stabilize our data, we will take the natural log of the series using numpy’s <code>np.log()</code> function before moving further.</p>
-<div id="b447a468" class="cell" data-execution_count="6">
+<div id="5e3c85eb" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Log transform the data to control for the fluctuating variance</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>data_log <span class="op">=</span> np.log(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will help to take care of the changing variance within the dataset. Now let’s check to see if <a href="../differencing/index.html">differencing</a> the data can successfully make it <a href="../understanding-stationarity/index.html">stationary</a>.</p>
 <p>As a reminder, ARIMA models assume that your time series is stable in mean and variance over time (i.e.&nbsp;stationary). We need to find the correct differencing order (known as <code>d</code>) to be able to specify it within the ARIMA model. For more information about ARIMA models check out our <a href="../intro-to-arima/index.html">Introduction to ARIMA Article</a>.</p>
-<div id="21b5f125" class="cell" data-execution_count="7">
+<div id="5fd18842" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Difference the data to make it stationary, dropping the resulting null value</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>data_log_diff <span class="op">=</span> data_log.diff(<span class="dv">1</span>).dropna()</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -413,7 +416,7 @@ Freq: MS, Name: PCOPPUSDM, dtype: float64</code></pre>
 </div>
 <p>Our mean and variance appear relatively stable now, indicating that we have successfully made our time series stationary through differencing it one time. Therefore, our <code>d</code> order, the differencing order, will be set to “1” in our ARIMA models.</p>
 <p>Now, let’s check <a href="../a-simple-guide-to-acf-and-pacf-plots/index.html">ACF and PACF plots</a> to determine which AR (<code>p</code>) and MA (<code>q</code>) orders are most suitable.</p>
-<div id="ce70f42c" class="cell" data-execution_count="8">
+<div id="94021321" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plot_acf(data_log_diff)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plot_pacf(data_log_diff)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -446,7 +449,7 @@ Freq: MS, Name: PCOPPUSDM, dtype: float64</code></pre>
 <section id="rolling-origin-cross-validation" class="level3">
 <h3 class="anchored" data-anchor-id="rolling-origin-cross-validation">Rolling-Origin Cross-Validation</h3>
 <p>Okay, now for the fun part. First, let’s set up a dictionary that contains our candidate models’ names and the parameters we will be setting up for them:</p>
-<div id="2cb87f0a" class="cell" data-execution_count="9">
+<div id="a8970c74" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Each entry: a name for the model and the corresponding settings to use</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> {</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"arima_110"</span>:       {<span class="st">"order"</span>: (<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="st">"trend"</span>: <span class="va">None</span>},</span>
@@ -457,13 +460,13 @@ Freq: MS, Name: PCOPPUSDM, dtype: float64</code></pre>
 </div>
 <p>Next, we will use the sklearn function <code>TimeSeriesSplit</code> to generate the correct indices for our cross-validation folds. You can find more information about this function in the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html">official scikit-learn documentation</a>.</p>
 <p>We will specifically set the <code>test_size</code> parameter here to the horizon we wish to calibrate our models for. In this case, we will say that a 12-month forecasting horizon is expected. Because we have plenty of historical data and a relatively short horizon, we can afford to set the <code>n_splits</code> parameter higher than the default 5. You need to consider the size of your dataset and how far out you want to forecast in production when choosing these parameters.</p>
-<div id="8211baec" class="cell" data-execution_count="10">
+<div id="f7f169eb" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare time-series split for 10 folds with a test size of 12 months</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>tscv <span class="op">=</span> TimeSeriesSplit(n_splits<span class="op">=</span><span class="dv">10</span>, test_size<span class="op">=</span><span class="dv">12</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Okay, we are ready to run our cross-validation now. This is done using a <code>for</code> loop, a standard Python feature that runs the same block of code once for each item in a sequence. In our case, there are two loops, one inside the other. The outer loop cycles through the folds, using the indices provided by our time-series split. The inner loop cycles through the model settings in the dictionary we set up earlier, fitting and scoring each model on the current fold.</p>
 <p>Loops like this can become quite complicated, so the goal here is to keep the process understandable and efficient.</p>
-<div id="bf750ffe" class="cell" data-execution_count="11">
+<div id="1325456b" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create blank list to hold results from the loop</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -506,7 +509,7 @@ Freq: MS, Name: PCOPPUSDM, dtype: float64</code></pre>
 <h3 class="anchored" data-anchor-id="analyze-results">Analyze Results</h3>
 <p>Now we are ready to analyze the results of our cross-validation. If we set up our loop in an organized way, this should be easy to do. In our case, we use the Root Mean Squared Error (RMSE) to compare our models’ performance. This metric quantifies the error in our models’ forecasts while penalizing “big misses” more severely.</p>
 <p>We assess performance across individual folds, the mean performance across all folds, and the standard deviation across all folds to see which models are most consistent. The standard deviation is sometimes overlooked, but it is a very important part of the analysis. You could have a model that performs very well on an error metric, but if it is wildly inconsistent across folds it could be less trustworthy in production.</p>
-<div id="52c4c3c6" class="cell" data-execution_count="12">
+<div id="567af08c" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Show the full performance across folds</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cv.<span class="bu">round</span>(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
@@ -644,7 +647,7 @@ Freq: MS, Name: PCOPPUSDM, dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<div id="3bbe0812" class="cell" data-execution_count="13">
+<div id="4e19e1bf" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cv.<span class="bu">filter</span>(like<span class="op">=</span><span class="st">"rmse"</span>).agg([<span class="st">"mean"</span>, <span class="st">"std"</span>]).<span class="bu">round</span>(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <div>
@@ -684,7 +687,7 @@ Freq: MS, Name: PCOPPUSDM, dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<div id="e134f6e1" class="cell" data-execution_count="14">
+<div id="ca6168ee" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>cv.<span class="bu">filter</span>(like<span class="op">=</span><span class="st">"rmse"</span>).agg([<span class="st">"mean"</span>, <span class="st">"std"</span>]).<span class="bu">round</span>(<span class="dv">4</span>).plot(kind<span class="op">=</span><span class="st">'bar'</span>, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Model Performance - Mean and Standard Dev. of RMSE'</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>plt.legend(bbox_to_anchor<span class="op">=</span>(<span class="fl">1.05</span>, <span class="dv">1</span>), loc<span class="op">=</span><span class="st">'upper left'</span>)</span>
@@ -709,7 +712,7 @@ Freq: MS, Name: PCOPPUSDM, dtype: float64</code></pre>
 </section>
 <section id="what-the-individual-folds-tell-us" class="level4">
 <h4 class="anchored" data-anchor-id="what-the-individual-folds-tell-us">What the individual folds tell us</h4>
-<div id="ef26a5d6" class="cell" data-execution_count="15">
+<div id="8144de90" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># How many folds did the trend model beat the naive model?</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>wins <span class="op">=</span> (cv[<span class="st">"rmse_arima_110_trend"</span>] <span class="op">&lt;</span> cv[<span class="st">"rmse_naive"</span>]).<span class="bu">sum</span>()</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ARIMA(1,1,0) with trend beat naive in </span><span class="sc">{</span>wins<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span><span class="bu">len</span>(cv)<span class="sc">}</span><span class="ss"> folds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -717,7 +720,7 @@ Freq: MS, Name: PCOPPUSDM, dtype: float64</code></pre>
 <pre><code>ARIMA(1,1,0) with trend beat naive in 6 of 10 folds</code></pre>
 </div>
 </div>
-<div id="599b7554" class="cell" data-execution_count="16">
+<div id="70f90907" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare the two models fold by fold, labelled by the start of each test window</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>fold_view <span class="op">=</span> cv[[<span class="st">"rmse_arima_110_trend"</span>, <span class="st">"rmse_naive"</span>]].copy()</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>fold_view.index <span class="op">=</span> (cv[<span class="st">"train_end"</span>] <span class="op">+</span> pd.DateOffset(months<span class="op">=</span><span class="dv">1</span>)).dt.strftime(<span class="st">"%b %Y"</span>)</span>

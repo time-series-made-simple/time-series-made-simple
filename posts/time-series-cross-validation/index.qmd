@@ -20,7 +20,7 @@ format:
 
 When undertaking a time series forecasting project, you will generally want to compare a variety of models before settling on the one that performs best on your dataset. To be able to compare models effectively, you need to be able to see how each model performs on data it was not trained on (i.e. "unseen data").
 
-A simple [train-test split](../time-series-train-test-split/index.html) is not sufficient for this task because the test set is specifically set aside for seeing how your final model performs on unseen data. It is not used for comparing candidate models.
+A simple [train-test split](../time-series-train-test-spit/index.html) is not sufficient for this task because the test set is specifically set aside for seeing how your final model performs on unseen data. It is not used for comparing candidate models.
 
 What you need is some form of a validation set: a portion of the training set that is set aside for comparing models, fine-tuning hyperparameters, and assessing performance. You could create a separate validation set for this purpose, but there is a way that is even more flexible, efficient, and effective. It's a process called cross-validation.
 
